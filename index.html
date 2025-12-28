@@ -1,31 +1,33 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>FDIA • Demo</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>D1IA • Demo</title>
 
 <style>
 :root{
-  --bg1:#6f7cff;
-  --bg2:#2a2f7a;
-  --glass:rgba(255,255,255,.18);
-  --glass-strong:rgba(255,255,255,.28);
-  --text:#fff;
-  --radius:22px;
-  --spring:cubic-bezier(.2,.8,.2,1);
+  --vio:#6b6cff;
+  --blue:#2f6bff;
+  --pink:#ff6ad5;
+  --yellow:#ffd86a;
+  --glass:rgba(255,255,255,.22);
+  --glass2:rgba(255,255,255,.12);
+  --r:22px;
+  --ease:cubic-bezier(.2,.8,.2,1);
 }
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{
   margin:0;
-  color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,Inter,system-ui,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,system-ui;
+  color:#fff;
   background:
-    radial-gradient(1200px 600px at -10% -10%, #9aa6ff33, transparent 60%),
-    radial-gradient(900px 500px at 110% 10%, #7a7cff33, transparent 60%),
-    linear-gradient(160deg,var(--bg1),var(--bg2));
+    radial-gradient(900px 500px at 10% 0%, var(--pink) 0%, transparent 60%),
+    radial-gradient(900px 500px at 90% 10%, var(--yellow) 0%, transparent 55%),
+    radial-gradient(1200px 700px at 50% 120%, var(--blue) 0%, transparent 60%),
+    linear-gradient(160deg,var(--vio),#1f235c);
   overflow:hidden;
 }
 
@@ -34,167 +36,144 @@ body{
 
 /* HEADER */
 .header{
-  padding:18px 20px 10px;
-  font-weight:700;
+  padding:16px 18px 8px;
+  font-weight:800;
   letter-spacing:.2px;
 }
 
-/* TABS */
-.tabs{flex:1;position:relative}
-.tab{
+/* SCREENS */
+.screens{flex:1;position:relative}
+.screen{
   position:absolute; inset:0;
-  padding:12px 16px 90px;
+  padding:10px 14px 90px;
   overflow:auto;
-  opacity:0; transform:translateY(10px) scale(.98);
-  transition:opacity .35s var(--spring), transform .35s var(--spring);
+  opacity:0; transform:translateY(10px);
+  transition:.35s var(--ease);
   pointer-events:none;
 }
-.tab.active{
-  opacity:1; transform:none; pointer-events:auto;
+.screen.active{opacity:1;transform:none;pointer-events:auto}
+
+/* GLASS */
+.card{
+  background:linear-gradient(180deg,var(--glass),var(--glass2));
+  backdrop-filter: blur(22px) saturate(130%);
+  border-radius:var(--r);
+  padding:16px;
+  box-shadow:0 20px 40px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.35);
 }
 
-/* GLASS CARD */
-.card{
-  background:linear-gradient(180deg,var(--glass),rgba(255,255,255,.08));
-  backdrop-filter: blur(22px) saturate(120%);
-  border-radius:var(--radius);
-  padding:16px;
-  box-shadow:
-    0 20px 40px rgba(0,0,0,.25),
-    inset 0 1px 0 rgba(255,255,255,.25);
-  animation:pop .5s var(--spring) both;
+/* GRID (визуальные кнопки) */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
 }
-@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
+.tile{
+  padding:18px;
+  border-radius:18px;
+  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.14));
+  backdrop-filter: blur(18px);
+  font-weight:700;
+}
 
 /* INPUTS */
-.field{margin-top:12px}
-.field label{font-size:12px;opacity:.8}
+label{font-size:12px;opacity:.8}
 input{
-  width:100%; margin-top:6px;
-  padding:14px 14px;
-  border-radius:14px; border:none; outline:none;
+  width:100%; margin-top:6px; margin-bottom:10px;
+  padding:14px; border-radius:14px; border:none; outline:none;
   font-size:16px;
-  background:rgba(255,255,255,.9);
 }
-button.primary{
-  margin-top:14px; width:100%;
-  padding:16px; border-radius:16px; border:none;
-  font-weight:700; font-size:16px;
-  color:#2a2f7a;
-  background:linear-gradient(180deg,#fff,#e9ecff);
-  box-shadow:0 12px 24px rgba(0,0,0,.25);
-  transition:transform .15s var(--spring), box-shadow .15s var(--spring);
-}
-button.primary:active{transform:scale(.97); box-shadow:0 6px 14px rgba(0,0,0,.25)}
 
-/* SIGN */
-canvas{
-  width:100%; height:110px;
-  background:#fff; border-radius:14px; margin-top:8px;
+/* BUTTON */
+.btn{
+  width:100%; padding:16px; border-radius:16px; border:none;
+  font-weight:800; color:#2b2f7a;
+  background:linear-gradient(180deg,#fff,#eef1ff);
 }
 
 /* DOCUMENT */
 .center{display:flex;justify-content:center}
 .doc-wrap{perspective:1400px}
-.document{
+.doc{
   width:100%; max-width:380px; height:230px;
   position:relative; transform-style:preserve-3d;
-  transition:transform .9s var(--spring);
+  transition:.9s var(--ease);
 }
-.document.flipped{transform:rotateY(180deg)}
+.doc.flip{transform:rotateY(180deg)}
 .side{
   position:absolute; inset:0; border-radius:20px;
-  padding:16px;
-  backface-visibility:hidden;
+  padding:16px; backface-visibility:hidden;
   background:
-    linear-gradient(135deg,#8f9bff,#3a3f9e);
-  box-shadow:0 30px 60px rgba(0,0,0,.35);
+    linear-gradient(135deg,#8b95ff,#3b44b5);
+  box-shadow:0 30px 60px rgba(0,0,0,.45);
 }
-.back{
-  transform:rotateY(180deg);
-  display:flex;align-items:center;justify-content:center;gap:12px;flex-direction:column;
-}
-.title{font-weight:800;letter-spacing:.3px}
-.row{display:flex;gap:12px;margin-top:12px}
-.photo{
-  width:64px;height:84px;border-radius:10px;overflow:hidden;
-  background:rgba(255,255,255,.35)
-}
+.back{transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.row{display:flex;gap:12px;margin-top:10px}
+.photo{width:64px;height:84px;border-radius:10px;background:rgba(255,255,255,.35);overflow:hidden}
 .photo img{width:100%;height:100%;object-fit:cover}
-.meta{font-size:14px}
-.watermark{
-  position:absolute; right:12px; bottom:10px;
-  font-size:10px; opacity:.6
-}
+.watermark{position:absolute;right:12px;bottom:10px;font-size:10px;opacity:.6}
 
 /* QR */
-.qr{
-  width:128px;height:128px;background:#fff;border-radius:12px;
-  box-shadow:inset 0 0 0 6px #000;
-  position:relative; overflow:hidden;
-}
-.qr::after{
-  content:""; position:absolute; inset:0;
-  background:
-    repeating-linear-gradient(45deg,#000 0 6px,#fff 6px 12px);
-  opacity:.08;
-}
-.qr-hint{font-size:12px;opacity:.8}
+.qr{width:120px;height:120px;background:#fff;border-radius:12px}
 
-/* TAB BAR */
+/* SIGN */
+canvas{width:100%;height:110px;background:#fff;border-radius:14px}
+
+/* TABBAR */
 .tabbar{
   position:absolute; left:0; right:0; bottom:0;
-  height:78px; padding:10px 10px env(safe-area-inset-bottom);
-  display:flex; gap:8px;
-  backdrop-filter: blur(24px) saturate(120%);
-  background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.08));
-  box-shadow:0 -10px 30px rgba(0,0,0,.35);
+  height:78px; padding:10px 8px env(safe-area-inset-bottom);
+  display:flex; gap:6px;
+  backdrop-filter: blur(24px);
+  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.08));
 }
 .tabbar button{
   flex:1; border:none; border-radius:16px;
-  background:transparent; color:#fff; font-weight:600;
-  transition:background .2s var(--spring), transform .15s var(--spring);
+  background:transparent; color:#fff; font-size:12px; font-weight:700;
 }
-.tabbar button.active{
-  background:rgba(255,255,255,.22);
-}
-.tabbar button:active{transform:scale(.96)}
-
-/* MICRO */
-.fade-up{animation:fadeUp .6s var(--spring) both}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.tabbar button.active{background:rgba(255,255,255,.22)}
 </style>
 </head>
 
 <body>
 <div class="app">
+  <div class="header">D1IA • Demo</div>
 
-  <div class="header">FDIA • Demo</div>
-
-  <div class="tabs">
+  <div class="screens">
+    <!-- HOME -->
+    <section class="screen active" id="home">
+      <div class="card">
+        <div class="grid">
+          <div class="tile">Документи</div>
+          <div class="tile">Послуги</div>
+          <div class="tile">Донати</div>
+          <div class="tile">Повідомлення</div>
+        </div>
+      </div>
+    </section>
 
     <!-- DATA -->
-    <section class="tab active" id="tab-data">
-      <div class="card fade-up">
-        <div class="field"><label>Імʼя</label><input id="name"></div>
-        <div class="field"><label>Прізвище</label><input id="surname"></div>
-        <div class="field"><label>Дата народження</label><input type="date" id="birth"></div>
-        <div class="field"><label>Фото</label><input type="file" id="photoInput"></div>
-        <div class="field"><label>Підпис</label><canvas id="sign"></canvas></div>
-        <button class="primary" onclick="generate()">Згенерувати документ</button>
+    <section class="screen" id="data">
+      <div class="card">
+        <label>Імʼя</label><input id="name">
+        <label>Прізвище</label><input id="surname">
+        <label>Дата народження</label><input type="date" id="birth">
+        <label>Фото</label><input type="file" id="photoInput">
+        <label>Підпис</label><canvas id="sign"></canvas>
+        <button class="btn" onclick="gen()">Згенерувати документ</button>
       </div>
     </section>
 
     <!-- DOCUMENT -->
-    <section class="tab" id="tab-doc">
+    <section class="screen" id="doc">
       <div class="center">
         <div class="doc-wrap">
-          <div class="document" id="doc" onclick="flip()">
+          <div class="doc" id="docCard" onclick="flip()">
             <div class="side">
-              <div class="title">DIGITAL ID • DEMO</div>
+              <b>DIGITAL ID • DEMO</b>
               <div class="row">
                 <div class="photo"><img id="photo"></div>
-                <div class="meta">
+                <div>
                   <div id="dName"></div>
                   <div id="dBirth"></div>
                 </div>
@@ -202,8 +181,7 @@ canvas{
               <div class="watermark">DEMO • NOT A REAL DOCUMENT</div>
             </div>
             <div class="side back">
-              <div class="qr" onclick="qrError()"></div>
-              <div class="qr-hint">Натисніть для перевірки</div>
+              <div class="qr" onclick="alert('Помилка перевірки (DEMO)')"></div>
               <div class="watermark">DEMO QR</div>
             </div>
           </div>
@@ -211,44 +189,50 @@ canvas{
       </div>
     </section>
 
+    <!-- SERVICES -->
+    <section class="screen" id="services"><div class="card">Послуги (візуально)</div></section>
+    <!-- DONATE -->
+    <section class="screen" id="donate"><div class="card">Донати (візуально)</div></section>
+    <!-- PROFILE -->
+    <section class="screen" id="profile"><div class="card">Профіль</div></section>
   </div>
 
   <div class="tabbar">
-    <button class="active" onclick="openTab('data',this)">Дані</button>
-    <button onclick="openTab('doc',this)">Документ</button>
+    <button class="active" onclick="open('home',this)">Дом</button>
+    <button onclick="open('data',this)">Дані</button>
+    <button onclick="open('doc',this)">Док</button>
+    <button onclick="open('services',this)">Серв</button>
+    <button onclick="open('donate',this)">Донат</button>
+    <button onclick="open('profile',this)">Проф</button>
   </div>
-
 </div>
 
 <script>
-const tabs = {data:document.getElementById('tab-data'), doc:document.getElementById('tab-doc')};
-function openTab(id,btn){
-  Object.values(tabs).forEach(t=>t.classList.remove('active'));
-  tabs[id].classList.add('active');
+const screens=document.querySelectorAll('.screen');
+function open(id,btn){
+  screens.forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
   document.querySelectorAll('.tabbar button').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
-function flip(){ document.getElementById('doc').classList.toggle('flipped'); }
-function qrError(){ alert('Помилка перевірки (DEMO)'); }
-
-function generate(){
-  dName.textContent = name.value + ' ' + surname.value;
-  dBirth.textContent = 'Народження: ' + birth.value;
-  openTab('doc', document.querySelectorAll('.tabbar button')[1]);
+function flip(){document.getElementById('docCard').classList.toggle('flip')}
+function gen(){
+  dName.textContent = name.value+' '+surname.value;
+  dBirth.textContent = 'Народження: '+birth.value;
+  open('doc', document.querySelectorAll('.tabbar button')[2]);
 }
+photoInput.onchange=e=>photo.src=URL.createObjectURL(e.target.files[0]);
 
-/* photo */
-photoInput.onchange = e => photo.src = URL.createObjectURL(e.target.files[0]);
-
-/* sign */
-const c=sign, ctx=c.getContext('2d'); let draw=false;
-c.onpointerdown=()=>{draw=true;ctx.beginPath()}
-c.onpointerup=()=>draw=false;
-c.onpointermove=e=>{
-  if(!draw)return;
-  ctx.lineWidth=2; ctx.lineCap='round';
-  ctx.lineTo(e.offsetX,e.offsetY); ctx.stroke();
-};
+/* SIGN FIX (без глюков) */
+const c=sign,ctx=c.getContext('2d');
+let d=false;
+c.addEventListener('pointerdown',()=>{d=true;ctx.beginPath()});
+c.addEventListener('pointerup',()=>d=false);
+c.addEventListener('pointermove',e=>{
+  if(!d)return;
+  ctx.lineWidth=2;ctx.lineCap='round';
+  ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();
+});
 </script>
 </body>
 </html>
