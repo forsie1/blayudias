@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>D1IA DEMO</title>
+<title>Дія</title>
+  <!-- FaceID -->
+  <section class="screen" id="face">
+    <div class="card faceid shimmer">🔒 Face ID…</div>
+  </section>
 <style>
 :root{
   --vio:#5b5cff;
@@ -131,7 +135,7 @@ canvas{width:100%;height:100px;background:#fff;border-radius:14px;}
 
 <body>
 <div class="app">
-<div class="header">D1IA DEMO</div>
+<div class="header">Дія</div>
 
 <div class="screens">
   <!-- Стрічка -->
@@ -165,18 +169,13 @@ canvas{width:100%;height:100px;background:#fff;border-radius:14px;}
     </div>
   </section>
 
-  <!-- FaceID -->
-  <section class="screen" id="face">
-    <div class="card faceid shimmer">🔒 Face ID…</div>
-  </section>
-
   <!-- Финальная карточка -->
   <section class="screen" id="final">
     <div class="center">
       <div class="doc-wrap">
         <div class="doc" id="docCard" onclick="flip()">
           <div class="side">
-            <b>D1IA DEMO</b>
+            <b>Паспорт Громадянина України</b>
             <div class="row">
               <div class="photo"><img id="photo"></div>
               <div>
@@ -184,11 +183,9 @@ canvas{width:100%;height:100px;background:#fff;border-radius:14px;}
                 <div id="dBirth"></div>
               </div>
             </div>
-            <div class="watermark">WATERMARK</div>
-          </div>
           <div class="side back">
             <div class="qr"></div>
-            <div class="watermark">QR DEMO</div>
+            <div class="watermark">QR</div>
           </div>
         </div>
       </div>
@@ -250,3 +247,4 @@ function nextTab(dir){
 </script>
 </body>
 </html>
+
