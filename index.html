@@ -1,75 +1,230 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FDIA Demo 5.0</title>
-<link rel="stylesheet" href="style.css">
-<link rel="manifest" href="manifest.json">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>FDIA Demo</title>
+
+<style>
+* { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(160deg,#6a5cff,#1e1b4b);
+  color: white;
+  overflow: hidden;
+}
+
+.app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs {
+  flex: 1;
+  position: relative;
+}
+
+.tab {
+  position: absolute;
+  inset: 0;
+  padding: 20px;
+  overflow-y: auto;
+  display: none;
+}
+.tab.active { display: block; }
+
+.tabbar {
+  height: 72px;
+  display: flex;
+  backdrop-filter: blur(20px);
+  background: rgba(255,255,255,0.12);
+}
+.tabbar button {
+  flex: 1;
+  border: none;
+  background: none;
+  color: white;
+  font-size: 14px;
+}
+
+/* glass */
+.card {
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* inputs */
+input {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+}
+
+/* document */
+.doc-wrapper {
+  perspective: 1200px;
+}
+.document {
+  width: 100%;
+  max-width: 360px;
+  height: 220px;
+  margin: 40px auto;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s;
+}
+.document.flipped {
+  transform: rotateY(180deg);
+}
+
+.doc-side {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  padding: 16px;
+  backface-visibility: hidden;
+  background: linear-gradient(135deg,#7c7cff,#2b2b66);
+}
+
+.doc-back {
+  transform: rotateY(180deg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.watermark {
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-size: 10px;
+  opacity: 0.5;
+}
+
+.photo {
+  width: 60px;
+  height: 80px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+canvas {
+  width: 100%;
+  height: 100px;
+  background: white;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+.qr {
+  width: 120px;
+  height: 120px;
+  background: white;
+}
+</style>
 </head>
+
 <body>
-<div id="app">
+<div class="app">
 
-  <!-- 0. FaceID -->
-  <section class="screen active" data-index="0">
-    <div class="logo">D1IA</div>
-    <div class="face">◉ ◉</div>
-    <p class="muted">Сканування Face ID…</p>
-  </section>
-
-  <!-- 1. Home -->
-  <section class="screen" data-index="1">
-    <h1>FDIA</h1>
-    <div class="card" onclick="go(2)">Документ</div>
-    <div class="card" onclick="go(3)">QR‑код</div>
-    <div class="card ghost">
-      💙 Донат на ЗСУ
-      <div class="sub">Функція недоступна</div>
+  <div class="tabs">
+    <!-- DATA -->
+    <div class="tab active" id="data">
+      <h2>Заповнення даних</h2>
+      <div class="card">
+        <input placeholder="Імʼя" id="name">
+        <input placeholder="Прізвище" id="surname">
+        <input type="date" id="birth">
+        <input type="file" id="photoInput">
+        <p>Підпис:</p>
+        <canvas id="sign"></canvas>
+        <button onclick="generate()" style="margin-top:15px;width:100%;padding:14px;border-radius:14px;border:none;">Згенерувати</button>
+      </div>
     </div>
-  </section>
 
-  <!-- 2. Document -->
-  <section class="screen" data-index="2">
-    <h2>Документ</h2>
-    <div id="fields">
-      <input placeholder="Імʼя">
-      <input placeholder="Прізвище">
-      <input placeholder="По батькові">
+    <!-- DOCUMENT -->
+    <div class="tab" id="doc">
+      <h2>Документ</h2>
+      <div class="doc-wrapper">
+        <div class="document" id="document" onclick="flip()">
+          <div class="doc-side">
+            <strong>ID CARD • DEMO</strong>
+            <div style="display:flex;gap:12px;margin-top:12px;">
+              <div class="photo"><img id="photo"></div>
+              <div>
+                <div id="dName"></div>
+                <div id="dBirth"></div>
+              </div>
+            </div>
+            <div class="watermark">DEMO • NOT A REAL DOCUMENT</div>
+          </div>
+          <div class="doc-side doc-back">
+            <div class="qr" onclick="alert('Помилка перевірки (DEMO)')"></div>
+            <div class="watermark">DEMO QR</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <button class="card accent" onclick="addField()">Додати поле</button>
+  </div>
 
-    <label class="card accent">
-      Завантажити фото
-      <input type="file" id="photoInput" style="display:none" onchange="loadPhoto(event)">
-    </label>
-    <div id="photoPreview"></div>
-
-    <div class="card accent" onclick="go(4)">Підписати</div>
-  </section>
-
-  <!-- 3. QR -->
-  <section class="screen" data-index="3">
-    <div class="qr-card" onclick="flipQR()">QR</div>
-    <p class="muted center">Перевірка документа</p>
-  </section>
-
-  <!-- 4. Signature -->
-  <section class="screen" data-index="4">
-    <h2>Розпис</h2>
-    <canvas id="canvas"></canvas>
-    <div class="card accent" onclick="saveSignature()">Зберегти підпис</div>
-    <div class="card accent" onclick="go(1)">Готово</div>
-  </section>
+  <div class="tabbar">
+    <button onclick="openTab('data')">Дані</button>
+    <button onclick="openTab('doc')">Документ</button>
+  </div>
 
 </div>
 
-<!-- Tab-bar -->
-<div id="tabbar">
-  <div class="tab" onclick="go(1)">🏠 Домой</div>
-  <div class="tab" onclick="go(2)">📝 Документы</div>
-  <div class="tab" onclick="go(3)">🔲 QR</div>
-</div>
+<script>
+let tabs = document.querySelectorAll('.tab');
+function openTab(id){
+  tabs.forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
 
-<script src="app.js"></script>
+function flip(){
+  document.getElementById('document').classList.toggle('flipped');
+}
+
+function generate(){
+  document.getElementById('dName').innerText =
+    name.value + ' ' + surname.value;
+  document.getElementById('dBirth').innerText =
+    'Народження: ' + birth.value;
+
+  openTab('doc');
+}
+
+// photo
+photoInput.onchange = e=>{
+  photo.src = URL.createObjectURL(e.target.files[0]);
+};
+
+// signature
+const c = sign, ctx = c.getContext('2d');
+let draw=false;
+c.onmousedown=()=>draw=true;
+c.onmouseup=()=>draw=false;
+c.onmousemove=e=>{
+  if(!draw)return;
+  ctx.lineWidth=2;
+  ctx.lineTo(e.offsetX,e.offsetY);
+  ctx.stroke();
+};
+</script>
 </body>
 </html>
+
