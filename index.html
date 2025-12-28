@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FDIA Demo 5.0</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+<div id="app">
+
+  <!-- 0. FaceID -->
+  <section class="screen active" data-index="0">
+    <div class="logo">D1IA</div>
+    <div class="face">◉ ◉</div>
+    <p class="muted">Сканування Face ID…</p>
+  </section>
+
+  <!-- 1. Home -->
+  <section class="screen" data-index="1">
+    <h1>FDIA</h1>
+    <div class="card" onclick="go(2)">Документ</div>
+    <div class="card" onclick="go(3)">QR‑код</div>
+    <div class="card ghost">
+      💙 Донат на ЗСУ
+      <div class="sub">Функція недоступна</div>
+    </div>
+  </section>
+
+  <!-- 2. Document -->
+  <section class="screen" data-index="2">
+    <h2>Документ</h2>
+    <div id="fields">
+      <input placeholder="Імʼя">
+      <input placeholder="Прізвище">
+      <input placeholder="По батькові">
+    </div>
+    <button class="card accent" onclick="addField()">Додати поле</button>
+
+    <label class="card accent">
+      Завантажити фото
+      <input type="file" id="photoInput" style="display:none" onchange="loadPhoto(event)">
+    </label>
+    <div id="photoPreview"></div>
+
+    <div class="card accent" onclick="go(4)">Підписати</div>
+  </section>
+
+  <!-- 3. QR -->
+  <section class="screen" data-index="3">
+    <div class="qr-card" onclick="flipQR()">QR</div>
+    <p class="muted center">Перевірка документа</p>
+  </section>
+
+  <!-- 4. Signature -->
+  <section class="screen" data-index="4">
+    <h2>Розпис</h2>
+    <canvas id="canvas"></canvas>
+    <div class="card accent" onclick="saveSignature()">Зберегти підпис</div>
+    <div class="card accent" onclick="go(1)">Готово</div>
+  </section>
+
+</div>
+
+<!-- Tab-bar -->
+<div id="tabbar">
+  <div class="tab" onclick="go(1)">🏠 Домой</div>
+  <div class="tab" onclick="go(2)">📝 Документы</div>
+  <div class="tab" onclick="go(3)">🔲 QR</div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
