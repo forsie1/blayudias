@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>D1IA DEMO</title>
-
 <style>
 :root{
   --vio:#5b5cff;
@@ -17,12 +16,10 @@
   --ease:cubic-bezier(.2,.8,.2,1);
 }
 
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
+/* Общие */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;margin:0;font-family:-apple-system,BlinkMacSystemFont,system-ui;color:#fff;}
 body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,system-ui;
-  color:#fff;
   background:
     radial-gradient(900px 600px at 10% 0%, var(--pink) 0%, transparent 55%),
     radial-gradient(900px 600px at 90% 10%, var(--yellow) 0%, transparent 55%),
@@ -32,26 +29,20 @@ body{
 }
 
 /* APP */
-.app{height:100%;display:flex;flex-direction:column}
-
-/* HEADER */
-.header{
-  padding:16px 18px 8px;
-  font-weight:900;
-  letter-spacing:.4px;
-}
+.app{height:100%;display:flex;flex-direction:column;}
+.header{padding:16px 18px 8px;font-weight:900;letter-spacing:.4px;}
 
 /* SCREENS */
-.screens{flex:1;position:relative}
+.screens{flex:1;position:relative;touch-action:pan-y;}
 .screen{
   position:absolute; inset:0;
   padding:10px 14px 90px;
   overflow:auto;
-  opacity:0; transform:translateY(10px);
-  transition:.35s var(--ease);
+  opacity:0; transform:translateX(100%);
+  transition:0.35s var(--ease);
   pointer-events:none;
 }
-.screen.active{opacity:1;transform:none;pointer-events:auto}
+.screen.active{opacity:1;transform:translateX(0);pointer-events:auto;}
 
 /* GLASS CARD */
 .card{
@@ -65,65 +56,55 @@ body{
 }
 
 /* SHIMMER */
-.shimmer{
-  position:relative; overflow:hidden;
-}
+.shimmer{position:relative;overflow:hidden;}
 .shimmer::after{
-  content:""; position:absolute; inset:-100% -50%;
+  content:"";position:absolute;inset:-100% -50%;
   background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.35) 50%,transparent 60%);
   animation:sh 2.2s infinite;
 }
-@keyframes sh{to{transform:translateX(200%)}}
+@keyframes sh{to{transform:translateX(200%)}} 
 
 /* GRID */
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
 .tile{
   padding:18px;border-radius:18px;
   background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.14));
   backdrop-filter: blur(18px);
-  font-weight:800;
+  font-weight:800;text-align:center;cursor:pointer;
 }
 
 /* INPUTS */
-label{font-size:12px;opacity:.8}
-input{
-  width:100%;margin-top:6px;margin-bottom:10px;
-  padding:14px;border-radius:14px;border:none;outline:none;font-size:16px;
-}
+label{font-size:12px;opacity:.8;}
+input{width:100%;margin-top:6px;margin-bottom:10px;padding:14px;border-radius:14px;border:none;outline:none;font-size:16px;}
 
 /* BUTTON */
-.btn{
-  width:100%;padding:16px;border-radius:16px;border:none;
-  font-weight:900;color:#2b2f7a;
-  background:linear-gradient(180deg,#fff,#eef1ff);
-}
+.btn{width:100%;padding:16px;border-radius:16px;border:none;font-weight:900;color:#2b2f7a;background:linear-gradient(180deg,#fff,#eef1ff);cursor:pointer;}
 
 /* DOCUMENT */
-.center{display:flex;justify-content:center}
-.doc-wrap{perspective:1400px}
+.center{display:flex;justify-content:center;align-items:center;}
+.doc-wrap{perspective:1400px;}
 .doc{
-  width:100%;max-width:380px;height:230px;
+  width:350px;height:220px;
   position:relative;transform-style:preserve-3d;
   transition:.9s var(--ease);
+  cursor:pointer;
 }
-.doc.flip{transform:rotateY(180deg)}
+.doc.flip{transform:rotateY(180deg);}
 .side{
   position:absolute;inset:0;border-radius:20px;
   padding:16px;backface-visibility:hidden;
   background:linear-gradient(135deg,#8b95ff,#3b44b5);
-  box-shadow:0 30px 60px rgba(0,0,0,.45);
+  box-shadow:0 20px 40px rgba(0,0,0,.45);
 }
-.back{transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center}
-.row{display:flex;gap:12px;margin-top:10px}
-.photo{width:64px;height:84px;border-radius:10px;background:rgba(255,255,255,.35);overflow:hidden}
-.photo img{width:100%;height:100%;object-fit:cover}
-.watermark{position:absolute;right:12px;bottom:10px;font-size:10px;opacity:.6}
-
-/* QR */
-.qr{width:120px;height:120px;background:#fff;border-radius:12px}
+.back{transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.row{display:flex;gap:12px;margin-top:10px;}
+.photo{width:64px;height:84px;border-radius:10px;background:rgba(255,255,255,.35);overflow:hidden;}
+.photo img{width:100%;height:100%;object-fit:cover;}
+.watermark{position:absolute;right:12px;bottom:10px;font-size:10px;opacity:.6;}
+.qr{width:120px;height:120px;background:#fff;border-radius:12px;}
 
 /* SIGN */
-canvas{width:100%;height:110px;background:#fff;border-radius:14px}
+canvas{width:100%;height:100px;background:#fff;border-radius:14px;}
 
 /* TABBAR */
 .tabbar{
@@ -136,10 +117,11 @@ canvas{width:100%;height:110px;background:#fff;border-radius:14px}
 .tabbar button{
   flex:1;border:none;border-radius:16px;
   background:transparent;color:#fff;font-size:12px;font-weight:800;
+  cursor:pointer;
 }
-.tabbar button.active{background:rgba(255,255,255,.22)}
+.tabbar button.active{background:rgba(255,255,255,.22);}
 
-/* FACE ID */
+/* FACEID */
 .faceid{
   display:flex;align-items:center;justify-content:center;
   height:200px;font-size:18px;font-weight:900;
@@ -149,85 +131,82 @@ canvas{width:100%;height:110px;background:#fff;border-radius:14px}
 
 <body>
 <div class="app">
-  <div class="header">D1IA DEMO</div>
+<div class="header">D1IA DEMO</div>
 
-  <div class="screens">
-    <!-- HOME -->
-    <section class="screen active" id="home">
-      <div class="card shimmer">
-        <div class="grid">
-          <div class="tile" onclick="go('docs')">Документи</div>
-          <div class="tile">Послуги</div>
-          <div class="tile">Донати</div>
-          <div class="tile">Повідомлення</div>
-        </div>
+<div class="screens">
+  <!-- Стрічка -->
+  <section class="screen active" id="feed">
+    <div class="card shimmer">
+      <div class="grid">
+        <div class="tile" onclick="go('docs')">Документи</div>
+        <div class="tile">Сервіси</div>
+        <div class="tile">Донати</div>
+        <div class="tile">Меню</div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- DOCS -->
-    <section class="screen" id="docs">
-      <div class="card">
-        <div class="tile" onclick="go('data')">➕ Створити документ</div>
-      </div>
-    </section>
+  <!-- Документы -->
+  <section class="screen" id="docs">
+    <div class="card">
+      <div class="tile" onclick="go('data')">➕ Створити документ</div>
+    </div>
+  </section>
 
-    <!-- DATA -->
-    <section class="screen" id="data">
-      <div class="card">
-        <label>Імʼя</label><input id="name">
-        <label>Прізвище</label><input id="surname">
-        <label>Дата народження</label><input type="date" id="birth">
-        <label>Фото</label><input type="file" id="photoInput">
-        <label>Підпис</label><canvas id="sign"></canvas>
-        <button class="btn" onclick="startFaceID()">Згенерувати</button>
-      </div>
-    </section>
+  <!-- Форма данных -->
+  <section class="screen" id="data">
+    <div class="card">
+      <label>Імʼя</label><input id="name">
+      <label>Прізвище</label><input id="surname">
+      <label>Дата народження</label><input type="date" id="birth">
+      <label>Фото</label><input type="file" id="photoInput">
+      <label>Підпис</label><canvas id="sign"></canvas>
+      <button class="btn" onclick="startFaceID()">Створити документ</button>
+    </div>
+  </section>
 
-    <!-- FACEID -->
-    <section class="screen" id="face">
-      <div class="card faceid shimmer">🔒 Face ID…</div>
-    </section>
+  <!-- FaceID -->
+  <section class="screen" id="face">
+    <div class="card faceid shimmer">🔒 Face ID…</div>
+  </section>
 
-    <!-- FINAL DOC -->
-    <section class="screen" id="final">
-      <div class="center">
-        <div class="doc-wrap">
-          <div class="doc" id="docCard" onclick="flip()">
-            <div class="side">
-              <b>DIGITAL ID • DEMO</b>
-              <div class="row">
-                <div class="photo"><img id="photo"></div>
-                <div>
-                  <div id="dName"></div>
-                  <div id="dBirth"></div>
-                </div>
+  <!-- Финальная карточка -->
+  <section class="screen" id="final">
+    <div class="center">
+      <div class="doc-wrap">
+        <div class="doc" id="docCard" onclick="flip()">
+          <div class="side">
+            <b>D1IA DEMO</b>
+            <div class="row">
+              <div class="photo"><img id="photo"></div>
+              <div>
+                <div id="dName"></div>
+                <div id="dBirth"></div>
               </div>
-              <div class="watermark">WATERMARK • DEMO</div>
             </div>
-            <div class="side back">
-              <div class="qr" onclick="alert('Помилка перевірки (DEMO)')"></div>
-              <div class="watermark">QR DEMO</div>
-            </div>
+            <div class="watermark">WATERMARK</div>
+          </div>
+          <div class="side back">
+            <div class="qr"></div>
+            <div class="watermark">QR DEMO</div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
+</div>
 
-    <!-- PROFILE -->
-    <section class="screen" id="profile">
-      <div class="card">Профіль (візуально)</div>
-    </section>
-  </div>
-
-  <div class="tabbar">
-    <button class="active" onclick="go('home',this)">Дом</button>
-    <button onclick="go('docs',this)">Документи</button>
-    <button onclick="go('profile',this)">Профіль</button>
-  </div>
+<div class="tabbar">
+  <button class="active" onclick="go('feed',this)">Стрічка</button>
+  <button onclick="go('docs',this)">Документи</button>
+  <button onclick="go('feed',this)">Сервіси</button>
+  <button onclick="go('feed',this)">Меню</button>
+</div>
 </div>
 
 <script>
 const screens=document.querySelectorAll('.screen');
+let startX=0;
 function go(id,btn){
   screens.forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -249,9 +228,25 @@ photoInput.onchange=e=>photo.src=URL.createObjectURL(e.target.files[0]);
 
 /* SIGN */
 const c=sign,ctx=c.getContext('2d');let d=false;
-c.onpointerdown=()=>{d=true;ctx.beginPath()}
+c.onpointerdown=()=>{d=true;ctx.beginPath();}
 c.onpointerup=()=>d=false;
 c.onpointermove=e=>{if(!d)return;ctx.lineWidth=2;ctx.lineCap='round';ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke()}
+
+/* SWIPE между вкладками */
+document.body.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;});
+document.body.addEventListener('touchend',e=>{
+  let endX=e.changedTouches[0].clientX;
+  if(endX-startX>50){nextTab(-1);} // свайп вправо
+  if(startX-endX>50){nextTab(1);}  // свайп влево
+});
+const tabs=['feed','docs','feed','feed']; // порядок свайпа
+let currentTab=0;
+function nextTab(dir){
+  currentTab+=dir;
+  if(currentTab<0)currentTab=0;
+  if(currentTab>=tabs.length)currentTab=tabs.length-1;
+  go(tabs[currentTab]);
+}
 </script>
 </body>
 </html>
