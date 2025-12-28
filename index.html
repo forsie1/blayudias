@@ -2,229 +2,253 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>FDIA Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>FDIA • Demo</title>
 
 <style>
-* { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-body {
-  margin: 0;
-  height: 100vh;
-  background: linear-gradient(160deg,#6a5cff,#1e1b4b);
-  color: white;
-  overflow: hidden;
+:root{
+  --bg1:#6f7cff;
+  --bg2:#2a2f7a;
+  --glass:rgba(255,255,255,.18);
+  --glass-strong:rgba(255,255,255,.28);
+  --text:#fff;
+  --radius:22px;
+  --spring:cubic-bezier(.2,.8,.2,1);
 }
 
-.app {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,Inter,system-ui,sans-serif;
+  background:
+    radial-gradient(1200px 600px at -10% -10%, #9aa6ff33, transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, #7a7cff33, transparent 60%),
+    linear-gradient(160deg,var(--bg1),var(--bg2));
+  overflow:hidden;
 }
 
-.tabs {
-  flex: 1;
-  position: relative;
+/* APP */
+.app{height:100%;display:flex;flex-direction:column}
+
+/* HEADER */
+.header{
+  padding:18px 20px 10px;
+  font-weight:700;
+  letter-spacing:.2px;
 }
 
-.tab {
-  position: absolute;
-  inset: 0;
-  padding: 20px;
-  overflow-y: auto;
-  display: none;
+/* TABS */
+.tabs{flex:1;position:relative}
+.tab{
+  position:absolute; inset:0;
+  padding:12px 16px 90px;
+  overflow:auto;
+  opacity:0; transform:translateY(10px) scale(.98);
+  transition:opacity .35s var(--spring), transform .35s var(--spring);
+  pointer-events:none;
 }
-.tab.active { display: block; }
-
-.tabbar {
-  height: 72px;
-  display: flex;
-  backdrop-filter: blur(20px);
-  background: rgba(255,255,255,0.12);
-}
-.tabbar button {
-  flex: 1;
-  border: none;
-  background: none;
-  color: white;
-  font-size: 14px;
+.tab.active{
+  opacity:1; transform:none; pointer-events:auto;
 }
 
-/* glass */
-.card {
-  background: rgba(255,255,255,0.18);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 20px;
-  margin-top: 20px;
+/* GLASS CARD */
+.card{
+  background:linear-gradient(180deg,var(--glass),rgba(255,255,255,.08));
+  backdrop-filter: blur(22px) saturate(120%);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:
+    0 20px 40px rgba(0,0,0,.25),
+    inset 0 1px 0 rgba(255,255,255,.25);
+  animation:pop .5s var(--spring) both;
+}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
+
+/* INPUTS */
+.field{margin-top:12px}
+.field label{font-size:12px;opacity:.8}
+input{
+  width:100%; margin-top:6px;
+  padding:14px 14px;
+  border-radius:14px; border:none; outline:none;
+  font-size:16px;
+  background:rgba(255,255,255,.9);
+}
+button.primary{
+  margin-top:14px; width:100%;
+  padding:16px; border-radius:16px; border:none;
+  font-weight:700; font-size:16px;
+  color:#2a2f7a;
+  background:linear-gradient(180deg,#fff,#e9ecff);
+  box-shadow:0 12px 24px rgba(0,0,0,.25);
+  transition:transform .15s var(--spring), box-shadow .15s var(--spring);
+}
+button.primary:active{transform:scale(.97); box-shadow:0 6px 14px rgba(0,0,0,.25)}
+
+/* SIGN */
+canvas{
+  width:100%; height:110px;
+  background:#fff; border-radius:14px; margin-top:8px;
 }
 
-/* inputs */
-input {
-  width: 100%;
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
-  font-size: 16px;
+/* DOCUMENT */
+.center{display:flex;justify-content:center}
+.doc-wrap{perspective:1400px}
+.document{
+  width:100%; max-width:380px; height:230px;
+  position:relative; transform-style:preserve-3d;
+  transition:transform .9s var(--spring);
+}
+.document.flipped{transform:rotateY(180deg)}
+.side{
+  position:absolute; inset:0; border-radius:20px;
+  padding:16px;
+  backface-visibility:hidden;
+  background:
+    linear-gradient(135deg,#8f9bff,#3a3f9e);
+  box-shadow:0 30px 60px rgba(0,0,0,.35);
+}
+.back{
+  transform:rotateY(180deg);
+  display:flex;align-items:center;justify-content:center;gap:12px;flex-direction:column;
+}
+.title{font-weight:800;letter-spacing:.3px}
+.row{display:flex;gap:12px;margin-top:12px}
+.photo{
+  width:64px;height:84px;border-radius:10px;overflow:hidden;
+  background:rgba(255,255,255,.35)
+}
+.photo img{width:100%;height:100%;object-fit:cover}
+.meta{font-size:14px}
+.watermark{
+  position:absolute; right:12px; bottom:10px;
+  font-size:10px; opacity:.6
 }
 
-/* document */
-.doc-wrapper {
-  perspective: 1200px;
+/* QR */
+.qr{
+  width:128px;height:128px;background:#fff;border-radius:12px;
+  box-shadow:inset 0 0 0 6px #000;
+  position:relative; overflow:hidden;
 }
-.document {
-  width: 100%;
-  max-width: 360px;
-  height: 220px;
-  margin: 40px auto;
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.8s;
+.qr::after{
+  content:""; position:absolute; inset:0;
+  background:
+    repeating-linear-gradient(45deg,#000 0 6px,#fff 6px 12px);
+  opacity:.08;
 }
-.document.flipped {
-  transform: rotateY(180deg);
-}
+.qr-hint{font-size:12px;opacity:.8}
 
-.doc-side {
-  position: absolute;
-  inset: 0;
-  border-radius: 18px;
-  padding: 16px;
-  backface-visibility: hidden;
-  background: linear-gradient(135deg,#7c7cff,#2b2b66);
+/* TAB BAR */
+.tabbar{
+  position:absolute; left:0; right:0; bottom:0;
+  height:78px; padding:10px 10px env(safe-area-inset-bottom);
+  display:flex; gap:8px;
+  backdrop-filter: blur(24px) saturate(120%);
+  background:linear-gradient(180deg,rgba(255,255,255,.2),rgba(255,255,255,.08));
+  box-shadow:0 -10px 30px rgba(0,0,0,.35);
 }
+.tabbar button{
+  flex:1; border:none; border-radius:16px;
+  background:transparent; color:#fff; font-weight:600;
+  transition:background .2s var(--spring), transform .15s var(--spring);
+}
+.tabbar button.active{
+  background:rgba(255,255,255,.22);
+}
+.tabbar button:active{transform:scale(.96)}
 
-.doc-back {
-  transform: rotateY(180deg);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.watermark {
-  position: absolute;
-  bottom: 8px;
-  right: 12px;
-  font-size: 10px;
-  opacity: 0.5;
-}
-
-.photo {
-  width: 60px;
-  height: 80px;
-  background: rgba(255,255,255,0.3);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-canvas {
-  width: 100%;
-  height: 100px;
-  background: white;
-  border-radius: 12px;
-  margin-top: 10px;
-}
-
-.qr {
-  width: 120px;
-  height: 120px;
-  background: white;
-}
+/* MICRO */
+.fade-up{animation:fadeUp .6s var(--spring) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 </style>
 </head>
 
 <body>
 <div class="app">
 
+  <div class="header">FDIA • Demo</div>
+
   <div class="tabs">
+
     <!-- DATA -->
-    <div class="tab active" id="data">
-      <h2>Заповнення даних</h2>
-      <div class="card">
-        <input placeholder="Імʼя" id="name">
-        <input placeholder="Прізвище" id="surname">
-        <input type="date" id="birth">
-        <input type="file" id="photoInput">
-        <p>Підпис:</p>
-        <canvas id="sign"></canvas>
-        <button onclick="generate()" style="margin-top:15px;width:100%;padding:14px;border-radius:14px;border:none;">Згенерувати</button>
+    <section class="tab active" id="tab-data">
+      <div class="card fade-up">
+        <div class="field"><label>Імʼя</label><input id="name"></div>
+        <div class="field"><label>Прізвище</label><input id="surname"></div>
+        <div class="field"><label>Дата народження</label><input type="date" id="birth"></div>
+        <div class="field"><label>Фото</label><input type="file" id="photoInput"></div>
+        <div class="field"><label>Підпис</label><canvas id="sign"></canvas></div>
+        <button class="primary" onclick="generate()">Згенерувати документ</button>
       </div>
-    </div>
+    </section>
 
     <!-- DOCUMENT -->
-    <div class="tab" id="doc">
-      <h2>Документ</h2>
-      <div class="doc-wrapper">
-        <div class="document" id="document" onclick="flip()">
-          <div class="doc-side">
-            <strong>ID CARD • DEMO</strong>
-            <div style="display:flex;gap:12px;margin-top:12px;">
-              <div class="photo"><img id="photo"></div>
-              <div>
-                <div id="dName"></div>
-                <div id="dBirth"></div>
+    <section class="tab" id="tab-doc">
+      <div class="center">
+        <div class="doc-wrap">
+          <div class="document" id="doc" onclick="flip()">
+            <div class="side">
+              <div class="title">DIGITAL ID • DEMO</div>
+              <div class="row">
+                <div class="photo"><img id="photo"></div>
+                <div class="meta">
+                  <div id="dName"></div>
+                  <div id="dBirth"></div>
+                </div>
               </div>
+              <div class="watermark">DEMO • NOT A REAL DOCUMENT</div>
             </div>
-            <div class="watermark">DEMO • NOT A REAL DOCUMENT</div>
-          </div>
-          <div class="doc-side doc-back">
-            <div class="qr" onclick="alert('Помилка перевірки (DEMO)')"></div>
-            <div class="watermark">DEMO QR</div>
+            <div class="side back">
+              <div class="qr" onclick="qrError()"></div>
+              <div class="qr-hint">Натисніть для перевірки</div>
+              <div class="watermark">DEMO QR</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
+
   </div>
 
   <div class="tabbar">
-    <button onclick="openTab('data')">Дані</button>
-    <button onclick="openTab('doc')">Документ</button>
+    <button class="active" onclick="openTab('data',this)">Дані</button>
+    <button onclick="openTab('doc',this)">Документ</button>
   </div>
 
 </div>
 
 <script>
-let tabs = document.querySelectorAll('.tab');
-function openTab(id){
-  tabs.forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+const tabs = {data:document.getElementById('tab-data'), doc:document.getElementById('tab-doc')};
+function openTab(id,btn){
+  Object.values(tabs).forEach(t=>t.classList.remove('active'));
+  tabs[id].classList.add('active');
+  document.querySelectorAll('.tabbar button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
 }
-
-function flip(){
-  document.getElementById('document').classList.toggle('flipped');
-}
+function flip(){ document.getElementById('doc').classList.toggle('flipped'); }
+function qrError(){ alert('Помилка перевірки (DEMO)'); }
 
 function generate(){
-  document.getElementById('dName').innerText =
-    name.value + ' ' + surname.value;
-  document.getElementById('dBirth').innerText =
-    'Народження: ' + birth.value;
-
-  openTab('doc');
+  dName.textContent = name.value + ' ' + surname.value;
+  dBirth.textContent = 'Народження: ' + birth.value;
+  openTab('doc', document.querySelectorAll('.tabbar button')[1]);
 }
 
-// photo
-photoInput.onchange = e=>{
-  photo.src = URL.createObjectURL(e.target.files[0]);
-};
+/* photo */
+photoInput.onchange = e => photo.src = URL.createObjectURL(e.target.files[0]);
 
-// signature
-const c = sign, ctx = c.getContext('2d');
-let draw=false;
-c.onmousedown=()=>draw=true;
-c.onmouseup=()=>draw=false;
-c.onmousemove=e=>{
+/* sign */
+const c=sign, ctx=c.getContext('2d'); let draw=false;
+c.onpointerdown=()=>{draw=true;ctx.beginPath()}
+c.onpointerup=()=>draw=false;
+c.onpointermove=e=>{
   if(!draw)return;
-  ctx.lineWidth=2;
-  ctx.lineTo(e.offsetX,e.offsetY);
-  ctx.stroke();
+  ctx.lineWidth=2; ctx.lineCap='round';
+  ctx.lineTo(e.offsetX,e.offsetY); ctx.stroke();
 };
 </script>
 </body>
 </html>
-
