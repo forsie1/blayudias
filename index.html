@@ -1,110 +1,114 @@
+
 <!DOCTYPE html>
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <title>Дія</title>
 
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont}
+html,body{height:100%}
 body{
-  background:linear-gradient(160deg,#5b4bff,#2f3cff,#ff5bbd);
-  color:#fff;overflow:hidden;
+  overflow:hidden;
+  color:#000;
+  background:linear-gradient(120deg,#ffe066,#5b5cff,#2fc0ff);
+  background-size:300% 300%;
+  animation:bg 18s ease infinite;
 }
-.hidden{display:none}
+@keyframes bg{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
 
-/* ===== PIN ===== */
-#pin{
-  position:fixed;inset:0;
-  display:flex;flex-direction:column;
-  justify-content:center;align-items:center;
-  gap:24px;
-}
-.dots{display:flex;gap:14px}
-.dots span{
-  width:14px;height:14px;
-  border:2px solid #fff;border-radius:50%;
-}
-.dots .on{background:#fff}
-.pad{display:grid;grid-template-columns:repeat(3,80px);gap:14px}
-.pad button{
-  height:70px;border:none;border-radius:18px;
-  background:rgba(255,255,255,.25);
-  color:#fff;font-size:26px;font-weight:900;
-}
-.erase{background:rgba(255,80,80,.35)!important}
+/* ---------- APP ---------- */
+#app{height:100%;display:flex;flex-direction:column}
 
-/* ===== APP SCREENS ===== */
+/* ---------- SCREENS ---------- */
+#screens{flex:1;position:relative;overflow:hidden}
 .screen{
   position:absolute;inset:0;
-  padding:20px 16px 90px;
+  display:none;
+  padding:20px;
   overflow-y:auto;
 }
+.screen.active{display:block}
 
-/* ===== TABBAR ===== */
+/* ---------- PIN ---------- */
+#pinScreen{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+.dots{display:flex;gap:12px;margin-bottom:20px}
+.dot{
+  width:14px;height:14px;
+  border:2px solid #000;border-radius:50%;
+}
+.dot.on{background:#000}
+.pad{
+  display:grid;
+  grid-template-columns:repeat(3,80px);
+  gap:14px;
+}
+.pad button{
+  height:70px;
+  border:none;border-radius:18px;
+  background:rgba(255,255,255,.6);
+  font-size:26px;font-weight:800;
+}
+.pad .del{background:#ffb3b3}
+
+/* ---------- TABBAR ---------- */
 #tabbar{
-  position:fixed;left:0;right:0;bottom:0;
-  height:80px;
+  height:70px;
   background:#000;
   display:flex;
 }
-#tabbar.hidden{display:none}
 #tabbar button{
-  flex:1;border:none;background:none;
-  color:#fff;font-weight:800;
+  flex:1;
+  background:none;border:none;
+  color:#fff;font-size:12px;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  gap:4px;font-size:12px;
+  gap:4px;
 }
 
-/* ===== DOCUMENT LIST ===== */
-.tile{
-  background:rgba(255,255,255,.18);
-  backdrop-filter:blur(20px);
-  border-radius:20px;
-  padding:16px;
-  font-weight:900;
-  margin-bottom:12px;
+/* ---------- BLOCK ---------- */
+.block{
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(18px);
+  border-radius:22px;
+  padding:18px;
+  margin-bottom:14px;
 }
 
-/* ===== FORM ===== */
-.form{
-  background:rgba(255,255,255,.18);
-  backdrop-filter:blur(25px);
-  border-radius:26px;
-  padding:20px;
-  max-width:380px;
-  margin:0 auto;
-  display:flex;flex-direction:column;gap:12px;
-}
-.form h2{margin:0 0 6px;font-weight:900}
-.form label{font-size:13px;font-weight:700;opacity:.85}
+/* ---------- FORM ---------- */
 .form input{
-  padding:14px 16px;border-radius:16px;border:none;
-  background:rgba(255,255,255,.25);
-  color:#fff;font-weight:800;
+  width:100%;
+  padding:12px;
+  border:none;border-radius:14px;
+  margin-bottom:10px;
 }
 .form button{
-  margin-top:8px;padding:16px;border:none;
-  border-radius:18px;
+  width:100%;
+  padding:14px;
+  border:none;border-radius:16px;
   background:#4f5cff;color:#fff;
   font-weight:900;
 }
 
-/* ===== SIGNATURE ===== */
-#sign{
-  background:rgba(255,255,255,.25);
-  border-radius:14px;
-}
-
-/* ===== CARD ===== */
-.card-wrap{display:flex;justify-content:center;margin-top:24px}
+/* ---------- CARD ---------- */
+.card-wrap{perspective:1200px}
 .card{
-  width:360px;height:480px;
+  width:100%;max-width:360px;
+  margin:auto;
+  height:520px;
   position:relative;
   transform-style:preserve-3d;
-  transition:.8s cubic-bezier(.2,.8,.2,1);
+  transition:.8s;
 }
 .card.flip{transform:rotateY(180deg)}
 
@@ -115,54 +119,45 @@ body{
   -webkit-backface-visibility:hidden;
   overflow:hidden;
 }
-
-/* front */
-.front{transform:rotateY(0deg)}
-.front .blur{
-  position:absolute;inset:0;
+.front{
+  background:rgba(255,255,255,.55);
   backdrop-filter:blur(22px);
-  background:rgba(255,255,255,.18);
+  padding:18px;
 }
-.front .content{
-  position:relative;z-index:1;
-  padding:18px;font-weight:900;
-}
-
-/* back */
 .back{
+  background:rgba(255,255,255,.65);
   transform:rotateY(180deg);
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  background:rgba(0,0,0,.2);
 }
 
-.logo{font-size:22px}
-.top{display:flex;gap:14px;margin-top:14px}
+.header{
+  text-align:center;
+  font-weight:900;
+  margin-bottom:12px;
+}
+.row{display:flex;gap:14px}
 .photo{
   width:110px;height:140px;
   border-radius:14px;
-  background:rgba(255,255,255,.35);
+  background:#fff;
   overflow:hidden;
 }
 .photo img{width:100%;height:100%;object-fit:cover}
+.info{font-size:14px}
+.info div{margin-bottom:6px}
 
-.info{
-  display:flex;flex-direction:column;
-  gap:6px;font-size:14px;
-}
-
-/* marquee */
 .marquee{
-  margin-top:14px;
-  background:rgba(0,255,120,.35);
+  margin:12px 0;
+  background:rgba(0,200,100,.5);
   border-radius:10px;
   overflow:hidden;
 }
 .marquee div{
   white-space:nowrap;
-  padding:8px 10px;
+  padding:6px;
   animation:run 8s linear infinite;
 }
 @keyframes run{
@@ -170,208 +165,178 @@ body{
   to{transform:translateX(-100%)}
 }
 
-.name{margin-top:12px;font-size:16px}
+.name{
+  font-weight:900;
+  line-height:1.4;
+}
+
+.menuDots{
+  position:absolute;
+  right:14px;bottom:14px;
+  background:#000;
+  color:#fff;
+  border-radius:50%;
+  width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;
+}
 
 .watermark{
   position:absolute;
-  bottom:10px;right:14px;
-  font-size:10px;opacity:.5;
-}
-
-.qr-title{
+  inset:0;
+  display:flex;
+  align-items:center;justify-content:center;
+  font-size:48px;
   font-weight:900;
-  margin-bottom:12px;
+  color:rgba(255,0,0,.15);
+  transform:rotate(-25deg);
+  pointer-events:none;
 }
 </style>
 </head>
 
 <body>
+<div id="app">
+
+<div id="screens">
 
 <!-- PIN -->
-<div id="pin">
+<div id="pinScreen" class="screen active">
   <div class="dots">
-    <span></span><span></span><span></span><span></span>
+    <div class="dot"></div><div class="dot"></div>
+    <div class="dot"></div><div class="dot"></div>
   </div>
   <div class="pad">
-    <button onclick="add(1)">1</button>
-    <button onclick="add(2)">2</button>
-    <button onclick="add(3)">3</button>
-    <button onclick="add(4)">4</button>
-    <button onclick="add(5)">5</button>
-    <button onclick="add(6)">6</button>
-    <button onclick="add(7)">7</button>
-    <button onclick="add(8)">8</button>
-    <button onclick="add(9)">9</button>
-    <button class="erase" onclick="del()">⌫</button>
-    <button onclick="add(0)">0</button>
-    <button></button>
+    <button onclick="add(1)">1</button><button onclick="add(2)">2</button><button onclick="add(3)">3</button>
+    <button onclick="add(4)">4</button><button onclick="add(5)">5</button><button onclick="add(6)">6</button>
+    <button onclick="add(7)">7</button><button onclick="add(8)">8</button><button onclick="add(9)">9</button>
+    <button class="del" onclick="del()">⌫</button><button onclick="add(0)">0</button><button></button>
   </div>
 </div>
 
+<!-- FEED -->
+<div id="feedScreen" class="screen">
+  <div class="block">Привіт 👋</div>
+  <div class="block">Незламність</div>
+  <div class="block">Дія.Картка</div>
+  <div class="block">Скануй QR</div>
+</div>
+
 <!-- DOCUMENTS -->
-<div id="documents" class="screen hidden">
-  <div class="tile" onclick="show('create')">➕ Створити документ</div>
-  <div id="passportTile" class="tile hidden" onclick="show('docView')">
+<div id="docsScreen" class="screen">
+  <div class="block" onclick="show('createScreen')">➕ Створити документ</div>
+  <div id="docTile" class="block" onclick="show('viewScreen')" style="display:none">
     Паспорт громадянина України
   </div>
 </div>
 
 <!-- CREATE -->
-<div id="create" class="screen hidden">
-  <div class="form">
-    <h2>Дія</h2>
-
-    <label>Прізвище</label>
-    <input id="surname">
-
-    <label>Імʼя</label>
-    <input id="name">
-
-    <label>По-батькові</label>
-    <input id="patro">
-
-    <label>Дата народження</label>
-    <input id="birth">
-
-    <label>Фото</label>
+<div id="createScreen" class="screen">
+  <div class="block form">
+    <input id="surname" placeholder="Прізвище">
+    <input id="name" placeholder="Імʼя">
+    <input id="patro" placeholder="По батькові">
+    <input id="birth" placeholder="Дата народження">
     <input type="file" accept="image/*" onchange="loadPhoto(event)">
-
-    <label>Підпис</label>
-    <canvas id="sign" width="300" height="120"></canvas>
-
-    <button onclick="save()">Створити</button>
+    <button onclick="save()">Створити документ</button>
   </div>
 </div>
 
-<!-- DOCUMENT VIEW -->
-<div id="docView" class="screen hidden">
+<!-- VIEW -->
+<div id="viewScreen" class="screen">
   <div class="card-wrap">
-    <div id="card" class="card" onclick="flip()">
-
-      <!-- FRONT -->
+    <div id="card" class="card" onclick="flipCard()">
       <div class="side front">
-        <div class="blur"></div>
-        <div class="content">
-          <div class="logo">Паспорт Громадянина України</div>
-
-          <div class="top">
-            <div class="photo">
-              <img id="photoImg">
-            </div>
-            <div class="info">
-              <div id="outBirth"></div>
-              <div>№ 07460112</div>
-              <div>Підпис</div>
-            </div>
+        <div class="header">Паспорт громадянина України</div>
+        <div class="row">
+          <div class="photo"><img id="photoImg"></div>
+          <div class="info">
+            <div id="outBirth"></div>
+            <div>№ 07460112</div>
+            <div>Підпис</div>
           </div>
-
-          <div class="marquee">
-            <div id="update"></div>
-          </div>
-
-          <div class="name" id="outName"></div>
-          <div class="watermark">...</div>
         </div>
+        <div class="marquee"><div id="update"></div></div>
+        <div class="name" id="outName"></div>
+        <div class="menuDots">⋯</div>
+        <div class="watermark"></div>
       </div>
-
-      <!-- BACK -->
       <div class="side back">
-        <div class="qr-title">QR-код</div>
+        <div style="font-weight:900;margin-bottom:12px">QR-код</div>
         <canvas id="qr" width="200" height="200"></canvas>
+        <div class="watermark"></div>
       </div>
-
     </div>
   </div>
 </div>
 
-<!-- TABBAR -->
-<div id="tabbar" class="hidden">
-  <button onclick="show('documents')">📄 Документи</button>
+<!-- SERVICES -->
+<div id="servicesScreen" class="screen">
+  <div class="block">Допомога армії</div>
+  <div class="block">Військові облігації</div>
+  <div class="block">Е-книга</div>
+</div>
+
+<!-- MENU -->
+<div id="menuScreen" class="screen">
+  <div class="block">Версія Дії 4.27</div>
+  <div class="block">Підтримка</div>
+  <div class="block">Питання та відповіді</div>
+</div>
+
+</div>
+
+<div id="tabbar">
+  <button onclick="show('feedScreen')">Стрічка</button>
+  <button onclick="show('docsScreen')">Документи</button>
+  <button onclick="show('servicesScreen')">Сервіси</button>
+  <button onclick="show('menuScreen')">Меню</button>
+</div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script>
-/* ===== PIN ===== */
-let pin=[], dots=document.querySelectorAll('.dots span');
-function drawDots(){
-  dots.forEach((d,i)=>d.classList.toggle('on',i<pin.length));
-}
+let pin=[],dots=document.querySelectorAll('.dot');
+
+function updateDots(){dots.forEach((d,i)=>d.classList.toggle('on',i<pin.length))}
 function add(n){
-  if(pin.length>=4) return;
-  pin.push(n); drawDots();
+  if(pin.length>=4)return;
+  pin.push(n);updateDots();
   if(pin.length===4){
-    setTimeout(()=>{
-      if(pin.join('')==='1111') unlock();
-      else{ pin=[]; drawDots(); }
-    },150);
+    if(pin.join('')==='1111'){
+      show('feedScreen');
+      document.getElementById('pinScreen').classList.remove('active');
+    }else{pin=[];updateDots()}
   }
 }
-function del(){ pin.pop(); drawDots(); }
-function unlock(){
-  document.getElementById('pin').style.display='none';
-  document.getElementById('tabbar').classList.remove('hidden');
-  show('documents');
-}
+function del(){pin.pop();updateDots()}
 
-/* ===== NAV ===== */
 function show(id){
-  ['documents','create','docView'].forEach(s=>{
-    document.getElementById(s).classList.add('hidden');
-  });
-  document.getElementById(id).classList.remove('hidden');
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
 
-/* ===== PHOTO ===== */
 function loadPhoto(e){
   const r=new FileReader();
-  r.onload=()=>document.getElementById('photoImg').src=r.result;
+  r.onload=()=>photoImg.src=r.result;
   r.readAsDataURL(e.target.files[0]);
 }
 
-/* ===== SIGN ===== */
-const sign=document.getElementById('sign');
-const ctx=sign.getContext('2d');
-let drawing=false;
-sign.onpointerdown=e=>{
-  drawing=true;
-  ctx.beginPath();
-  ctx.moveTo(e.offsetX,e.offsetY);
-};
-sign.onpointermove=e=>{
-  if(!drawing) return;
-  ctx.lineTo(e.offsetX,e.offsetY);
-  ctx.stroke();
-};
-sign.onpointerup=()=>drawing=false;
-
-/* ===== SAVE ===== */
 function save(){
-  const s=document.getElementById('surname').value;
-  const n=document.getElementById('name').value;
-  const p=document.getElementById('patro').value;
-  const b=document.getElementById('birth').value;
-
-  document.getElementById('outName').textContent = `${s} ${n} ${p}`;
-  document.getElementById('outBirth').textContent = b;
-  document.getElementById('update').textContent =
-    `Документ оновлено ${new Date().toLocaleDateString('uk-UA')}`;
-
-  QRCode.toCanvas(
-    document.getElementById('qr'),
-    'https://example.com/error',
-    {width:200}
-  );
-
-  document.getElementById('passportTile').classList.remove('hidden');
-  show('documents');
+  outName.textContent =
+    surname.value+"\n"+name.value+"\n"+patro.value;
+  outBirth.textContent =
+    "Дата народження: "+birth.value;
+  update.textContent =
+    "Документ оновлено "+new Date().toLocaleString('uk-UA');
+  QRCode.toCanvas(qr,"https://example.com/error",{width:200});
+  document.getElementById('docTile').style.display='block';
+  show('docsScreen');
 }
 
-/* ===== FLIP ===== */
-function flip(){
+function flipCard(){
   document.getElementById('card').classList.toggle('flip');
 }
 </script>
-
 </body>
 </html>
-
