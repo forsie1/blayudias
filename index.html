@@ -1,12 +1,9 @@
+<!DOCTYPE html>
+<html lang="uk">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Дія</title>
-
-<!-- Favicon / аватарка додана -->
-<link rel="icon" type="image/svg+xml" sizes="32x32" href="https://upload.wikimedia.org/wikipedia/commons/8/89/DiiaLogo.svg">
-<link rel="icon" type="image/svg+xml" sizes="16x16" href="https://upload.wikimedia.org/wikipedia/commons/8/89/DiiaLogo.svg">
-<link rel="apple-touch-icon" sizes="180x180" href="https://upload.wikimedia.org/wikipedia/commons/8/89/DiiaLogo.svg">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
@@ -126,6 +123,7 @@ body{
   transform:rotateY(180deg);
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
+  gap:8px;
 }
 
 /* PASSPORT */
@@ -169,3 +167,181 @@ canvas{
   border:1px solid #555;border-radius:12px
 }
 </style>
+</head>
+
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <h1>Привіт 👋</h1>
+  <p>Дія</p>
+  <p>Міністерство цифрової трансформації України</p>
+  <small></small>
+</div>
+
+<!-- PIN -->
+<div id="pinScreen" class="hidden">
+  <div class="pin-dots" id="dots"></div>
+  <div class="pin-pad" id="pad"></div>
+</div>
+
+<div id="app" class="hidden">
+<div id="screens">
+
+<!-- FEED -->
+<div class="screen active" id="feed">
+  <div class="feed-card">
+    <h3>Дія.Картка</h3>
+    <p>Єдина картка українця</p>
+    <button>Відкрити картку →</button>
+  </div>
+  <div class="feed-card">
+    <h3>Незламність</h3>
+    <p>Мапа пунктів незламності та укриттів</p>
+  </div>
+  <div class="feed-card">
+    <h3>Відсутній звʼязок</h3>
+    <p>Подати заяву</p>
+  </div>
+  <div class="feed-card">
+    <h3>Сканувати QR-код</h3>
+  </div>
+</div>
+
+<!-- DOCUMENTS -->
+<div class="screen" id="documents">
+  <div class="card-wrap">
+    <div class="card" id="card">
+      <div class="face front">
+        <div>
+          <div class="header">Паспорт громадянина України</div>
+          <div class="main">
+            <div class="photo"><img id="pPhoto"></div>
+            <div class="info">
+              Дата народження<b id="pBirth"></b>
+              Номер<b>172073</b>
+              Підпис<img id="pSign" class="signature-img">
+            </div>
+          </div>
+          <div class="ticker"><span id="tickerText"></span></div>
+        </div>
+        <div class="fio-row">
+          <div class="fio" id="pFio"></div>
+          <div>⋮</div>
+        </div>
+      </div>
+
+      <div class="face back">
+        <div style="text-align:center;font-weight:800;margin-bottom:6px;">
+          QR-код буде дійсний ще <span id="qrMin">3</span> хв <span id="qrSec">0</span> сек
+        </div>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=diia">
+        <div style="display:flex;gap:10px;margin-top:10px">
+          <button>QR-код</button>
+          <button>Штрих-код</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="screen" id="services">
+  <div class="services-grid">
+    <div class="service">🔍 Пошук</div>
+    <div class="service">🪖 Допомога армії</div>
+    <div class="service">⚡ Незламність</div>
+    <div class="service">💰 Військові облігації</div>
+    <div class="service">🚁 Лінія дронів</div>
+    <div class="service">📘 єКнига</div>
+  </div>
+</div>
+
+<!-- MENU -->
+<div class="screen" id="menu">
+  <input placeholder="Прізвище" id="last">
+  <input placeholder="Імʼя" id="first">
+  <input placeholder="По батькові" id="father">
+  <input type="date" id="birth">
+  <input type="file" id="photo">
+  <canvas id="sign"></canvas>
+  <button onclick="save()">Зберегти</button>
+</div>
+
+</div>
+
+<div id="tabbar">
+  <div class="tab active" onclick="openTab('feed',this)"><span>📰</span>Стрічка</div>
+  <div class="tab" onclick="openTab('documents',this)"><span>📄</span>Документи</div>
+  <div class="tab" onclick="openTab('services',this)"><span>🧩</span>Сервіси</div>
+  <div class="tab" onclick="openTab('menu',this)"><span>☰</span>Меню</div>
+</div>
+</div>
+
+<script>
+/* SPLASH */
+setTimeout(()=>{splash.style.display="none";pinScreen.classList.remove("hidden");},2000);
+
+/* PIN */
+const PIN="1111";let p="";
+for(let i=0;i<4;i++)dots.appendChild(document.createElement("div")).className="pin-dot";
+[1,2,3,4,5,6,7,8,9,"⌫",0].forEach(v=>{
+  const b=document.createElement("div");
+  b.className="pin-btn";b.textContent=v;
+  b.onclick=()=>press(v);pad.appendChild(b);
+});
+function press(v){
+  if(v==="⌫")p=p.slice(0,-1);
+  else if(p.length<4)p+=v;
+  [...dots.children].forEach((d,i)=>d.classList.toggle("filled",i<p.length));
+  if(p===PIN){pinScreen.style.display="none";app.classList.remove("hidden");}
+}
+
+/* TABS */
+function openTab(id,el){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+}
+
+/* FLIP */
+card.onclick=()=>card.classList.toggle("flipped");
+
+/* SIGN */
+const c=document.getElementById("sign"),ctx=c.getContext("2d");
+let d=false;
+c.onmousedown=()=>d=true;
+c.onmouseup=()=>{d=false;ctx.beginPath()}
+c.onmousemove=e=>{if(!d)return;ctx.strokeStyle="#fff";ctx.lineWidth=2;ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();ctx.beginPath();ctx.moveTo(e.offsetX,e.offsetY);};
+
+/* DATA */
+function save(){
+  const data={last:last.value||"Іваненко",first:first.value||"Іван",father:father.value||"Іванович",birth:birth.value||"2000-01-01",photo:photo.files[0]?URL.createObjectURL(photo.files[0]):"",sign:c.toDataURL()};
+  localStorage.setItem("passportData",JSON.stringify(data));
+  load();
+}
+function load(){
+  const d=JSON.parse(localStorage.getItem("passportData"))||{last:"Іваненко",first:"Іван",father:"Іванович",birth:"2000-01-01"};
+  pFio.innerHTML=`${d.father}<br>${d.first}<br>${d.last}`;
+  pBirth.innerText=d.birth.split("-").reverse().join(".");
+  if(d.photo)pPhoto.src=d.photo;
+  if(d.sign)pSign.src=d.sign;
+  tickerText.innerText=`Дані оновлено · ${new Date().toLocaleString()}`;
+}
+load();
+
+/* QR TIMER */
+let qrTime = 180;
+setInterval(()=>{
+  const min = Math.floor(qrTime/60);
+  const sec = qrTime % 60;
+  document.getElementById("qrMin").innerText=min;
+  document.getElementById("qrSec").innerText=sec;
+  qrTime--; if(qrTime<0) qrTime=180;
+},1000);
+</script>
+
+</body>
+</html>
+
