@@ -2,74 +2,196 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <title>Дія</title>
+
 <style>
-* { box-sizing:border-box; margin:0; padding:0; font-family:-apple-system,BlinkMacSystemFont; }
-body, html { height:100%; width:100%; overflow:hidden; background:#000; color:#fff; display:flex; flex-direction:column; }
-
-@keyframes gradientBG {
-  0% {background: linear-gradient(135deg, #FFE066, #5B4BFF);}
-  25% {background: linear-gradient(135deg, #FF6B6B, #5B4BFF);}
-  50% {background: linear-gradient(135deg, #FF6B6B, #2FC0FF);}
-  75% {background: linear-gradient(135deg, #FFE066, #2FC0FF);}
-  100% {background: linear-gradient(135deg, #FFE066, #5B4BFF);}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont}
+body{
+  background:linear-gradient(160deg,#5b4bff,#2f3cff,#ff5bbd);
+  color:#fff;overflow:hidden;
 }
-#appBackground { position:fixed; inset:0; animation: gradientBG 20s ease infinite; z-index:-1; }
+.hidden{display:none}
 
-.screen { display:none; flex-direction:column; align-items:center; width:100%; padding:20px; overflow-y:auto; height:100%; }
-.screen.active { display:flex; }
+/* ===== PIN ===== */
+#pin{
+  position:fixed;inset:0;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  gap:24px;
+}
+.dots{display:flex;gap:14px}
+.dots span{
+  width:14px;height:14px;
+  border:2px solid #fff;border-radius:50%;
+}
+.dots .on{background:#fff}
+.pad{display:grid;grid-template-columns:repeat(3,80px);gap:14px}
+.pad button{
+  height:70px;border:none;border-radius:18px;
+  background:rgba(255,255,255,.25);
+  color:#fff;font-size:26px;font-weight:900;
+}
+.erase{background:rgba(255,80,80,.35)!important}
 
-#pin { display:flex; flex-direction:column; justify-content:center; align-items:center; gap:24px; }
-.dots { display:flex; gap:12px; margin-bottom:16px; }
-.dots span { width:14px; height:14px; border:2px solid #fff; border-radius:50%; }
-.dots .on { background:#fff; }
-.pad { display:grid; grid-template-columns:repeat(3,80px); gap:14px; }
-.pad button { height:70px; border:none; border-radius:18px; background:rgba(255,255,255,0.25); color:#fff; font-size:26px; font-weight:900; }
-.erase { background:rgba(255,80,80,0.35)!important; }
+/* ===== APP SCREENS ===== */
+.screen{
+  position:absolute;inset:0;
+  padding:20px 16px 90px;
+  overflow-y:auto;
+}
 
-.tabbar { position:fixed; bottom:0; left:0; right:0; height:70px; background:#000; display:flex; z-index:10; }
-.tabbar button { flex:1; border:none; background:none; color:#fff; font-weight:800; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; font-size:12px; }
+/* ===== TABBAR ===== */
+#tabbar{
+  position:fixed;left:0;right:0;bottom:0;
+  height:80px;
+  background:#000;
+  display:flex;
+}
+#tabbar.hidden{display:none}
+#tabbar button{
+  flex:1;border:none;background:none;
+  color:#fff;font-weight:800;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:4px;font-size:12px;
+}
 
-.form { background:rgba(255,255,255,.18); backdrop-filter:blur(22px); border-radius:26px; padding:20px; max-width:380px; display:flex; flex-direction:column; gap:12px; margin-top:20px; }
-.form input[type=text], .form input[type=date], .form input[type=file] { padding:12px 16px; border-radius:14px; border:none; background:rgba(255,255,255,.25); color:#fff; font-weight:700; }
-.form button { margin-top:10px; padding:14px; border:none; border-radius:16px; background:#4f5cff; color:#fff; font-weight:900; cursor:pointer; }
+/* ===== DOCUMENT LIST ===== */
+.tile{
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(20px);
+  border-radius:20px;
+  padding:16px;
+  font-weight:900;
+  margin-bottom:12px;
+}
 
-.card-wrap { perspective:1000px; margin-top:20px; }
-.card { width:360px; height:480px; transform-style:preserve-3d; transition:0.8s; cursor:pointer; position:relative; }
-.card.flip { transform:rotateY(180deg); }
+/* ===== FORM ===== */
+.form{
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(25px);
+  border-radius:26px;
+  padding:20px;
+  max-width:380px;
+  margin:0 auto;
+  display:flex;flex-direction:column;gap:12px;
+}
+.form h2{margin:0 0 6px;font-weight:900}
+.form label{font-size:13px;font-weight:700;opacity:.85}
+.form input{
+  padding:14px 16px;border-radius:16px;border:none;
+  background:rgba(255,255,255,.25);
+  color:#fff;font-weight:800;
+}
+.form button{
+  margin-top:8px;padding:16px;border:none;
+  border-radius:18px;
+  background:#4f5cff;color:#fff;
+  font-weight:900;
+}
 
-.side { position:absolute; inset:0; border-radius:28px; backface-visibility:hidden; -webkit-backface-visibility:hidden; overflow:hidden; display:flex; flex-direction:column; }
-.front { background:rgba(255,255,255,.18); backdrop-filter:blur(22px); padding:20px; justify-content:flex-start; }
-.back { background:rgba(0,0,0,.2); transform:rotateY(180deg); justify-content:center; align-items:center; }
+/* ===== SIGNATURE ===== */
+#sign{
+  background:rgba(255,255,255,.25);
+  border-radius:14px;
+}
 
-.logo { font-size:22px; font-weight:900; margin-bottom:12px; text-align:center; }
-.doc-top { display:flex; gap:14px; margin-bottom:12px; }
-.photo { width:110px; height:140px; border-radius:14px; overflow:hidden; background:rgba(255,255,255,.35); }
-.photo img { width:100%; height:100%; object-fit:cover; }
-.info { display:flex; flex-direction:column; justify-content:flex-start; font-size:14px; }
-.info div { margin-bottom:6px; }
-.marquee { margin-top:12px; background:rgba(0,255,120,.35); border-radius:10px; overflow:hidden; }
-.marquee div { white-space:nowrap; padding:6px 10px; animation:run 8s linear infinite; }
-@keyframes run { from {transform:translateX(100%);} to {transform:translateX(-100%);} }
+/* ===== CARD ===== */
+.card-wrap{display:flex;justify-content:center;margin-top:24px}
+.card{
+  width:360px;height:480px;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:.8s cubic-bezier(.2,.8,.2,1);
+}
+.card.flip{transform:rotateY(180deg)}
 
-.name-block { margin-top:12px; display:flex; flex-direction:column; font-size:16px; font-weight:700; }
-.watermark { position:absolute; bottom:10px; right:14px; font-size:10px; opacity:.5; }
+.side{
+  position:absolute;inset:0;
+  border-radius:28px;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  overflow:hidden;
+}
 
-#qrTitle { margin-bottom:12px; font-weight:900; }
+/* front */
+.front{transform:rotateY(0deg)}
+.front .blur{
+  position:absolute;inset:0;
+  backdrop-filter:blur(22px);
+  background:rgba(255,255,255,.18);
+}
+.front .content{
+  position:relative;z-index:1;
+  padding:18px;font-weight:900;
+}
 
-.card-service { background:rgba(255,255,255,.18); padding:20px; margin-bottom:12px; border-radius:16px; width:90%; text-align:center; }
-.news-item { background:rgba(255,255,255,.18); padding:14px; border-radius:16px; margin-bottom:12px; width:90%; }
+/* back */
+.back{
+  transform:rotateY(180deg);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  background:rgba(0,0,0,.2);
+}
 
+.logo{font-size:22px}
+.top{display:flex;gap:14px;margin-top:14px}
+.photo{
+  width:110px;height:140px;
+  border-radius:14px;
+  background:rgba(255,255,255,.35);
+  overflow:hidden;
+}
+.photo img{width:100%;height:100%;object-fit:cover}
+
+.info{
+  display:flex;flex-direction:column;
+  gap:6px;font-size:14px;
+}
+
+/* marquee */
+.marquee{
+  margin-top:14px;
+  background:rgba(0,255,120,.35);
+  border-radius:10px;
+  overflow:hidden;
+}
+.marquee div{
+  white-space:nowrap;
+  padding:8px 10px;
+  animation:run 8s linear infinite;
+}
+@keyframes run{
+  from{transform:translateX(100%)}
+  to{transform:translateX(-100%)}
+}
+
+.name{margin-top:12px;font-size:16px}
+
+.watermark{
+  position:absolute;
+  bottom:10px;right:14px;
+  font-size:10px;opacity:.5;
+}
+
+.qr-title{
+  font-weight:900;
+  margin-bottom:12px;
+}
 </style>
 </head>
+
 <body>
 
-<div id="appBackground"></div>
-
-<!-- PIN SCREEN -->
-<div id="pin" class="screen active">
-  <div class="dots"><span></span><span></span><span></span><span></span></div>
+<!-- PIN -->
+<div id="pin">
+  <div class="dots">
+    <span></span><span></span><span></span><span></span>
+  </div>
   <div class="pad">
     <button onclick="add(1)">1</button>
     <button onclick="add(2)">2</button>
@@ -86,116 +208,169 @@ body, html { height:100%; width:100%; overflow:hidden; background:#000; color:#f
   </div>
 </div>
 
-<!-- DOCUMENTS SCREEN -->
-<div id="documents" class="screen">
-  <button class="form" onclick="show('create')">➕ Створити документ</button>
-  <div id="passportTile" class="form hidden" onclick="show('docView')">Паспорт громадянина України · DEMO</div>
+<!-- DOCUMENTS -->
+<div id="documents" class="screen hidden">
+  <div class="tile" onclick="show('create')">➕ Створити документ</div>
+  <div id="passportTile" class="tile hidden" onclick="show('docView')">
+    Паспорт громадянина України · DEMO
+  </div>
 </div>
 
-<!-- CREATE DOCUMENT SCREEN -->
-<div id="create" class="screen">
+<!-- CREATE -->
+<div id="create" class="screen hidden">
   <div class="form">
-    <h2>D1IA DEMO</h2>
-    <label>Прізвище</label><input type="text" id="surname">
-    <label>Імʼя</label><input type="text" id="name">
-    <label>По-батькові</label><input type="text" id="patro">
-    <label>Дата народження</label><input type="text" id="birth">
-    <label>Фото</label><input type="file" accept="image/*" onchange="loadPhoto(event)">
-    <label>Підпис</label><canvas id="sign" width="300" height="120"></canvas>
+    <h2>Дія</h2>
+
+    <label>Прізвище</label>
+    <input id="surname">
+
+    <label>Імʼя</label>
+    <input id="name">
+
+    <label>По-батькові</label>
+    <input id="patro">
+
+    <label>Дата народження</label>
+    <input id="birth">
+
+    <label>Фото</label>
+    <input type="file" accept="image/*" onchange="loadPhoto(event)">
+
+    <label>Підпис</label>
+    <canvas id="sign" width="300" height="120"></canvas>
+
     <button onclick="save()">Створити</button>
   </div>
 </div>
 
-<!-- DOCUMENT VIEW SCREEN -->
-<div id="docView" class="screen">
+<!-- DOCUMENT VIEW -->
+<div id="docView" class="screen hidden">
   <div class="card-wrap">
     <div id="card" class="card" onclick="flip()">
+
+      <!-- FRONT -->
       <div class="side front">
-        <div class="logo">Паспорт громадянина України</div>
-        <div class="doc-top">
-          <div class="photo"><img id="photoImg"></div>
-          <div class="info">
-            <div id="outBirth"></div>
-            <div>№ 07460112</div>
-            <div>Підпис</div>
+        <div class="blur"></div>
+        <div class="content">
+          <div class="logo">DA1 · DEMO</div>
+
+          <div class="top">
+            <div class="photo">
+              <img id="photoImg">
+            </div>
+            <div class="info">
+              <div id="outBirth"></div>
+              <div>№ 07460112</div>
+              <div>Підпис</div>
+            </div>
           </div>
+
+          <div class="marquee">
+            <div id="update"></div>
+          </div>
+
+          <div class="name" id="outName"></div>
+          <div class="watermark">WATERMARK · DEMO</div>
         </div>
-        <div class="marquee"><div id="update"></div></div>
-        <div class="name-block" id="outName"></div>
-        <div class="watermark">FakeDiiA</div>
       </div>
+
+      <!-- BACK -->
       <div class="side back">
-        <div id="qrTitle">QR-код</div>
+        <div class="qr-title">QR-код</div>
         <canvas id="qr" width="200" height="200"></canvas>
       </div>
+
     </div>
   </div>
 </div>
 
-<!-- NEWS SCREEN -->
-<div id="news" class="screen">
-  <div class="news-item">📰 Новина 1: Демо новинна стрічка</div>
-  <div class="news-item">📰 Новина 2: Ще одна новина</div>
-  <div class="news-item">📰 Новина 3: І ще одна</div>
-</div>
-
-<!-- SERVICES SCREEN -->
-<div id="services" class="screen">
-  <div class="card-service">Сервіс 1</div>
-  <div class="card-service">Сервіс 2</div>
-  <div class="card-service">Сервіс 3</div>
-</div>
-
-<!-- MENU SCREEN -->
-<div id="menu" class="screen">
-  <div class="form">Профіль та налаштування</div>
-  <div class="form">Вийти</div>
-</div>
-
 <!-- TABBAR -->
-<div class="tabbar">
+<div id="tabbar" class="hidden">
   <button onclick="show('documents')">📄 Документи</button>
-  <button onclick="show('news')">📰 Стрічка</button>
-  <button onclick="show('services')">⚡ Сервіси</button>
-  <button onclick="show('menu')">👤 Меню</button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script>
+/* ===== PIN ===== */
 let pin=[], dots=document.querySelectorAll('.dots span');
-function drawDots(){ dots.forEach((d,i)=>d.classList.toggle('on',i<pin.length)); }
-function add(n){ if(pin.length>=4) return; pin.push(n); drawDots();
-if(pin.length===4){ setTimeout(()=>{ if(pin.join('')==='1111'){ unlock(); } else { pin=[]; drawDots(); } },150); } }
+function drawDots(){
+  dots.forEach((d,i)=>d.classList.toggle('on',i<pin.length));
+}
+function add(n){
+  if(pin.length>=4) return;
+  pin.push(n); drawDots();
+  if(pin.length===4){
+    setTimeout(()=>{
+      if(pin.join('')==='1111') unlock();
+      else{ pin=[]; drawDots(); }
+    },150);
+  }
+}
 function del(){ pin.pop(); drawDots(); }
-function unlock(){ document.getElementById('pin').classList.remove('active'); show('documents'); }
-
-function show(id){
-  const screens = document.querySelectorAll('.screen');
-  screens.forEach(s => s.classList.remove('active'));
-  const el=document.getElementById(id); if(el) el.classList.add('active');
+function unlock(){
+  document.getElementById('pin').style.display='none';
+  document.getElementById('tabbar').classList.remove('hidden');
+  show('documents');
 }
 
-function loadPhoto(e){ const r=new FileReader(); r.onload=()=>document.getElementById('photoImg').src=r.result; r.readAsDataURL(e.target.files[0]); }
+/* ===== NAV ===== */
+function show(id){
+  ['documents','create','docView'].forEach(s=>{
+    document.getElementById(s).classList.add('hidden');
+  });
+  document.getElementById(id).classList.remove('hidden');
+}
 
-const sign=document.getElementById('sign'), ctx=sign.getContext('2d'); let drawing=false;
-sign.onpointerdown=e=>{ drawing=true; ctx.beginPath(); ctx.moveTo(e.offsetX,e.offsetY); };
-sign.onpointermove=e=>{ if(!drawing) return; ctx.lineTo(e.offsetX,e.offsetY); ctx.stroke(); };
+/* ===== PHOTO ===== */
+function loadPhoto(e){
+  const r=new FileReader();
+  r.onload=()=>document.getElementById('photoImg').src=r.result;
+  r.readAsDataURL(e.target.files[0]);
+}
+
+/* ===== SIGN ===== */
+const sign=document.getElementById('sign');
+const ctx=sign.getContext('2d');
+let drawing=false;
+sign.onpointerdown=e=>{
+  drawing=true;
+  ctx.beginPath();
+  ctx.moveTo(e.offsetX,e.offsetY);
+};
+sign.onpointermove=e=>{
+  if(!drawing) return;
+  ctx.lineTo(e.offsetX,e.offsetY);
+  ctx.stroke();
+};
 sign.onpointerup=()=>drawing=false;
 
+/* ===== SAVE ===== */
 function save(){
   const s=document.getElementById('surname').value;
   const n=document.getElementById('name').value;
   const p=document.getElementById('patro').value;
   const b=document.getElementById('birth').value;
-  document.getElementById('outName').textContent = `${s}\n${n}\n${p}`;
-  document.getElementById('outBirth').textContent = `Дата народження: ${b}`;
-  document.getElementById('update').textContent = `Документ оновлено ${new Date().toLocaleString('uk-UA')}`;
-  QRCode.toCanvas(document.getElementById('qr'), 'https://example.com/error', {width:200});
+
+  document.getElementById('outName').textContent = `${s} ${n} ${p}`;
+  document.getElementById('outBirth').textContent = b;
+  document.getElementById('update').textContent =
+    `Документ оновлено ${new Date().toLocaleDateString('uk-UA')}`;
+
+  QRCode.toCanvas(
+    document.getElementById('qr'),
+    'https://example.com/error',
+    {width:200}
+  );
+
   document.getElementById('passportTile').classList.remove('hidden');
   show('documents');
 }
 
-function flip(){ document.getElementById('card').classList.toggle('flip'); }
+/* ===== FLIP ===== */
+function flip(){
+  document.getElementById('card').classList.toggle('flip');
+}
 </script>
+
 </body>
 </html>
