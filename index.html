@@ -32,7 +32,8 @@ body{
 }
 .screen.active{opacity:1;transform:translateX(0);pointer-events:auto;}
 .center{display:flex;justify-content:center;align-items:center;flex-direction:column;width:100%;}
-.btn{padding:16px;border-radius:16px;border:none;font-weight:900;color:#2b2f7a;background:linear-gradient(180deg,#fff,#eef1ff);cursor:pointer;margin-top:10px;width:140px;font-size:16px;}
+.btn{padding:16px;border-radius:16px;border:none;font-weight:900;color:#fff;background:linear-gradient(180deg,#5b5cff,#2b6cff);cursor:pointer;margin-top:10px;width:180px;font-size:16px;transition:0.2s;}
+.btn:hover{transform:scale(1.05);}
 .num-pad{display:grid;grid-template-columns:repeat(3,80px);gap:12px;margin-top:20px;}
 .num-pad button{padding:18px;font-size:24px;border-radius:12px;border:none;background:rgba(255,255,255,.2);color:#fff;font-weight:900;cursor:pointer;transition:0.15s;}
 .num-pad button:active{transform:scale(0.95);background:rgba(255,255,255,.35);}
@@ -52,6 +53,9 @@ body{
 .back{transform:rotateY(180deg);display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);}
 .photo{width:100px;height:120px;border-radius:10px;background:rgba(255,255,255,.35);overflow:hidden;position:absolute;top:50px;left:16px;}
 .photo img{width:100%;height:100%;object-fit:cover;}
+.input-group{display:flex;flex-direction:column;width:220px;margin:6px;}
+.input-group input{padding:10px 12px;border-radius:12px;border:none;background:rgba(255,255,255,.15);color:#fff;font-weight:700;font-size:14px;margin-top:4px;}
+.input-group input::placeholder{color:rgba(255,255,255,.6);}
 .info-left{position:absolute;top:180px;left:16px;display:flex;flex-direction:column;gap:4px;}
 .info-left div{font-size:14px;}
 .info-right{position:absolute;top:50px;right:16px;display:flex;flex-direction:column;gap:6px;}
@@ -62,7 +66,6 @@ body{
 .bottom-line .dots{font-size:20px;}
 .pin-display{display:flex;gap:12px;margin-top:10px;font-size:24px;font-weight:900;}
 .pin-display div{width:20px;height:20px;border-bottom:2px solid #fff;text-align:center;}
-input{margin:4px 0;padding:6px 8px;border-radius:8px;border:none;width:180px;}
 </style>
 </head>
 <body>
@@ -100,7 +103,7 @@ input{margin:4px 0;padding:6px 8px;border-radius:8px;border:none;width:180px;}
 <!-- Главный экран -->
 <section class="screen" id="feed">
   <div class="center">
-    <div style="font-size:24px;font-weight:900;margin-bottom:20px;">D1IA DEMO</div>
+    <div style="font-size:24px;font-weight:900;margin-bottom:20px;">Дія</div>
     <button class="btn" onclick="go('docs')">Створити документ</button>
   </div>
 </section>
@@ -118,11 +121,11 @@ input{margin:4px 0;padding:6px 8px;border-radius:8px;border:none;width:180px;}
 <section class="screen" id="data">
   <div class="center">
     <div class="card-wrap">
-      <input id="name" placeholder="Імʼя">
-      <input id="surname" placeholder="Прізвище">
-      <input id="patronymic" placeholder="По-батькові">
-      <input type="date" id="birth">
-      <input type="file" id="photoInput">
+      <div class="input-group"><label>Імʼя</label><input id="name" placeholder="Імʼя"></div>
+      <div class="input-group"><label>Прізвище</label><input id="surname" placeholder="Прізвище"></div>
+      <div class="input-group"><label>По-батькові</label><input id="patronymic" placeholder="По-батькові"></div>
+      <div class="input-group"><label>Дата народження</label><input type="date" id="birth"></div>
+      <div class="input-group"><label>Фото</label><input type="file" id="photoInput"></div>
       <canvas id="sign" class="signature"></canvas>
       <button class="btn" onclick="generateDoc()">Створити документ</button>
     </div>
@@ -133,8 +136,8 @@ input{margin:4px 0;padding:6px 8px;border-radius:8px;border:none;width:180px;}
 <section class="screen" id="final">
   <div class="center">
     <div class="card-wrap">
-      <div class="doc" id="docCard">
-        <div class="side front">
+      <div class="doc" id="docCard" onclick="flipCard()">
+        <div class="side front" id="cardFront">
           <div style="font-size:22px;font-weight:900;">DA1</div>
           <div class="photo"><img id="photo"></div>
           <div class="info-left">
@@ -153,7 +156,6 @@ input{margin:4px 0;padding:6px 8px;border-radius:8px;border:none;width:180px;}
           <canvas id="qrCanvas"></canvas>
         </div>
       </div>
-      <div style="margin-top:12px;"><button class="btn" onclick="flip()">QR-код</button></div>
     </div>
   </div>
 </section>
@@ -179,7 +181,6 @@ function go(id,btn){
     btn.classList.add('active');
   }
 }
-function flip(){document.getElementById('docCard').classList.toggle('flip');}
 
 // КОД-ПАРОЛЬ
 let pinValue='';
@@ -196,7 +197,7 @@ function addDigit(d){
     if(pinValue==='1111'){
       pinValue='';updatePinDisplay();
       document.querySelector('.tabbar').style.display='flex';
-      go('docs'); // сразу в документы
+      go('docs');
       document.getElementById('pinError').textContent='';
     } else {
       document.getElementById('pinError').textContent='Невірний код!';
@@ -216,6 +217,16 @@ const c=document.getElementById('sign'),ctx=c.getContext('2d');let d=false;
 c.onpointerdown=e=>{d=true;ctx.beginPath();ctx.moveTo(e.offsetX,e.offsetY);}
 c.onpointerup=()=>d=false;
 c.onpointermove=e=>{if(!d)return;ctx.lineWidth=2;ctx.lineCap='round';ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();}
+
+// Финальная карточка
+let qrGenerated=false;
+function flipCard(){
+  if(!qrGenerated){
+    QRCode.toCanvas(document.getElementById('qrCanvas'), 'https://example.com',{width:200},function(err){if(err)console.error(err);});
+    qrGenerated=true;
+  }
+  document.getElementById('docCard').classList.toggle('flip');
+}
 
 // Генерация документа
 function generateDoc(){
@@ -238,9 +249,6 @@ function generateDoc(){
   // Зеленая полоска
   const today = new Date().toLocaleDateString('uk-UA');
   document.getElementById('updateStrip').textContent = `Документ оновлено: ${today}`;
-
-  // QR-код создается только при клике на карточку
-  QRCode.toCanvas(document.getElementById('qrCanvas'), 'https://example.com',{width:120},function(err){if(err)console.error(err);});
 
   go('final');
 }
