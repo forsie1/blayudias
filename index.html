@@ -10,7 +10,7 @@
   --glass:rgba(255,255,255,.15); --r:22px; --ease:cubic-bezier(.2,.8,.2,1);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;margin:0;font-family:-apple-system,BlinkMacSystemFont,system-ui;color:#fff;}
+html,body{height:100%;margin:0;font-family:-apple-system,BlinkMacSystemFont,system-ui;color:#fff;touch-action:none;}
 body{
   background:
     radial-gradient(900px 600px at 10% 0%, var(--pink) 0%, transparent 55%),
@@ -32,9 +32,10 @@ body{
 }
 .screen.active{opacity:1;transform:translateX(0);pointer-events:auto;}
 .center{display:flex;justify-content:center;align-items:center;flex-direction:column;width:100%;}
-.btn{padding:16px;border-radius:16px;border:none;font-weight:900;color:#2b2f7a;background:linear-gradient(180deg,#fff,#eef1ff);cursor:pointer;margin-top:10px;width:120px;}
+.btn{padding:16px;border-radius:16px;border:none;font-weight:900;color:#2b2f7a;background:linear-gradient(180deg,#fff,#eef1ff);cursor:pointer;margin-top:10px;width:140px;font-size:16px;}
 .num-pad{display:grid;grid-template-columns:repeat(3,80px);gap:12px;margin-top:20px;}
-.num-pad button{padding:18px;font-size:24px;border-radius:12px;border:none;background:rgba(255,255,255,.2);color:#fff;font-weight:900;cursor:pointer;}
+.num-pad button{padding:18px;font-size:24px;border-radius:12px;border:none;background:rgba(255,255,255,.2);color:#fff;font-weight:900;cursor:pointer;transition:0.15s;}
+.num-pad button:active{transform:scale(0.95);background:rgba(255,255,255,.35);}
 .num-pad .erase{background:rgba(255,100,100,.3);}
 .tabbar{display:none;position:absolute;left:0;right:0;bottom:0;height:78px;padding:10px 8px env(safe-area-inset-bottom);display:flex;gap:6px;backdrop-filter: blur(24px);background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.08));}
 .tabbar button{flex:1;border:none;border-radius:16px;background:transparent;color:#fff;font-size:12px;font-weight:800;cursor:pointer;}
@@ -99,7 +100,8 @@ input{margin:4px 0;padding:6px 8px;border-radius:8px;border:none;width:180px;}
 <!-- Главный экран -->
 <section class="screen" id="feed">
   <div class="center">
-    <div style="font-size:24px;font-weight:900;margin-bottom:20px;">Дія</div>
+    <div style="font-size:24px;font-weight:900;margin-bottom:20px;">D1IA DEMO</div>
+    <button class="btn" onclick="go('docs')">Створити документ</button>
   </div>
 </section>
 
@@ -119,7 +121,7 @@ input{margin:4px 0;padding:6px 8px;border-radius:8px;border:none;width:180px;}
       <input id="name" placeholder="Імʼя">
       <input id="surname" placeholder="Прізвище">
       <input id="patronymic" placeholder="По-батькові">
-      <input type="date" id="birth" placeholder="Дата народження">
+      <input type="date" id="birth">
       <input type="file" id="photoInput">
       <canvas id="sign" class="signature"></canvas>
       <button class="btn" onclick="generateDoc()">Створити документ</button>
@@ -131,7 +133,7 @@ input{margin:4px 0;padding:6px 8px;border-radius:8px;border:none;width:180px;}
 <section class="screen" id="final">
   <div class="center">
     <div class="card-wrap">
-      <div class="doc" id="docCard" onclick="flip()">
+      <div class="doc" id="docCard">
         <div class="side front">
           <div style="font-size:22px;font-weight:900;">DA1</div>
           <div class="photo"><img id="photo"></div>
@@ -151,6 +153,7 @@ input{margin:4px 0;padding:6px 8px;border-radius:8px;border:none;width:180px;}
           <canvas id="qrCanvas"></canvas>
         </div>
       </div>
+      <div style="margin-top:12px;"><button class="btn" onclick="flip()">QR-код</button></div>
     </div>
   </div>
 </section>
@@ -192,7 +195,8 @@ function addDigit(d){
   if(pinValue.length===4){
     if(pinValue==='1111'){
       pinValue='';updatePinDisplay();
-      go('feed'); document.querySelector('.tabbar').style.display='flex';
+      document.querySelector('.tabbar').style.display='flex';
+      go('docs'); // сразу в документы
       document.getElementById('pinError').textContent='';
     } else {
       document.getElementById('pinError').textContent='Невірний код!';
@@ -235,7 +239,7 @@ function generateDoc(){
   const today = new Date().toLocaleDateString('uk-UA');
   document.getElementById('updateStrip').textContent = `Документ оновлено: ${today}`;
 
-  // QR-код
+  // QR-код создается только при клике на карточку
   QRCode.toCanvas(document.getElementById('qrCanvas'), 'https://example.com',{width:120},function(err){if(err)console.error(err);});
 
   go('final');
