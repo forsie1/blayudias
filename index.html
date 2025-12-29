@@ -2,14 +2,13 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>D1A DEMO</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont}
+*{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+html,body{height:100%;overflow:hidden}
 body{
-  height:100vh;
-  overflow:hidden;
   background:linear-gradient(-45deg,#ffd54f,#4fc3f7,#7e57c2,#ec407a);
   background-size:400% 400%;
   animation:bg 18s ease infinite;
@@ -19,233 +18,250 @@ body{
   50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
-
 .hidden{display:none}
 
+/* ===== APP ===== */
+#app{position:fixed;inset:0;display:flex;flex-direction:column}
+#screens{flex:1;overflow:hidden;position:relative}
+
 /* ===== PIN ===== */
-#pinScreen{
-  position:fixed;inset:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  backdrop-filter:blur(25px);
+#pin{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  justify-content:center;align-items:center;
+  backdrop-filter:blur(30px);
+  z-index:10;
 }
-.pinDots{display:flex;gap:12px;margin-bottom:25px}
-.dot{
+.pin-dots{display:flex;gap:14px;margin:20px}
+.pin-dot{
   width:14px;height:14px;border-radius:50%;
-  border:2px solid white;
+  border:2px solid #fff;
 }
-.dot.fill{background:white}
-.pinGrid{
+.pin-dot.filled{background:#fff}
+.pin-pad{
   display:grid;
   grid-template-columns:repeat(3,80px);
-  gap:15px;
+  gap:14px;
 }
-.pinBtn{
-  width:80px;height:80px;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,.4);
-  color:white;font-size:24px;
+.pin-btn{
+  width:80px;height:80px;border-radius:50%;
   background:rgba(255,255,255,.15);
+  color:#fff;font-size:26px;
+  display:flex;align-items:center;justify-content:center;
 }
-.pinBtn:active{transform:scale(.95)}
-.erase{grid-column:2}
-
-/* ===== APP ===== */
-#app{height:100%;display:flex;flex-direction:column}
-
-/* ===== CONTENT ===== */
-#content{flex:1;overflow:auto;padding:20px;color:white}
+.pin-btn:active{transform:scale(.95)}
 
 /* ===== TABBAR ===== */
 #tabbar{
-  height:70px;
-  background:black;
+  height:74px;
+  background:#000;
   display:flex;
   justify-content:space-around;
   align-items:center;
+  color:#fff;
 }
-.tab{
-  color:white;
-  font-size:12px;
-  text-align:center;
-  opacity:.5;
-}
-.tab.active{opacity:1;font-weight:600}
+.tab{display:flex;flex-direction:column;align-items:center;font-size:12px}
+.tab.active{opacity:1}
+.tab{opacity:.6}
+
+/* ===== SCREENS ===== */
+.screen{position:absolute;inset:0;overflow-y:auto;padding:16px;color:#fff}
+.title{font-size:22px;font-weight:700;margin-bottom:12px}
 
 /* ===== FORM ===== */
-.input{
-  background:rgba(255,255,255,.15);
-  padding:14px;
-  border-radius:14px;
-  margin-bottom:12px;
-  color:white;
-  border:none;
+.form input{
   width:100%;
+  padding:14px;
+  margin-bottom:10px;
+  border-radius:14px;
+  border:none;
+  background:rgba(255,255,255,.15);
+  color:#fff;
   font-size:16px;
 }
+.form button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:16px;
+  background:#fff;
+  color:#000;
+  font-weight:700;
+}
+
+/* ===== SIGN ===== */
+#sign{background:#fff;border-radius:12px;width:100%;height:120px}
 
 /* ===== CARD ===== */
-.cardWrap{
-  perspective:1200px;
-}
+.card-wrap{display:flex;justify-content:center;margin-top:20px}
 .card{
-  width:100%;
-  max-width:380px;
-  margin:auto;
-  height:240px;
+  width:340px;
+  border-radius:24px;
   position:relative;
   transform-style:preserve-3d;
-  transition:.8s;
+  transition:transform .6s;
 }
-.card.flip{transform:rotateY(180deg)}
-.side{
+.card.flipped{transform:rotateY(180deg)}
+.face{
   position:absolute;inset:0;
-  border-radius:22px;
-  backdrop-filter:blur(18px);
-  background:rgba(255,255,255,.15);
-  padding:16px;
   backface-visibility:hidden;
+  border-radius:24px;
+  padding:16px;
 }
-.back{transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center}
-.cardTitle{text-align:center;font-weight:700;margin-bottom:6px}
-
-.row{display:flex;gap:12px}
+.front{
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(20px);
+}
+.back{
+  background:#fff;
+  transform:rotateY(180deg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.card-header{text-align:center;font-weight:700;margin-bottom:10px}
+.card-main{display:flex;gap:12px}
 .photo{
-  width:90px;height:110px;border-radius:14px;
-  background:rgba(255,255,255,.3);
+  width:90px;height:120px;
+  border-radius:12px;
+  background:#ccc;
   overflow:hidden;
 }
 .photo img{width:100%;height:100%;object-fit:cover}
-.dataRight{flex:1;font-size:14px}
-.nameBlock{
-  margin-top:10px;
+.info{font-size:13px}
+.info b{font-size:14px}
+.sign-img{width:120px;margin-top:6px}
+.marquee{
+  margin:10px 0;
+  overflow:hidden;
+  white-space:nowrap;
+}
+.marquee span{
+  display:inline-block;
+  animation:run 10s linear infinite;
+  color:#8aff8a;
+}
+@keyframes run{
+  from{transform:translateX(100%)}
+  to{transform:translateX(-100%)}
+}
+.fio{
   font-weight:800;
   font-size:18px;
-  line-height:1.2;
 }
-
-.ticker{
-  margin:10px 0;
-  background:rgba(76,175,80,.35);
-  padding:6px;
-  white-space:nowrap;
-  overflow:hidden;
-}
-.ticker span{
-  display:inline-block;
-  animation:ticker 8s linear infinite;
-}
-@keyframes ticker{
-  0%{transform:translateX(100%)}
-  100%{transform:translateX(-100%)}
-}
+.qr-title{margin-bottom:10px;font-weight:700}
 </style>
 </head>
 
 <body>
+<div id="app">
+  <div id="screens">
 
-<!-- PIN -->
-<div id="pinScreen">
-  <div class="pinDots" id="dots"></div>
-  <div class="pinGrid">
-    <button class="pinBtn" onclick="add(1)">1</button>
-    <button class="pinBtn" onclick="add(2)">2</button>
-    <button class="pinBtn" onclick="add(3)">3</button>
-    <button class="pinBtn" onclick="add(4)">4</button>
-    <button class="pinBtn" onclick="add(5)">5</button>
-    <button class="pinBtn" onclick="add(6)">6</button>
-    <button class="pinBtn" onclick="add(7)">7</button>
-    <button class="pinBtn" onclick="add(8)">8</button>
-    <button class="pinBtn" onclick="add(9)">9</button>
-    <button class="pinBtn erase" onclick="del()">⌫</button>
-    <button class="pinBtn" onclick="add(0)">0</button>
+    <!-- PIN -->
+    <div id="pin">
+      <div class="pin-dots" id="dots"></div>
+      <div class="pin-pad" id="pad"></div>
+    </div>
+
+    <!-- DOCUMENTS -->
+    <div class="screen" id="documents">
+      <div class="title">Документи</div>
+
+      <div class="form">
+        <input placeholder="Прізвище" id="ln">
+        <input placeholder="Імʼя" id="fn">
+        <input placeholder="По батькові" id="mn">
+        <input placeholder="Дата народження" id="bd">
+        <input type="file" accept="image/*" id="photoInput">
+        <canvas id="sign"></canvas>
+        <button onclick="createDoc()">Створити документ</button>
+      </div>
+
+      <div class="card-wrap hidden" id="cardWrap">
+        <div class="card" id="card" onclick="flip()">
+          <div class="face front">
+            <div class="card-header">Паспорт громадянина України</div>
+            <div class="card-main">
+              <div class="photo"><img id="photo"></div>
+              <div class="info">
+                <b>Дата народження</b><br><span id="bdOut"></span><br><br>
+                <b>Номер</b><br>07460112<br>
+                <img class="sign-img" id="signOut">
+              </div>
+            </div>
+            <div class="marquee"><span>Документ оновлено · сьогодні · Документ дійсний</span></div>
+            <div class="fio" id="fio"></div>
+          </div>
+          <div class="face back">
+            <div class="qr-title">QR-код</div>
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=demo">
+          </div>
+        </div>
+      </div>
+
+    </div>
+
   </div>
-</div>
 
-<!-- APP -->
-<div id="app" class="hidden">
-  <div id="content"></div>
-
-  <div id="tabbar">
-    <div class="tab active" onclick="openTab('feed')">Стрічка</div>
-    <div class="tab" onclick="openTab('docs')">Документи</div>
-    <div class="tab" onclick="openTab('services')">Сервіси</div>
-    <div class="tab" onclick="openTab('menu')">Меню</div>
+  <!-- TABBAR -->
+  <div id="tabbar" class="hidden">
+    <div class="tab active">Стрічка</div>
+    <div class="tab">Документи</div>
+    <div class="tab">Сервіси</div>
+    <div class="tab">Меню</div>
   </div>
 </div>
 
 <script>
-let pin="";
+/* PIN */
+const PIN="1111";let pin="";
 const dots=document.getElementById("dots");
-for(let i=0;i<4;i++){
-  let d=document.createElement("div");
-  d.className="dot";
-  dots.appendChild(d);
-}
-
-function renderDots(){
-  [...dots.children].forEach((d,i)=>d.classList.toggle("fill",i<pin.length))
-}
-function add(n){
-  if(pin.length<4){pin+=n;renderDots()}
+for(let i=0;i<4;i++){dots.innerHTML+=`<div class="pin-dot"></div>`}
+const pad=document.getElementById("pad");
+[1,2,3,4,5,6,7,8,9,"⌫",0].forEach(v=>{
+  const b=document.createElement("div");
+  b.className="pin-btn";
+  b.textContent=v;
+  b.onclick=()=>{
+    if(v==="⌫"){pin=pin.slice(0,-1)}
+    else if(pin.length<4){pin+=v}
+    updatePin();
+  };
+  pad.appendChild(b);
+});
+function updatePin(){
+  [...dots.children].forEach((d,i)=>d.classList.toggle("filled",i<pin.length));
   if(pin.length===4){
-    setTimeout(()=>{
-      pin="";
-      renderDots();
-      document.getElementById("pinScreen").classList.add("hidden");
-      document.getElementById("app").classList.remove("hidden");
-      openTab('docs');
-    },300)
-  }
-}
-function del(){pin=pin.slice(0,-1);renderDots()}
-
-function openTab(t){
-  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
-
-  const c=document.getElementById("content");
-  if(t==='docs'){
-    c.innerHTML=`
-      <input class="input" id="ln" placeholder="Прізвище">
-      <input class="input" id="fn" placeholder="Імʼя">
-      <input class="input" id="mn" placeholder="По батькові">
-      <input class="input" id="bd" placeholder="Дата народження">
-      <input class="input" type="file" id="ph">
-      <button class="input" onclick="gen()">Створити документ</button>
-      <div id="out"></div>
-    `;
-  } else {
-    c.innerHTML="<h2>"+t+"</h2>";
+    if(pin===PIN){
+      document.getElementById("pin").classList.add("hidden");
+      document.getElementById("tabbar").classList.remove("hidden");
+    }else{pin="";updatePin()}
   }
 }
 
-function gen(){
-  const ln=ln.value,fn=fn.value,mn=mn.value,bd=bd.value;
-  if(!ln||!fn)return;
-  const img=ph.files[0]?URL.createObjectURL(ph.files[0]):"";
-  out.innerHTML=`
-  <div class="cardWrap">
-    <div class="card" onclick="this.classList.toggle('flip')">
-      <div class="side">
-        <div class="cardTitle">Паспорт громадянина України</div>
-        <div class="row">
-          <div class="photo">${img?`<img src="${img}">`:''}</div>
-          <div class="dataRight">${bd}<br>№ 07460112</div>
-        </div>
-        <div class="ticker"><span>Документ оновлено • ${new Date().toLocaleDateString()}</span></div>
-        <div class="nameBlock">${ln}<br>${fn}<br>${mn||''}</div>
-      </div>
-      <div class="side back">
-        <div>QR-код</div>
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=demo">
-      </div>
-    </div>
-  </div>`;
+/* SIGN */
+const c=document.getElementById("sign");
+const ctx=c.getContext("2d");
+c.width=c.offsetWidth;c.height=c.offsetHeight;
+let draw=false;
+c.onpointerdown=e=>{draw=true;ctx.moveTo(e.offsetX,e.offsetY)}
+c.onpointermove=e=>{if(draw){ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke()}}
+c.onpointerup=()=>draw=false;
+
+/* PHOTO */
+document.getElementById("photoInput").onchange=e=>{
+  const r=new FileReader();
+  r.onload=()=>document.getElementById("photo").src=r.result;
+  r.readAsDataURL(e.target.files[0]);
 }
+
+/* DOC */
+function createDoc(){
+  document.getElementById("fio").innerText=
+    ln.value+"\n"+fn.value+"\n"+mn.value;
+  document.getElementById("bdOut").innerText=bd.value;
+  document.getElementById("signOut").src=c.toDataURL();
+  document.getElementById("cardWrap").classList.remove("hidden");
+}
+function flip(){document.getElementById("card").classList.toggle("flipped")}
 </script>
-
 </body>
 </html>
