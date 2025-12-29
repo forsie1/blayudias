@@ -7,52 +7,62 @@
 
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;height:100%;font-family:-apple-system;color:#fff}
+html,body{margin:0;height:100%;font-family:-apple-system,BlinkMacSystemFont,system-ui}
 body{
-  background:linear-gradient(160deg,#6a5cff,#2b3cff,#ff5fb7);
-  overflow:hidden;
+  background:linear-gradient(160deg,#6a5cff,#3a45ff,#ff5fb7);
+  color:#fff;overflow:hidden;
 }
 
 /* ===== SCREENS ===== */
 .screen{
-  position:absolute; inset:0;
-  display:flex; flex-direction:column;
-  justify-content:center; align-items:center;
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
 }
 .hidden{display:none}
 
 /* ===== PIN ===== */
-.pin-dots{display:flex;gap:12px;margin-bottom:20px}
-.pin-dots div{width:14px;height:14px;border:2px solid #fff;border-radius:50%}
+#pinScreen{gap:20px}
+.pin-dots{display:flex;gap:14px}
+.pin-dots div{
+  width:14px;height:14px;border-radius:50%;
+  border:2px solid #fff;
+}
 .pin-dots .on{background:#fff}
 
-.pad{display:grid;grid-template-columns:repeat(3,80px);gap:12px}
+.pad{
+  display:grid;
+  grid-template-columns:repeat(3,80px);
+  gap:14px;
+}
 .pad button{
-  height:70px;border:none;border-radius:18px;
+  height:70px;border-radius:18px;border:none;
   background:rgba(255,255,255,.25);
   color:#fff;font-size:26px;font-weight:800;
 }
+.pad button:active{transform:scale(.95)}
+.erase{background:rgba(255,80,80,.35)!important}
 
 /* ===== FORM ===== */
 .form{
-  width:90%;max-width:360px;
-  background:rgba(255,255,255,.15);
-  backdrop-filter:blur(20px);
-  border-radius:24px;
+  width:92%;max-width:380px;
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(22px);
+  border-radius:26px;
   padding:20px;
-  display:flex;flex-direction:column;gap:12px;
+  display:flex;flex-direction:column;gap:14px;
 }
+.form h2{margin:0 0 6px;font-weight:900}
 .form input{
-  padding:12px 14px;
-  border-radius:14px;
-  border:none;
+  padding:14px 16px;
+  border-radius:16px;border:none;
   background:rgba(255,255,255,.25);
-  color:#fff;font-size:15px;
+  color:#fff;font-size:15px;font-weight:700;
 }
+.form input::placeholder{color:rgba(255,255,255,.7)}
 .form button{
-  margin-top:10px;
-  padding:14px;border:none;border-radius:18px;
-  background:#5b6cff;color:#fff;font-weight:800;
+  margin-top:6px;padding:16px;
+  border:none;border-radius:18px;
+  background:#5b6cff;color:#fff;font-weight:900;
 }
 
 /* ===== CARD ===== */
@@ -66,50 +76,75 @@ body{
 .card.flip{transform:rotateY(180deg)}
 
 .side{
-  position:absolute; inset:0;
+  position:absolute;inset:0;
   border-radius:26px;
   backface-visibility:hidden;
   overflow:hidden;
 }
+
+/* blur only background */
 .blur-bg{
-  position:absolute; inset:0;
+  position:absolute;inset:0;
   backdrop-filter:blur(20px);
   background:rgba(255,255,255,.18);
 }
-.front-content{
+
+/* FRONT */
+.front{
   position:relative;z-index:2;
   padding:18px;
 }
-
+.logo{font-weight:900;font-size:22px}
 .top{display:flex;gap:14px;margin-top:14px}
 .photo{
   width:110px;height:140px;
-  background:rgba(255,255,255,.35);
   border-radius:14px;
+  background:rgba(255,255,255,.35);
 }
-.right{font-size:14px;display:flex;flex-direction:column;gap:6px}
-
-.name{margin-top:14px;font-weight:800}
+.right{
+  font-size:14px;
+  display:flex;flex-direction:column;gap:6px;
+}
 .update{
-  margin-top:12px;
-  padding:8px;
+  margin-top:14px;
+  padding:8px 10px;
   background:rgba(0,255,0,.35);
-  border-radius:10px;text-align:center;
+  border-radius:10px;
+  font-weight:800;text-align:center;
+}
+.name{
+  margin-top:14px;
+  font-weight:900;font-size:16px;
 }
 
+/* BACK */
 .back{
   transform:rotateY(180deg);
   display:flex;flex-direction:column;
   justify-content:center;align-items:center;
 }
-.back h3{margin-bottom:10px}
+.back h3{margin:0 0 10px}
+
+/* ===== TABBAR ===== */
+.tabbar{
+  position:absolute;left:0;right:0;bottom:0;
+  height:80px;
+  display:flex;
+  background:rgba(255,255,255,.2);
+  backdrop-filter:blur(22px);
+}
+.tabbar.hidden{display:none}
+.tabbar button{
+  flex:1;border:none;background:none;
+  color:#fff;font-weight:800;
+}
 </style>
 </head>
 
 <body>
 
 <!-- PIN -->
-<div id="pin" class="screen">
+<div id="pinScreen" class="screen">
   <div class="pin-dots">
     <div></div><div></div><div></div><div></div>
   </div>
@@ -117,15 +152,16 @@ body{
     <button onclick="add(1)">1</button><button onclick="add(2)">2</button><button onclick="add(3)">3</button>
     <button onclick="add(4)">4</button><button onclick="add(5)">5</button><button onclick="add(6)">6</button>
     <button onclick="add(7)">7</button><button onclick="add(8)">8</button><button onclick="add(9)">9</button>
-    <button onclick="del()">⌫</button><button onclick="add(0)">0</button><button></button>
+    <button class="erase" onclick="del()">⌫</button><button onclick="add(0)">0</button><button></button>
   </div>
 </div>
 
 <!-- FORM -->
 <div id="formScreen" class="screen hidden">
   <div class="form">
-    <input id="name" placeholder="Імʼя">
+    <h2>D1IA DEMO</h2>
     <input id="surname" placeholder="Прізвище">
+    <input id="name" placeholder="Імʼя">
     <input id="patronymic" placeholder="По-батькові">
     <input id="birth" placeholder="Дата народження">
     <button onclick="createDoc()">Створити документ</button>
@@ -136,9 +172,11 @@ body{
 <div id="cardScreen" class="screen hidden">
   <div class="card-wrap">
     <div id="card" class="card" onclick="flip()">
+      <!-- FRONT -->
       <div class="side">
         <div class="blur-bg"></div>
-        <div class="front-content">
+        <div class="front">
+          <div class="logo">DA1 • DEMO</div>
           <div class="top">
             <div class="photo"></div>
             <div class="right">
@@ -147,10 +185,11 @@ body{
               <div>Підпис</div>
             </div>
           </div>
-          <div class="update">Документ оновлено</div>
+          <div class="update" id="update"></div>
           <div class="name" id="nameOut"></div>
         </div>
       </div>
+      <!-- BACK -->
       <div class="side back">
         <h3>QR-код</h3>
         <canvas id="qr"></canvas>
@@ -159,27 +198,67 @@ body{
   </div>
 </div>
 
+<!-- TABBAR -->
+<div id="tabbar" class="tabbar hidden">
+  <button>Стрічка</button>
+  <button>Документи</button>
+  <button>Сервіси</button>
+  <button>Меню</button>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script>
-let pin=[],dots=document.querySelectorAll('.pin-dots div');
-function draw(){dots.forEach((d,i)=>d.classList.toggle('on',i<pin.length))}
-function add(n){if(pin.length<4){pin.push(n);draw();if(pin.join('')==='1111'){unlock()}}}
-function del(){pin.pop();draw()}
+/* ===== PIN ===== */
+let pin=[];
+const dots=document.querySelectorAll('.pin-dots div');
+
+function drawDots(){
+  dots.forEach((d,i)=>d.classList.toggle('on',i<pin.length));
+}
+
+function add(n){
+  if(pin.length>=4) return;
+  pin.push(n); drawDots();
+  if(pin.length===4){
+    setTimeout(()=>{
+      if(pin.join('')==='1111'){
+        unlock();
+      }else{
+        pin=[]; drawDots();
+      }
+    },150);
+  }
+}
+function del(){pin.pop();drawDots();}
+
 function unlock(){
-  pin=[];draw();
+  pin=[];drawDots();
   pinScreen.classList.add('hidden');
   formScreen.classList.remove('hidden');
 }
 
+/* ===== FORM → CARD ===== */
+let qrReady=false;
+
 function createDoc(){
   nameOut.textContent =
-    surname.value+" "+name.value+" "+patronymic.value;
-  birthOut.textContent=birth.value;
+    `${surname.value} ${name.value} ${patronymic.value}`;
+  birthOut.textContent = birth.value;
+
+  update.textContent =
+    'Документ оновлено: ' + new Date().toLocaleDateString('uk-UA');
+
   formScreen.classList.add('hidden');
   cardScreen.classList.remove('hidden');
-  QRCode.toCanvas(qr,'https://example.com',{width:200});
+  tabbar.classList.remove('hidden');
+
+  if(!qrReady){
+    QRCode.toCanvas(qr,'https://example.com',{width:200});
+    qrReady=true;
+  }
 }
 
+/* ===== CARD FLIP ===== */
 function flip(){
   card.classList.toggle('flip');
 }
