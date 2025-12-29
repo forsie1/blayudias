@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Привіт</title>
+<title>Дія</title>
 <style>
 :root{
   --vio:#5b5cff;
@@ -67,7 +67,7 @@ input{width:100%;margin-top:6px;margin-bottom:10px;padding:14px;border-radius:14
 .doc-wrap{perspective:1400px;}
 .doc{
   width:350px;
-  height:380px;
+  height:400px;
   position:relative;transform-style:preserve-3d;
   transition:transform 0.8s cubic-bezier(.2,.8,.2,1);
   cursor:pointer;
@@ -88,12 +88,11 @@ input{width:100%;margin-top:6px;margin-bottom:10px;padding:14px;border-radius:14
   align-items:center;
   justify-content:center;
 }
-.row{display:flex;gap:12px;margin-top:10px;}
-.photo{width:100px;height:120px;border-radius:10px;background:rgba(255,255,255,.35);overflow:hidden;}
+.photo{width:100px;height:120px;border-radius:10px;background:rgba(255,255,255,.35);overflow:hidden;position:absolute;top:16px;left:16px;}
 .photo img{width:100%;height:100%;object-fit:cover;}
-.watermark{position:absolute;right:12px;bottom:10px;font-size:10px;opacity:.6;}
-.qr{width:120px;height:120px;background:#fff;border-radius:12px;margin-bottom:10px;}
-canvas{width:100%;height:100px;background:#fff;border-radius:14px;}
+.info{position:absolute;top:16px;left:130px;display:flex;flex-direction:column;gap:4px;}
+.info div{font-size:14px;}
+.signature{position:absolute;bottom:60px;left:16px;width:150px;height:60px;}
 .update-strip{
   position:absolute;bottom:0;left:0;right:0;
   height:30px;
@@ -101,7 +100,9 @@ canvas{width:100%;height:100px;background:#fff;border-radius:14px;}
   display:flex;align-items:center;justify-content:center;
   font-size:14px;font-weight:700;border-bottom-left-radius:20px;border-bottom-right-radius:20px;
 }
+.qr{width:120px;height:120px;background:#fff;border-radius:12px;margin-bottom:10px;}
 .tabbar{
+  display:none; /* Скрыт по умолчанию */
   position:absolute;left:0;right:0;bottom:0;
   height:78px;padding:10px 8px env(safe-area-inset-bottom);
   display:flex;gap:6px;
@@ -114,20 +115,24 @@ canvas{width:100%;height:100px;background:#fff;border-radius:14px;}
   cursor:pointer;
 }
 .tabbar button.active{background:rgba(255,255,255,.22);}
-.faceid{display:flex;align-items:center;justify-content:center;height:100%;font-size:22px;font-weight:900;}
 </style>
 </head>
 <body>
 <div class="app">
 <div class="screens">
-  <!-- FaceID при запуске -->
-  <section class="screen active" id="face">
-    <div class="faceid shimmer">🔒 Аутентифікація FaceID…</div>
+  <!-- Экран блокировки паролем -->
+  <section class="screen active" id="lock">
+    <div class="center" style="flex-direction:column;gap:20px;">
+      <div style="font-size:22px;font-weight:900;">Введіть код доступу</div>
+      <input id="pin" type="password" maxlength="4" style="width:120px;text-align:center;font-size:24px;padding:10px;border-radius:12px;border:none;">
+      <button class="btn" onclick="checkPin()">Ввести</button>
+      <div id="pinError" style="color:#ff6b6b;font-weight:700;"></div>
+    </div>
   </section>
 
-  <!-- Стрічка -->
+  <!-- Главный экран (Стрічка) -->
   <section class="screen" id="feed">
-    <div class="header">Дія</div>
+    <div class="header">Привіт</div>
     <div class="card shimmer">
       <div class="grid">
         <div class="tile" onclick="go('docs')">Документи</div>
@@ -152,7 +157,7 @@ canvas{width:100%;height:100px;background:#fff;border-radius:14px;}
       <label>Прізвище</label><input id="surname">
       <label>Дата народження</label><input type="date" id="birth">
       <label>Фото</label><input type="file" id="photoInput">
-      <label>Підпис</label><canvas id="sign"></canvas>
+      <label>Підпис</label><canvas id="sign" class="signature"></canvas>
       <button class="btn" onclick="generateDoc()">Створити документ</button>
     </div>
   </section>
@@ -163,22 +168,17 @@ canvas{width:100%;height:100px;background:#fff;border-radius:14px;}
       <div class="doc-wrap">
         <div class="doc" id="docCard" onclick="flip()">
           <div class="side front">
-            <b>Паспорт громадянина України</b>
-            <div class="row">
-              <div class="photo"><img id="photo"></div>
-              <div style="flex:1;">
-                <div id="dName"></div>
-                <div id="dBirth"></div>
-                <div id="dSign"></div>
-                <div id="dNumber"></div>
-              </div>
+            <div class="photo"><img id="photo"></div>
+            <div class="info">
+              <div id="dName"></div>
+              <div id="dBirth"></div>
+              <div id="dNumber"></div>
             </div>
+            <canvas id="dSign" class="signature"></canvas>
             <div class="update-strip" id="updateStrip"></div>
-            <div class="watermark">...</div>
           </div>
           <div class="side back">
             <div class="qr"></div>
-            <div class="watermark">QR-код</div>
           </div>
         </div>
       </div>
@@ -207,14 +207,24 @@ function go(id,btn){
 
 function flip(){document.getElementById('docCard').classList.toggle('flip');}
 
-// FaceID при запуске
-setTimeout(()=>{go('feed');},2000);
+// Проверка пароля
+function checkPin(){
+  const pin = document.getElementById('pin').value;
+  const error = document.getElementById('pinError');
+  if(pin==='1111'){
+    error.textContent='';
+    go('feed');
+    document.querySelector('.tabbar').style.display='flex';
+  } else { error.textContent='Невірний код!'; }
+}
 
 // Загрузка фото
+const photoInput = document.getElementById('photoInput');
+const photo = document.getElementById('photo');
 photoInput.onchange=e=>photo.src=URL.createObjectURL(e.target.files[0]);
 
 // Подпись
-const c=sign,ctx=c.getContext('2d');let d=false;
+const c=document.getElementById('sign'),ctx=c.getContext('2d');let d=false;
 c.onpointerdown=()=>{d=true;ctx.beginPath();}
 c.onpointerup=()=>d=false;
 c.onpointermove=e=>{if(!d)return;ctx.lineWidth=2;ctx.lineCap='round';ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();}
@@ -222,25 +232,29 @@ c.onpointermove=e=>{if(!d)return;ctx.lineWidth=2;ctx.lineCap='round';ctx.lineTo(
 // Генерация документа
 function generateDoc(){
   const fullName = name.value+' '+surname.value;
-  dName.textContent = "Імʼя: "+fullName;
-  dBirth.textContent = "Народження: "+birth.value;
+  document.getElementById('dName').textContent = fullName;
+  document.getElementById('dBirth').textContent = birth.value;
+  const docNumber = Math.floor(1000000 + Math.random()*9000000);
+  document.getElementById('dNumber').textContent = "№ " + docNumber;
 
   // Подпись
-  const signData = sign.toDataURL();
-  dSign.innerHTML = `<img src="${signData}" style="width:100%;height:60px;object-fit:contain;border:1px solid #fff;border-radius:6px;">`;
+  const signData = c.toDataURL();
+  const dSign = document.getElementById('dSign');
+  const img = new Image();
+  img.src = signData;
+  img.style.width='100%';
+  img.style.height='60px';
+  img.style.objectFit='contain';
+  dSign.replaceWith(img);
 
-  // Номер документа
-  const docNumber = Math.floor(1000000 + Math.random()*9000000);
-  dNumber.textContent = "Номер документа: "+docNumber;
-
-  // Зеленая полоска с сегодняшней датой
+  // Зеленая полоска
   const today = new Date().toLocaleDateString('uk-UA');
-  updateStrip.textContent = `Документ оновлено: ${today}`;
+  document.getElementById('updateStrip').textContent = `Документ оновлено: ${today}`;
 
   go('final');
 }
 
-// Свайпы между вкладками
+// Свайпы
 let startX=0; const tabs=['feed','docs','feed','feed']; let currentTab=0;
 document.body.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;});
 document.body.addEventListener('touchend',e=>{
