@@ -5,12 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Дія</title>
 <style>
+/* =========================
+   GLOBAL
+========================= */
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif;}
-html,body{height:100%;overflow:hidden;}
-body{background:linear-gradient(-45deg,#ffd54f,#4fc3f7,#7e57c2);background-size:400% 400%;animation:bg 18s ease infinite;color:#fff;}
-@keyframes bg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+html,body{height:100%;overflow:hidden;background:linear-gradient(-45deg,#ffd54f,#4fc3f7,#7e57c2);background-size:400% 400%;animation:bg 18s ease infinite;color:#fff;}
+@keyframes bg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%;}}
 
-/* PIN */
+/* =========================
+   PIN SCREEN
+========================= */
 #pinScreen{position:fixed;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;backdrop-filter:blur(25px);z-index:1000;}
 .pin-dots{display:flex;gap:14px;margin-bottom:24px}
 .pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid #fff}
@@ -18,50 +22,63 @@ body{background:linear-gradient(-45deg,#ffd54f,#4fc3f7,#7e57c2);background-size:
 .pin-pad{display:grid;grid-template-columns:repeat(3,80px);gap:14px}
 .pin-btn{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 
-/* SCREENS */
+/* =========================
+   SCREENS
+========================= */
 .screen{position:absolute;inset:0;padding:16px;display:none;overflow:hidden;}
 .screen.active{display:block;}
+.title{font-size:22px;font-weight:800;margin-bottom:12px}
 
-/* TABBAR */
+/* =========================
+   TABBAR
+========================= */
 #tabbar{position:fixed;bottom:0;left:0;right:0;height:70px;background:#000;display:flex;justify-content:space-around;align-items:center;z-index:100;}
 .tab{color:#fff;font-size:14px;opacity:.6;cursor:pointer;text-align:center;}
-.tab.active{opacity:1;font-weight:700;}
+.tab.active{opacity:1;font-weight:700}
 
-/* FEED */
+/* =========================
+   FEED
+========================= */
 .feed-container{display:flex;overflow-x:auto;gap:12px;padding-bottom:12px;}
-.news{background:rgba(255,255,255,.15);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:6px;min-width:220px;}
+.news{background:rgba(255,255,255,.15);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:6px;min-width:220px;flex-shrink:0;}
 .news img{width:100%;height:120px;border-radius:12px;object-fit:cover}
 .news button{margin-top:6px;background:rgba(255,255,255,.25);border:none;color:#fff;padding:6px 12px;border-radius:12px;cursor:pointer}
 
-/* DOCUMENTS */
-.docs-wrapper{position:relative;overflow:hidden;height:560px;display:flex;justify-content:center;align-items:center;}
+/* =========================
+   DOCUMENTS
+========================= */
+.docs-wrapper{position:relative;overflow:hidden;height:600px;display:flex;justify-content:center;align-items:center;}
 .docs-track{display:flex;transition:transform .3s ease;height:100%;align-items:center;}
-.card-wrap{position:relative;min-width:380px;height:500px;flex-shrink:0;perspective:1000px;}
-.card{width:100%;height:100%;transform-style:preserve-3d;transition:.6s;position:relative;}
+.card-wrap{position:relative;min-width:360px;height:520px;flex-shrink:0;perspective:1200px;}
+.card{width:100%;height:100%;transform-style:preserve-3d;transition:.6s;position:relative;border-radius:24px;}
 .card.flipped{transform:rotateY(180deg);}
 .face{position:absolute;inset:0;border-radius:24px;padding:16px;backface-visibility:hidden;display:flex;flex-direction:column;}
-.front{background:rgba(255,255,255,.18);backdrop-filter:blur(20px);color:#fff;display:flex;flex-direction:column;}
+.front{background:rgba(255,255,255,.18);backdrop-filter:blur(20px);color:#fff;display:flex;flex-direction:column;justify-content:flex-start;}
 .back{background:#fff;color:#000;justify-content:center;align-items:center;text-align:center;display:flex;flex-direction:column;transform:rotateY(180deg);}
-.status{position:absolute;top:12px;left:16px;background:#1aff64;color:#000;padding:4px 10px;font-size:12px;border-radius:12px;white-space:nowrap;overflow:hidden;}
+.status{margin:12px 0 6px 0;background:#1aff64;color:#000;padding:4px 10px;font-size:12px;border-radius:12px;white-space:nowrap;overflow:hidden;}
 @keyframes marquee{0%{transform:translateX(100%);}100%{transform:translateX(-100%);}}
 .marquee{display:inline-block;animation:marquee 8s linear infinite;}
 .main{display:flex;gap:12px;align-items:flex-start;flex:1;}
 .photo{width:150px;height:200px;background:#333;border-radius:14px;overflow:hidden;}
 .photo img{width:100%;height:100%;object-fit:cover;}
 .info{font-size:16px;flex:1;display:flex;flex-direction:column;align-items:flex-start;}
-.fio{text-align:left;font-weight:900;font-size:22px;line-height:1.2;margin-top:12px;margin-bottom:4px;white-space:pre-line;}
-canvas.sign{border:1px solid #444;border-radius:8px;width:100%;height:60px;margin-top:10px;}
+.fio{text-align:left;font-weight:900;font-size:26px;line-height:1.2;margin-top:12px;margin-bottom:4px;white-space:pre-line;}
+canvas.sign{border:1px solid #444;border-radius:8px;width:100%;height:50px;margin-top:10px;}
 .qr-title{background:rgba(0,0,0,.1);padding:4px 10px;border-radius:8px;margin-bottom:8px;display:inline-block;}
 .doc-indicator{display:flex;justify-content:center;gap:6px;margin-top:6px;}
 .doc-indicator div{width:10px;height:10px;border-radius:50%;background:#ccc;}
-.doc-indicator div.active{background:#fff;}
+.doc-indicator div.active{background:#fff}
 
-/* SERVICES */
+/* =========================
+   SERVICES
+========================= */
 .services{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
 .service{background:rgba(255,255,255,.15);border-radius:16px;padding:14px;text-align:center;cursor:pointer}
 .icon{font-size:26px;margin-bottom:6px}
 
-/* MENU */
+/* =========================
+   MENU
+========================= */
 .menu{display:flex;flex-direction:column;gap:12px}
 .menu button, .menu input, .menu select{padding:12px;border:none;border-radius:14px;background:rgba(255,255,255,.15);color:#fff;font-size:16px;cursor:pointer}
 .menu input, .menu select{color:#000;}
@@ -123,7 +140,7 @@ canvas.sign{border:1px solid #444;border-radius:8px;width:100%;height:60px;margi
       <option value="passport">Паспорт громадянина України</option>
       <option value="rnkpp">Картка платника податків</option>
     </select>
-    <canvas id="signCanvas" width="300" height="60" style="background:#fff;"></canvas>
+    <canvas id="signCanvas" width="300" height="50"></canvas>
     <button onclick="addUserDocument()">Додати документ</button>
     <button>Вийти</button>
     <button>Налаштування</button>
@@ -144,7 +161,7 @@ canvas.sign{border:1px solid #444;border-radius:8px;width:100%;height:60px;margi
 </div>
 
 <script>
-// PIN
+// ========================= PIN CODE
 const PIN="1111";let p="";
 const pinScreen=document.getElementById("pinScreen");
 const app=document.getElementById("app");
@@ -152,12 +169,11 @@ const dots=document.getElementById("dots");
 for(let i=0;i<4;i++)dots.appendChild(Object.assign(document.createElement("div"),{className:"pin-dot"}));
 const pad=document.getElementById("pad");
 [1,2,3,4,5,6,7,8,9,"⌫",0].forEach(v=>{
-  const b=document.createElement("div");
-  b.className="pin-btn";b.textContent=v;
-  b.onclick=()=>press(v);pad.appendChild(b);
+  const b=document.createElement("div"); b.className="pin-btn"; b.textContent=v;
+  b.onclick=()=>press(v); pad.appendChild(b);
 });
 function press(v){
-  if(v==="⌫")p=p.slice(0,-1);
+  if(v==="⌫") p=p.slice(0,-1);
   else if(p.length<4)p+=v;
   [...dots.children].forEach((d,i)=>d.classList.toggle("filled",i<p.length));
   if(p.length===4)setTimeout(()=>{
@@ -166,7 +182,7 @@ function press(v){
   },200);
 }
 
-// Tabs
+// ========================= TABS
 function openTab(id,el){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
@@ -174,7 +190,7 @@ function openTab(id,el){
   if(el)el.classList.add("active");
 }
 
-// Feed
+// ========================= FEED
 const feedContainer=document.getElementById("feedContainer");
 const feedItems=[
   {img:'https://picsum.photos/200/150?1',title:'Оновлення системи безпеки',text:'Документи працюють стабільно'},
@@ -187,7 +203,7 @@ feedItems.forEach(item=>{
   feedContainer.appendChild(div);
 });
 
-// Documents
+// ========================= DOCUMENTS
 const track=document.getElementById('track');
 const indicator=document.getElementById('docIndicator');
 let docs=[];
@@ -206,7 +222,7 @@ function renderDocs(){
         <div class="info">
           <div>Дата народження: ${data.birth}</div>
           <div>Номер: ${data.number}</div>
-          <canvas class="sign"></canvas>
+          <canvas class="sign" width="200" height="50"></canvas>
         </div>
       </div>
       <div class="fio">${data.last}\n${data.first}\n${data.middle}</div>`;
@@ -222,11 +238,11 @@ function renderDocs(){
 }
 
 function updateDocsPosition(){
-  track.style.transform=`translateX(-${currentDoc*(380+16)}px)`;
+  track.style.transform=`translateX(-${currentDoc*(360+16)}px)`;
   [...indicator.children].forEach((d,i)=>d.classList.toggle('active',i===currentDoc));
 }
 
-// Swipe
+// ========================= SWIPE
 let startX=null;
 track.parentElement.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
 track.parentElement.addEventListener('touchend',e=>{
@@ -238,7 +254,7 @@ track.parentElement.addEventListener('touchend',e=>{
   updateDocsPosition();
 });
 
-// Add document
+// ========================= ADD DOCUMENT
 function addUserDocument(){
   const fileInput=document.getElementById('photoFile');
   const photo= fileInput.files[0] ? URL.createObjectURL(fileInput.files[0]) : 'https://picsum.photos/200';
@@ -257,7 +273,7 @@ function addUserDocument(){
   openTab('documents');
 }
 
-// Canvas подпись
+// ========================= SIGN CANVAS
 const signCanvas=document.getElementById('signCanvas');
 const ctx=signCanvas.getContext('2d');
 let drawing=false;
@@ -270,5 +286,6 @@ signCanvas.addEventListener('mousemove',e=>{
   ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();ctx.beginPath();ctx.moveTo(e.offsetX,e.offsetY);
 });
 </script>
+
 </body>
 </html>
