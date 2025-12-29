@@ -1,19 +1,17 @@
-
 <!DOCTYPE html>
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<title>Дія</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D1A DEMO</title>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont}
-html,body{height:100%}
 body{
+  height:100vh;
   overflow:hidden;
-  color:#000;
-  background:linear-gradient(120deg,#ffe066,#5b5cff,#2fc0ff);
-  background-size:300% 300%;
+  background:linear-gradient(-45deg,#ffd54f,#4fc3f7,#7e57c2,#ec407a);
+  background-size:400% 400%;
   animation:bg 18s ease infinite;
 }
 @keyframes bg{
@@ -22,321 +20,232 @@ body{
   100%{background-position:0% 50%}
 }
 
-/* ---------- APP ---------- */
-#app{height:100%;display:flex;flex-direction:column}
+.hidden{display:none}
 
-/* ---------- SCREENS ---------- */
-#screens{flex:1;position:relative;overflow:hidden}
-.screen{
-  position:absolute;inset:0;
-  display:none;
-  padding:20px;
-  overflow-y:auto;
-}
-.screen.active{display:block}
-
-/* ---------- PIN ---------- */
+/* ===== PIN ===== */
 #pinScreen{
+  position:fixed;inset:0;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
+  backdrop-filter:blur(25px);
 }
-.dots{display:flex;gap:12px;margin-bottom:20px}
+.pinDots{display:flex;gap:12px;margin-bottom:25px}
 .dot{
-  width:14px;height:14px;
-  border:2px solid #000;border-radius:50%;
+  width:14px;height:14px;border-radius:50%;
+  border:2px solid white;
 }
-.dot.on{background:#000}
-.pad{
+.dot.fill{background:white}
+.pinGrid{
   display:grid;
   grid-template-columns:repeat(3,80px);
-  gap:14px;
+  gap:15px;
 }
-.pad button{
-  height:70px;
-  border:none;border-radius:18px;
-  background:rgba(255,255,255,.6);
-  font-size:26px;font-weight:800;
+.pinBtn{
+  width:80px;height:80px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.4);
+  color:white;font-size:24px;
+  background:rgba(255,255,255,.15);
 }
-.pad .del{background:#ffb3b3}
+.pinBtn:active{transform:scale(.95)}
+.erase{grid-column:2}
 
-/* ---------- TABBAR ---------- */
+/* ===== APP ===== */
+#app{height:100%;display:flex;flex-direction:column}
+
+/* ===== CONTENT ===== */
+#content{flex:1;overflow:auto;padding:20px;color:white}
+
+/* ===== TABBAR ===== */
 #tabbar{
   height:70px;
-  background:#000;
+  background:black;
   display:flex;
+  justify-content:space-around;
+  align-items:center;
 }
-#tabbar button{
-  flex:1;
-  background:none;border:none;
-  color:#fff;font-size:12px;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:4px;
+.tab{
+  color:white;
+  font-size:12px;
+  text-align:center;
+  opacity:.5;
 }
+.tab.active{opacity:1;font-weight:600}
 
-/* ---------- BLOCK ---------- */
-.block{
-  background:rgba(255,255,255,.6);
-  backdrop-filter:blur(18px);
-  border-radius:22px;
-  padding:18px;
-  margin-bottom:14px;
-}
-
-/* ---------- FORM ---------- */
-.form input{
-  width:100%;
-  padding:12px;
-  border:none;border-radius:14px;
-  margin-bottom:10px;
-}
-.form button{
-  width:100%;
+/* ===== FORM ===== */
+.input{
+  background:rgba(255,255,255,.15);
   padding:14px;
-  border:none;border-radius:16px;
-  background:#4f5cff;color:#fff;
-  font-weight:900;
+  border-radius:14px;
+  margin-bottom:12px;
+  color:white;
+  border:none;
+  width:100%;
+  font-size:16px;
 }
 
-/* ---------- CARD ---------- */
-.card-wrap{perspective:1200px}
+/* ===== CARD ===== */
+.cardWrap{
+  perspective:1200px;
+}
 .card{
-  width:100%;max-width:360px;
+  width:100%;
+  max-width:380px;
   margin:auto;
-  height:520px;
+  height:240px;
   position:relative;
   transform-style:preserve-3d;
   transition:.8s;
 }
 .card.flip{transform:rotateY(180deg)}
-
 .side{
   position:absolute;inset:0;
-  border-radius:28px;
+  border-radius:22px;
+  backdrop-filter:blur(18px);
+  background:rgba(255,255,255,.15);
+  padding:16px;
   backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
-  overflow:hidden;
 }
-.front{
-  background:rgba(255,255,255,.55);
-  backdrop-filter:blur(22px);
-  padding:18px;
-}
-.back{
-  background:rgba(255,255,255,.65);
-  transform:rotateY(180deg);
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-}
+.back{transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.cardTitle{text-align:center;font-weight:700;margin-bottom:6px}
 
-.header{
-  text-align:center;
-  font-weight:900;
-  margin-bottom:12px;
-}
-.row{display:flex;gap:14px}
+.row{display:flex;gap:12px}
 .photo{
-  width:110px;height:140px;
-  border-radius:14px;
-  background:#fff;
+  width:90px;height:110px;border-radius:14px;
+  background:rgba(255,255,255,.3);
   overflow:hidden;
 }
 .photo img{width:100%;height:100%;object-fit:cover}
-.info{font-size:14px}
-.info div{margin-bottom:6px}
+.dataRight{flex:1;font-size:14px}
+.nameBlock{
+  margin-top:10px;
+  font-weight:800;
+  font-size:18px;
+  line-height:1.2;
+}
 
-.marquee{
-  margin:12px 0;
-  background:rgba(0,200,100,.5);
-  border-radius:10px;
+.ticker{
+  margin:10px 0;
+  background:rgba(76,175,80,.35);
+  padding:6px;
+  white-space:nowrap;
   overflow:hidden;
 }
-.marquee div{
-  white-space:nowrap;
-  padding:6px;
-  animation:run 8s linear infinite;
+.ticker span{
+  display:inline-block;
+  animation:ticker 8s linear infinite;
 }
-@keyframes run{
-  from{transform:translateX(100%)}
-  to{transform:translateX(-100%)}
-}
-
-.name{
-  font-weight:900;
-  line-height:1.4;
-}
-
-.menuDots{
-  position:absolute;
-  right:14px;bottom:14px;
-  background:#000;
-  color:#fff;
-  border-radius:50%;
-  width:34px;height:34px;
-  display:flex;align-items:center;justify-content:center;
-}
-
-.watermark{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;justify-content:center;
-  font-size:48px;
-  font-weight:900;
-  color:rgba(255,0,0,.15);
-  transform:rotate(-25deg);
-  pointer-events:none;
+@keyframes ticker{
+  0%{transform:translateX(100%)}
+  100%{transform:translateX(-100%)}
 }
 </style>
 </head>
 
 <body>
-<div id="app">
-
-<div id="screens">
 
 <!-- PIN -->
-<div id="pinScreen" class="screen active">
-  <div class="dots">
-    <div class="dot"></div><div class="dot"></div>
-    <div class="dot"></div><div class="dot"></div>
-  </div>
-  <div class="pad">
-    <button onclick="add(1)">1</button><button onclick="add(2)">2</button><button onclick="add(3)">3</button>
-    <button onclick="add(4)">4</button><button onclick="add(5)">5</button><button onclick="add(6)">6</button>
-    <button onclick="add(7)">7</button><button onclick="add(8)">8</button><button onclick="add(9)">9</button>
-    <button class="del" onclick="del()">⌫</button><button onclick="add(0)">0</button><button></button>
-  </div>
-</div>
-
-<!-- FEED -->
-<div id="feedScreen" class="screen">
-  <div class="block">Привіт 👋</div>
-  <div class="block">Незламність</div>
-  <div class="block">Дія.Картка</div>
-  <div class="block">Скануй QR</div>
-</div>
-
-<!-- DOCUMENTS -->
-<div id="docsScreen" class="screen">
-  <div class="block" onclick="show('createScreen')">➕ Створити документ</div>
-  <div id="docTile" class="block" onclick="show('viewScreen')" style="display:none">
-    Паспорт громадянина України
+<div id="pinScreen">
+  <div class="pinDots" id="dots"></div>
+  <div class="pinGrid">
+    <button class="pinBtn" onclick="add(1)">1</button>
+    <button class="pinBtn" onclick="add(2)">2</button>
+    <button class="pinBtn" onclick="add(3)">3</button>
+    <button class="pinBtn" onclick="add(4)">4</button>
+    <button class="pinBtn" onclick="add(5)">5</button>
+    <button class="pinBtn" onclick="add(6)">6</button>
+    <button class="pinBtn" onclick="add(7)">7</button>
+    <button class="pinBtn" onclick="add(8)">8</button>
+    <button class="pinBtn" onclick="add(9)">9</button>
+    <button class="pinBtn erase" onclick="del()">⌫</button>
+    <button class="pinBtn" onclick="add(0)">0</button>
   </div>
 </div>
 
-<!-- CREATE -->
-<div id="createScreen" class="screen">
-  <div class="block form">
-    <input id="surname" placeholder="Прізвище">
-    <input id="name" placeholder="Імʼя">
-    <input id="patro" placeholder="По батькові">
-    <input id="birth" placeholder="Дата народження">
-    <input type="file" accept="image/*" onchange="loadPhoto(event)">
-    <button onclick="save()">Створити документ</button>
+<!-- APP -->
+<div id="app" class="hidden">
+  <div id="content"></div>
+
+  <div id="tabbar">
+    <div class="tab active" onclick="openTab('feed')">Стрічка</div>
+    <div class="tab" onclick="openTab('docs')">Документи</div>
+    <div class="tab" onclick="openTab('services')">Сервіси</div>
+    <div class="tab" onclick="openTab('menu')">Меню</div>
   </div>
 </div>
 
-<!-- VIEW -->
-<div id="viewScreen" class="screen">
-  <div class="card-wrap">
-    <div id="card" class="card" onclick="flipCard()">
-      <div class="side front">
-        <div class="header">Паспорт громадянина України</div>
-        <div class="row">
-          <div class="photo"><img id="photoImg"></div>
-          <div class="info">
-            <div id="outBirth"></div>
-            <div>№ 07460112</div>
-            <div>Підпис</div>
-          </div>
-        </div>
-        <div class="marquee"><div id="update"></div></div>
-        <div class="name" id="outName"></div>
-        <div class="menuDots">⋯</div>
-        <div class="watermark"></div>
-      </div>
-      <div class="side back">
-        <div style="font-weight:900;margin-bottom:12px">QR-код</div>
-        <canvas id="qr" width="200" height="200"></canvas>
-        <div class="watermark"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- SERVICES -->
-<div id="servicesScreen" class="screen">
-  <div class="block">Допомога армії</div>
-  <div class="block">Військові облігації</div>
-  <div class="block">Е-книга</div>
-</div>
-
-<!-- MENU -->
-<div id="menuScreen" class="screen">
-  <div class="block">Версія Дії 4.27</div>
-  <div class="block">Підтримка</div>
-  <div class="block">Питання та відповіді</div>
-</div>
-
-</div>
-
-<div id="tabbar">
-  <button onclick="show('feedScreen')">Стрічка</button>
-  <button onclick="show('docsScreen')">Документи</button>
-  <button onclick="show('servicesScreen')">Сервіси</button>
-  <button onclick="show('menuScreen')">Меню</button>
-</div>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script>
-let pin=[],dots=document.querySelectorAll('.dot');
+let pin="";
+const dots=document.getElementById("dots");
+for(let i=0;i<4;i++){
+  let d=document.createElement("div");
+  d.className="dot";
+  dots.appendChild(d);
+}
 
-function updateDots(){dots.forEach((d,i)=>d.classList.toggle('on',i<pin.length))}
+function renderDots(){
+  [...dots.children].forEach((d,i)=>d.classList.toggle("fill",i<pin.length))
+}
 function add(n){
-  if(pin.length>=4)return;
-  pin.push(n);updateDots();
+  if(pin.length<4){pin+=n;renderDots()}
   if(pin.length===4){
-    if(pin.join('')==='1111'){
-      show('feedScreen');
-      document.getElementById('pinScreen').classList.remove('active');
-    }else{pin=[];updateDots()}
+    setTimeout(()=>{
+      pin="";
+      renderDots();
+      document.getElementById("pinScreen").classList.add("hidden");
+      document.getElementById("app").classList.remove("hidden");
+      openTab('docs');
+    },300)
   }
 }
-function del(){pin.pop();updateDots()}
+function del(){pin=pin.slice(0,-1);renderDots()}
 
-function show(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+function openTab(t){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+
+  const c=document.getElementById("content");
+  if(t==='docs'){
+    c.innerHTML=`
+      <input class="input" id="ln" placeholder="Прізвище">
+      <input class="input" id="fn" placeholder="Імʼя">
+      <input class="input" id="mn" placeholder="По батькові">
+      <input class="input" id="bd" placeholder="Дата народження">
+      <input class="input" type="file" id="ph">
+      <button class="input" onclick="gen()">Створити документ</button>
+      <div id="out"></div>
+    `;
+  } else {
+    c.innerHTML="<h2>"+t+"</h2>";
+  }
 }
 
-function loadPhoto(e){
-  const r=new FileReader();
-  r.onload=()=>photoImg.src=r.result;
-  r.readAsDataURL(e.target.files[0]);
-}
-
-function save(){
-  outName.textContent =
-    surname.value+"\n"+name.value+"\n"+patro.value;
-  outBirth.textContent =
-    "Дата народження: "+birth.value;
-  update.textContent =
-    "Документ оновлено "+new Date().toLocaleString('uk-UA');
-  QRCode.toCanvas(qr,"https://example.com/error",{width:200});
-  document.getElementById('docTile').style.display='block';
-  show('docsScreen');
-}
-
-function flipCard(){
-  document.getElementById('card').classList.toggle('flip');
+function gen(){
+  const ln=ln.value,fn=fn.value,mn=mn.value,bd=bd.value;
+  if(!ln||!fn)return;
+  const img=ph.files[0]?URL.createObjectURL(ph.files[0]):"";
+  out.innerHTML=`
+  <div class="cardWrap">
+    <div class="card" onclick="this.classList.toggle('flip')">
+      <div class="side">
+        <div class="cardTitle">Паспорт громадянина України</div>
+        <div class="row">
+          <div class="photo">${img?`<img src="${img}">`:''}</div>
+          <div class="dataRight">${bd}<br>№ 07460112</div>
+        </div>
+        <div class="ticker"><span>Документ оновлено • ${new Date().toLocaleDateString()}</span></div>
+        <div class="nameBlock">${ln}<br>${fn}<br>${mn||''}</div>
+      </div>
+      <div class="side back">
+        <div>QR-код</div>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=demo">
+      </div>
+    </div>
+  </div>`;
 }
 </script>
+
 </body>
 </html>
