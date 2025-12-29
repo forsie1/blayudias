@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>D1A DEMO</title>
+<title>Дія</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 html,body{height:100%;overflow:hidden}
@@ -12,109 +12,51 @@ body{
   background-size:400% 400%;
   animation:bg 18s ease infinite;
 }
-@keyframes bg{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
-#pinScreen{
-  position:fixed;inset:0;
-  display:flex;flex-direction:column;
-  justify-content:center;align-items:center;
-  backdrop-filter:blur(30px);
-  z-index:1000;
-}
+@keyframes bg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+#pinScreen{position:fixed;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;backdrop-filter:blur(30px);z-index:1000}
 .pin-dots{display:flex;gap:14px;margin-bottom:24px}
 .pin-dot{width:14px;height:14px;border-radius:50%;border:2px solid #fff}
 .pin-dot.filled{background:#fff}
 .pin-pad{display:grid;grid-template-columns:repeat(3,80px);gap:14px}
-.pin-btn{
-  width:80px;height:80px;border-radius:50%;
-  background:rgba(255,255,255,.18);
-  color:#fff;font-size:26px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-}
+.pin-btn{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.18);color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 #app{position:fixed;inset:0;display:flex;flex-direction:column}
 #screens{flex:1;position:relative}
 .screen{position:absolute;inset:0;display:none;padding:16px;color:#fff;overflow-y:auto}
 .screen.active{display:block}
 .title{font-size:22px;font-weight:800;margin-bottom:12px}
-#tabbar{
-  height:74px;background:#000;
-  display:none;justify-content:space-around;align-items:center;color:#fff;
-}
+#tabbar{height:74px;background:#000;display:none;justify-content:space-around;align-items:center;color:#fff}
 .tab{font-size:12px;opacity:.6;cursor:pointer}
 .tab.active{opacity:1}
-/* ===== NEWS FEED ===== */
-.news-item{
-  background:rgba(255,255,255,.15);
-  border-radius:18px;
-  margin-bottom:12px;
-  padding:12px;
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
-}
+/* Стрічка */
+.news-item{background:rgba(255,255,255,.15);border-radius:18px;margin-bottom:12px;padding:12px;display:flex;gap:12px;align-items:flex-start}
 .news-item img{width:80px;height:80px;border-radius:12px;object-fit:cover}
 .news-text{flex:1;}
 .news-actions{display:flex;gap:12px;margin-top:6px}
-.news-actions button{
-  background:rgba(255,255,255,.2);
-  border:none;padding:6px 12px;border-radius:12px;color:#fff;cursor:pointer;
-}
-/* ===== PASSPORT ===== */
+.news-actions button{background:rgba(255,255,255,.2);border:none;padding:6px 12px;border-radius:12px;color:#fff;cursor:pointer}
+/* Паспорт */
 .card-wrap{display:flex;justify-content:center;align-items:center;height:100%}
-.card{
-  width:360px;height:400px;
-  transform-style:preserve-3d;
-  transition:.6s;
-}
+.card{width:360px;height:420px;transform-style:preserve-3d;transition:.6s}
 .card.flipped{transform:rotateY(180deg)}
-.face{
-  position:absolute;inset:0;
-  border-radius:24px;
-  padding:16px;
-  backface-visibility:hidden;
-}
-.front{
-  background:rgba(255,255,255,.18);
-  backdrop-filter:blur(20px);
-}
-.back{
-  background:#fff;transform:rotateY(180deg);
-  display:flex;flex-direction:column;justify-content:center;align-items:center;color:#000;
-}
+.face{position:absolute;inset:0;border-radius:24px;padding:16px;backface-visibility:hidden}
+.front{background:rgba(255,255,255,.18);backdrop-filter:blur(20px)}
+.back{background:#fff;transform:rotateY(180deg);display:flex;flex-direction:column;justify-content:center;align-items:center;color:#000}
 .card-header{text-align:center;font-weight:800;margin-bottom:10px;font-size:18px}
 .card-main{display:flex;gap:12px}
-.photo{
-  width:100px;height:140px;
-  border-radius:12px;
-  overflow:hidden;
-  background:#eee;
-}
+.photo{width:120px;height:160px;border-radius:12px;overflow:hidden;background:#eee}
 .photo canvas{width:100%;height:100%;object-fit:cover}
 .info{font-size:14px}
 .fio{font-weight:900;font-size:16px;line-height:1.2;margin-top:6px}
 .sign-wrap{margin-top:6px}
 canvas#signCanvas{border:1px solid #000;border-radius:8px;width:120px;height:50px;touch-action:none}
-/* ===== FORM ===== */
+/* Форма */
 input,button{border-radius:12px;padding:8px;margin:4px 0;border:none;font-size:14px}
 input{width:100%;box-sizing:border-box}
 button{background:#000;color:#fff;cursor:pointer;width:100%}
-/* ===== MENU ===== */
-.menu-button{
-  background:rgba(255,255,255,.2);
-  padding:12px;
-  border-radius:18px;
-  margin-bottom:12px;
-  text-align:center;
-  cursor:pointer;
-}
+/* Меню */
+.menu-button{background:rgba(255,255,255,.2);padding:12px;border-radius:18px;margin-bottom:12px;text-align:center;cursor:pointer}
 </style>
 </head>
 <body>
-
 <!-- PIN -->
 <div id="pinScreen">
   <div class="pin-dots" id="dots"></div>
@@ -124,58 +66,39 @@ button{background:#000;color:#fff;cursor:pointer;width:100%}
 <div id="app">
 <div id="screens">
 
-<!-- FEED -->
+<!-- Стрічка -->
 <div class="screen active" id="feed">
   <div class="title">Стрічка</div>
-  <div class="news-item">
-    <img src="https://via.placeholder.com/80?text=W" alt="Водяний знак">
-    <div class="news-text">
-      <p>Оновлення системи безпеки.</p>
-      <div class="news-actions">
-        <button onclick="openTab('documents',document.querySelector('[data-tab]'))">Відкрити картку D1A</button>
-      </div>
-    </div>
-  </div>
-  <div class="news-item">
-    <img src="https://via.placeholder.com/80?text=W" alt="Водяний знак">
-    <div class="news-text">
-      <p>Додано новий документ у вашому профілі.</p>
-      <div class="news-actions">
-        <button onclick="openTab('documents',document.querySelector('[data-tab]'))">Відкрити картку D1A</button>
-      </div>
-    </div>
-  </div>
+  <div id="newsContainer"></div>
 </div>
 
-<!-- DOCUMENTS -->
-<div class="screen" id="documents">
+<!-- Форма створення паспорта -->
+<div class="screen" id="passportFormScreen">
   <div class="title">Створити Паспорт</div>
-  <div id="passportForm">
-    <input type="text" id="firstName" placeholder="Ім'я">
-    <input type="text" id="lastName" placeholder="Прізвище">
-    <input type="text" id="middleName" placeholder="По батькові">
-    <input type="text" id="birthDate" placeholder="Дата народження">
-    <input type="text" id="passportNumber" placeholder="Номер паспорта">
-    <label>Завантажити фото</label>
-    <input type="file" id="photoInput" accept="image/*">
-    <p>Підпис (малюйте пальцем/мишею):</p>
-    <canvas id="signCanvas"></canvas>
-    <button onclick="createPassport()">Створити паспорт</button>
-  </div>
-  <div class="card-wrap hidden" id="passportCard">
+  <input type="text" id="firstName" placeholder="Ім'я">
+  <input type="text" id="lastName" placeholder="Прізвище">
+  <input type="text" id="middleName" placeholder="По батькові">
+  <input type="text" id="birthDate" placeholder="Дата народження">
+  <input type="text" id="passportNumber" placeholder="Номер паспорта">
+  <label>Завантажити фото</label>
+  <input type="file" id="photoInput" accept="image/*">
+  <p>Підпис (малюйте пальцем/мишею):</p>
+  <canvas id="signCanvas"></canvas>
+  <button onclick="createPassport()">Створити паспорт</button>
+</div>
+
+<!-- Готовий паспорт -->
+<div class="screen" id="passportScreen">
+  <div class="card-wrap">
     <div class="card" id="card" onclick="flip()">
       <div class="face front">
         <div class="card-header">Паспорт громадянина України</div>
         <div class="card-main">
-          <div class="photo">
-            <canvas id="photoCanvas"></canvas>
-          </div>
+          <div class="photo"><canvas id="photoCanvas"></canvas></div>
           <div class="info">
             Дата народження<br><b id="cardBirth"></b><br><br>
             Номер<br><b id="cardNumber"></b>
-            <div class="sign-wrap">
-              <canvas id="cardSign"></canvas>
-            </div>
+            <div class="sign-wrap"><canvas id="cardSign"></canvas></div>
           </div>
         </div>
         <div class="fio" id="cardFio"></div>
@@ -188,42 +111,46 @@ button{background:#000;color:#fff;cursor:pointer;width:100%}
   </div>
 </div>
 
-<!-- SERVICES -->
+<!-- Сервіси -->
 <div class="screen" id="services">
   <div class="title">Сервіси</div>
   <div class="services">
     <div class="service"><div class="icon">🪖</div>Допомога армії</div>
     <div class="service"><div class="icon">⚡</div>Незламність</div>
     <div class="service"><div class="icon">💰</div>Військові облігації</div>
+    <div class="service"><div class="icon"></div>Допомога Армії</div>
+    <div class="service"><div class="icon"></div>Чатбот єВорог</div>
+    <div class="service"><div class="icon"></div>Єкнига</div>
   </div>
 </div>
 
-<!-- MENU -->
+<!-- Меню -->
 <div class="screen" id="menu">
   <div class="title">Меню</div>
   <div class="menu-button" onclick="alert('Вихід...')">Вийти</div>
   <div class="menu-button" onclick="alert('Налаштування...')">Налаштування</div>
   <div class="menu-button" onclick="alert('Допомога...')">Допомога</div>
+  <div class="menu-button" onclick="alert('Дія.Підпис...')">Дія.Підпис</div>
+  <div class="menu-button" onclick="alert('Служба підтримки')">Служба підтримки</div>
 </div>
 
 </div>
 
 <!-- TABBAR -->
 <div id="tabbar">
-  <div class="tab active" onclick="openTab('feed',this)" data-tab>Стрічка</div>
-  <div class="tab" onclick="openTab('documents',this)" data-tab>Документи</div>
-  <div class="tab" onclick="openTab('services',this)" data-tab>Сервіси</div>
-  <div class="tab" onclick="openTab('menu',this)" data-tab>Меню</div>
+  <div class="tab active" onclick="openTab('feed',this)">Стрічка</div>
+  <div class="tab" onclick="openTab('passportFormScreen',this)">Документи</div>
+  <div class="tab" onclick="openTab('services',this)">Сервіси</div>
+  <div class="tab" onclick="openTab('menu',this)">Меню</div>
 </div>
-
 </div>
 
 <script>
-/* PIN */
+// PIN
 const PIN="1111";let p="";
 const dots=document.getElementById("dots");
-for(let i=0;i<4;i++){dots.appendChild(document.createElement("div")).className="pin-dot"}
 const pad=document.getElementById("pad");
+for(let i=0;i<4;i++){dots.appendChild(document.createElement("div")).className="pin-dot"}
 [1,2,3,4,5,6,7,8,9,"⌫",0].forEach(v=>{
   const b=document.createElement("div");
   b.className="pin-btn";b.textContent=v;
@@ -242,21 +169,39 @@ function openTab(id,el){
   if(el) el.classList.add("active");
 }
 
-/* PASSPORT */
+// Стрічка - додаємо багато новин
+const newsData=[
+  "Оновлення системи безпеки.",
+  "Додано новий документ у вашому профілі.",
+  "Повідомлення від служби підтримки.",
+  "Нове сповіщення про статус заявки.",
+  "Надійшли нові умови користування."
+];
+const newsContainer=document.getElementById("newsContainer");
+newsData.forEach(text=>{
+  const div=document.createElement("div");
+  div.className="news-item";
+  div.innerHTML=`<img src="https://via.placeholder.com/80?text=W" alt="W">
+    <div class="news-text">
+      <p>${text}</p>
+      <div class="news-actions"><button onclick="openTab('passportScreen')">Відкрити картку D1A</button></div>
+    </div>`;
+  newsContainer.appendChild(div);
+});
+
+// Паспорт - підпис
 let signCanvas=document.getElementById("signCanvas");
-let signCtx=signCanvas.getContext("2d");
-signCtx.strokeStyle="black";signCtx.lineWidth=2;let drawing=false;
+let signCtx=signCanvas.getContext("2d");signCtx.strokeStyle="black";signCtx.lineWidth=2;let drawing=false;
 signCanvas.addEventListener('pointerdown', e=>{drawing=true;signCtx.beginPath();signCtx.moveTo(e.offsetX,e.offsetY)});
 signCanvas.addEventListener('pointermove', e=>{if(drawing){signCtx.lineTo(e.offsetX,e.offsetY);signCtx.stroke()}});
 signCanvas.addEventListener('pointerup', e=>{drawing=false});
 signCanvas.addEventListener('pointerleave', e=>{drawing=false});
 
+// Фото
 let photoCanvas=document.getElementById("photoCanvas");
 let photoCtx=photoCanvas.getContext("2d");
-
 document.getElementById("photoInput").addEventListener("change", function(e){
-  const file=e.target.files[0];
-  if(!file)return;
+  const file=e.target.files[0]; if(!file)return;
   const img=new Image();
   img.onload=()=>{photoCtx.clearRect(0,0,photoCanvas.width,photoCanvas.height);photoCtx.drawImage(img,0,0,photoCanvas.width,photoCanvas.height);}
   img.src=URL.createObjectURL(file);
@@ -268,27 +213,22 @@ function createPassport(){
   const m=document.getElementById("middleName").value;
   const b=document.getElementById("birthDate").value;
   const n=document.getElementById("passportNumber").value;
-  
   if(!f || !l){alert("Заповніть ім'я та прізвище!"); return;}
-  
   document.getElementById("cardFio").innerHTML=`${l}<br>${f}<br>${m}`;
   document.getElementById("cardBirth").textContent=b;
   document.getElementById("cardNumber").textContent=n;
 
-  // Копіювання підпису
+  // Копіюємо підпис
   const cardSign=document.getElementById("cardSign");
   const cardSignCtx=cardSign.getContext("2d");
   cardSign.width=signCanvas.width;
   cardSign.height=signCanvas.height;
   cardSignCtx.drawImage(signCanvas,0,0);
 
-  document.getElementById("passportForm").classList.add("hidden");
-  document.getElementById("passportCard").classList.remove("hidden");
+  openTab('passportScreen');
 }
 
 function flip(){document.getElementById("card").classList.toggle("flipped")}
 </script>
 </body>
 </html>
-
-
