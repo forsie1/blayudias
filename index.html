@@ -7,8 +7,7 @@
 <style>
 :root{
   --vio:#5b5cff; --blue:#2b6cff; --pink:#ff63c3; --yellow:#ffd66e;
-  --glass:rgba(255,255,255,.15); --glass2:rgba(255,255,255,.12); --r:22px;
-  --ease:cubic-bezier(.2,.8,.2,1);
+  --glass:rgba(255,255,255,.15); --r:22px; --ease:cubic-bezier(.2,.8,.2,1);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;margin:0;font-family:-apple-system,BlinkMacSystemFont,system-ui;color:#fff;}
@@ -20,18 +19,19 @@ body{
     linear-gradient(160deg,var(--vio),#1f235c);
   overflow:hidden;
 }
-.app{height:100%;display:flex;flex-direction:column;align-items:center;}
-.screens{flex:1;position:relative;touch-action:pan-y;width:100%;}
+.app{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.screens{flex:1;position:relative;width:100%;}
 .screen{
-  position:absolute; inset:0;
+  position:absolute;inset:0;
   padding:10px 14px 90px;
   overflow:auto;
   opacity:0; transform:translateX(100%);
   transition:0.35s var(--ease);
   pointer-events:none;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
 }
 .screen.active{opacity:1;transform:translateX(0);pointer-events:auto;}
-.center{display:flex;justify-content:center;align-items:center;flex-direction:column;}
+.center{display:flex;justify-content:center;align-items:center;flex-direction:column;width:100%;}
 .btn{padding:16px;border-radius:16px;border:none;font-weight:900;color:#2b2f7a;background:linear-gradient(180deg,#fff,#eef1ff);cursor:pointer;margin-top:10px;width:120px;}
 .num-pad{display:grid;grid-template-columns:repeat(3,80px);gap:12px;margin-top:20px;}
 .num-pad button{padding:18px;font-size:24px;border-radius:12px;border:none;background:rgba(255,255,255,.2);color:#fff;font-weight:900;cursor:pointer;}
@@ -51,14 +51,17 @@ body{
 .back{transform:rotateY(180deg);display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);}
 .photo{width:100px;height:120px;border-radius:10px;background:rgba(255,255,255,.35);overflow:hidden;position:absolute;top:50px;left:16px;}
 .photo img{width:100%;height:100%;object-fit:cover;}
-.info{position:absolute;top:50px;left:130px;display:flex;flex-direction:column;gap:4px;}
-.info div{font-size:14px;}
-.signature{position:absolute;top:200px;left:16px;width:150px;height:60px;background:rgba(255,255,255,.08);}
+.info-left{position:absolute;top:180px;left:16px;display:flex;flex-direction:column;gap:4px;}
+.info-left div{font-size:14px;}
+.info-right{position:absolute;top:50px;right:16px;display:flex;flex-direction:column;gap:6px;}
+.info-right div{font-size:14px;}
+.signature{width:150px;height:60px;background:rgba(255,255,255,.08);}
 .update-strip{position:absolute;bottom:60px;left:0;right:0;height:30px;background:rgba(0,255,0,.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;border-bottom-left-radius:20px;border-bottom-right-radius:20px;}
 .bottom-line{display:flex;justify-content:space-between;align-items:center;position:absolute;bottom:20px;left:16px;right:16px;font-size:14px;font-weight:700;}
 .bottom-line .dots{font-size:20px;}
 .pin-display{display:flex;gap:12px;margin-top:10px;font-size:24px;font-weight:900;}
 .pin-display div{width:20px;height:20px;border-bottom:2px solid #fff;text-align:center;}
+input{margin:4px 0;padding:6px 8px;border-radius:8px;border:none;width:180px;}
 </style>
 </head>
 <body>
@@ -68,7 +71,7 @@ body{
 <!-- Экран кода -->
 <section class="screen active" id="lock">
   <div class="center">
-    <div style="font-size:22px;font-weight:900;">Введіть код</div>
+    <div style="font-size:22px;font-weight:900;margin-bottom:12px;">Введіть код</div>
     <div class="pin-display">
       <div id="d1"></div>
       <div id="d2"></div>
@@ -96,13 +99,7 @@ body{
 <!-- Главный экран -->
 <section class="screen" id="feed">
   <div class="center">
-    <div style="font-size:24px;font-weight:900;">D1IA DEMO</div>
-    <div style="display:grid;grid-template-columns:repeat(2,140px);gap:12px;margin-top:20px;">
-      <button class="btn" onclick="go('docs')">Документи</button>
-      <button class="btn">Сервіси</button>
-      <button class="btn">Донати</button>
-      <button class="btn">Меню</button>
-    </div>
+    <div style="font-size:24px;font-weight:900;margin-bottom:20px;">Дія</div>
   </div>
 </section>
 
@@ -119,12 +116,12 @@ body{
 <section class="screen" id="data">
   <div class="center">
     <div class="card-wrap">
-      <label>Імʼя</label><input id="name">
-      <label>Прізвище</label><input id="surname">
-      <label>По-батькові</label><input id="patronymic">
-      <label>Дата народження</label><input type="date" id="birth">
-      <label>Фото</label><input type="file" id="photoInput">
-      <label>Підпис</label><canvas id="sign" class="signature"></canvas>
+      <input id="name" placeholder="Імʼя">
+      <input id="surname" placeholder="Прізвище">
+      <input id="patronymic" placeholder="По-батькові">
+      <input type="date" id="birth" placeholder="Дата народження">
+      <input type="file" id="photoInput">
+      <canvas id="sign" class="signature"></canvas>
       <button class="btn" onclick="generateDoc()">Створити документ</button>
     </div>
   </div>
@@ -138,16 +135,17 @@ body{
         <div class="side front">
           <div style="font-size:22px;font-weight:900;">DA1</div>
           <div class="photo"><img id="photo"></div>
-          <div class="info">
+          <div class="info-left">
+            <div id="fullNameName">Імʼя</div>
+            <div id="fullNameSurname">Прізвище</div>
+            <div id="fullNamePatronymic">По-батькові</div>
+          </div>
+          <div class="info-right">
             <div id="dBirth">Дата: 01.01.2000</div>
             <div id="dNumber">№ 07460112</div>
             <canvas id="dSign" class="signature"></canvas>
           </div>
           <div class="update-strip" id="updateStrip"></div>
-          <div class="bottom-line">
-            <div id="fullName">Імʼя Прізвище По-батькові</div>
-            <div class="dots">•••</div>
-          </div>
         </div>
         <div class="side back">
           <canvas id="qrCanvas"></canvas>
@@ -162,6 +160,8 @@ body{
 <div class="tabbar">
   <button class="active" onclick="go('feed',this)">Стрічка</button>
   <button onclick="go('docs',this)">Документи</button>
+  <button>Сервіси</button>
+  <button>Меню</button>
 </div>
 </div>
 
@@ -215,11 +215,14 @@ c.onpointermove=e=>{if(!d)return;ctx.lineWidth=2;ctx.lineCap='round';ctx.lineTo(
 
 // Генерация документа
 function generateDoc(){
-  const fullName = document.getElementById('name').value+' '+document.getElementById('surname').value+' '+document.getElementById('patronymic').value;
-  document.getElementById('fullName').textContent = fullName;
+  document.getElementById('fullNameName').textContent=document.getElementById('name').value;
+  document.getElementById('fullNameSurname').textContent=document.getElementById('surname').value;
+  document.getElementById('fullNamePatronymic').textContent=document.getElementById('patronymic').value;
+
   const birthVal = document.getElementById('birth').value.split('-').reverse().join('.');
   document.getElementById('dBirth').textContent = `Дата: ${birthVal}`;
   document.getElementById('dNumber').textContent = '№ 07460112';
+
   // Подпись
   const signData = c.toDataURL();
   const dSign = document.getElementById('dSign');
@@ -227,14 +230,16 @@ function generateDoc(){
   img.src = signData;
   img.style.width='150px'; img.style.height='60px'; img.style.objectFit='contain';
   dSign.replaceWith(img);
+
   // Зеленая полоска
   const today = new Date().toLocaleDateString('uk-UA');
   document.getElementById('updateStrip').textContent = `Документ оновлено: ${today}`;
+
   // QR-код
   QRCode.toCanvas(document.getElementById('qrCanvas'), 'https://example.com',{width:120},function(err){if(err)console.error(err);});
+
   go('final');
 }
 </script>
 </body>
 </html>
-
