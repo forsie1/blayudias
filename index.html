@@ -2,264 +2,263 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <title>Дія</title>
+
 <style>
-:root{
-  --vio:#5b5cff; --blue:#2b6cff; --pink:#ff63c3; --yellow:#ffd66e;
-  --glass:rgba(255,255,255,.15); --r:22px; --ease:cubic-bezier(.2,.8,.2,1);
-}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;margin:0;font-family:-apple-system,BlinkMacSystemFont,system-ui;color:#fff;touch-action:none;}
-body{
-  background:
-    radial-gradient(900px 600px at 10% 0%, var(--pink) 0%, transparent 55%),
-    radial-gradient(900px 600px at 90% 10%, var(--yellow) 0%, transparent 55%),
-    radial-gradient(1200px 800px at 50% 120%, var(--blue) 0%, transparent 60%),
-    linear-gradient(160deg,var(--vio),#1f235c);
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{
+  margin:0;height:100%;
+  font-family:-apple-system,BlinkMacSystemFont,system-ui;
+  background:linear-gradient(160deg,#6a5cff,#2b3cff,#ff5fb7);
+  color:#fff;
   overflow:hidden;
 }
-.app{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.screens{flex:1;position:relative;width:100%;}
+
+/* ===== SCREENS ===== */
 .screen{
-  position:absolute;inset:0;
-  padding:10px 14px 90px;
-  overflow:auto;
-  opacity:0; transform:translateX(100%);
-  transition:0.35s var(--ease);
-  pointer-events:none;
-  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  position:absolute; inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  transition:.35s ease;
 }
-.screen.active{opacity:1;transform:translateX(0);pointer-events:auto;}
-.center{display:flex;justify-content:center;align-items:center;flex-direction:column;width:100%;}
-.btn{padding:16px;border-radius:16px;border:none;font-weight:900;color:#fff;background:linear-gradient(180deg,#5b5cff,#2b6cff);cursor:pointer;margin-top:10px;width:180px;font-size:16px;transition:0.2s;}
-.btn:hover{transform:scale(1.05);}
-.num-pad{display:grid;grid-template-columns:repeat(3,80px);gap:12px;margin-top:20px;}
-.num-pad button{padding:18px;font-size:24px;border-radius:12px;border:none;background:rgba(255,255,255,.2);color:#fff;font-weight:900;cursor:pointer;transition:0.15s;}
-.num-pad button:active{transform:scale(0.95);background:rgba(255,255,255,.35);}
-.num-pad .erase{background:rgba(255,100,100,.3);}
-.tabbar{display:none;position:absolute;left:0;right:0;bottom:0;height:78px;padding:10px 8px env(safe-area-inset-bottom);display:flex;gap:6px;backdrop-filter: blur(24px);background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.08));}
-.tabbar button{flex:1;border:none;border-radius:16px;background:transparent;color:#fff;font-size:12px;font-weight:800;cursor:pointer;}
-.tabbar button.active{background:rgba(255,255,255,.22);}
-.card-wrap{perspective:1400px;margin-top:20px;}
-.doc{
-  width:350px;height:420px;
-  position:relative;transform-style:preserve-3d;
-  transition:transform 0.8s cubic-bezier(.2,.8,.2,1);
-  cursor:pointer;
+.hidden{display:none}
+
+/* ===== PIN ===== */
+#pinScreen{
+  gap:20px;
 }
-.doc.flip{transform:rotateY(180deg);}
-.side{
-  position:absolute;inset:0;border-radius:20px;padding:16px;
+.pin-dots{
+  display:flex; gap:12px;
+}
+.pin-dots div{
+  width:14px;height:14px;
+  border-radius:50%;
+  border:2px solid #fff;
+}
+.pin-dots .on{background:#fff}
+
+.pad{
+  display:grid;
+  grid-template-columns:repeat(3,80px);
+  gap:12px;
+}
+.pad button{
+  height:70px;
+  border-radius:18px;
+  border:none;
+  background:rgba(255,255,255,.25);
+  color:#fff;
+  font-size:26px;
+  font-weight:800;
+}
+.pad button:active{transform:scale(.95)}
+
+/* ===== CARD ===== */
+.card-wrap{perspective:1400px}
+.card{
+  width:360px;
+  height:460px;
+  position:relative;
   transform-style:preserve-3d;
-  display:flex;flex-direction:column;
-  backdrop-filter:blur(20px);
-  background:rgba(255,255,255,.05);
+  transition:transform .8s cubic-bezier(.2,.8,.2,1);
+}
+.card.flip{transform:rotateY(180deg)}
+
+.side{
+  position:absolute; inset:0;
+  border-radius:26px;
+  backface-visibility:hidden;
   overflow:hidden;
 }
-.back{transform:rotateY(180deg);display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);flex-direction:column;}
-.photo{width:100px;height:120px;border-radius:10px;background:rgba(255,255,255,.35);overflow:hidden;position:absolute;top:50px;left:16px;}
-.photo img{width:100%;height:100%;object-fit:cover;}
-.input-group{display:flex;flex-direction:column;width:220px;margin:6px;}
-.input-group input{padding:10px 12px;border-radius:12px;border:none;background:rgba(255,255,255,.15);color:#fff;font-weight:700;font-size:14px;margin-top:4px;}
-.input-group input::placeholder{color:rgba(255,255,255,.6);}
-.info-left{position:absolute;top:180px;left:16px;display:flex;flex-direction:column;gap:4px;}
-.info-left div{font-size:14px;z-index:10;}
-.info-right{position:absolute;top:50px;right:16px;display:flex;flex-direction:column;gap:6px;z-index:10;}
-.info-right div{font-size:14px;}
-.signature{width:150px;height:60px;background:rgba(255,255,255,.08);}
-.update-strip{position:absolute;bottom:60px;left:0;right:0;height:30px;background:rgba(0,255,0,.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;border-bottom-left-radius:20px;border-bottom-right-radius:20px;z-index:10;}
-.bottom-line{display:flex;justify-content:space-between;align-items:center;position:absolute;bottom:20px;left:16px;right:16px;font-size:14px;font-weight:700;}
-.bottom-line .dots{font-size:20px;}
-.pin-display{display:flex;gap:12px;margin-top:10px;font-size:24px;font-weight:900;}
-.pin-display div{width:20px;height:20px;border-bottom:2px solid #fff;text-align:center;}
-.qr-label{color:#fff;font-weight:700;margin-bottom:10px;font-size:16px;}
+
+/* blur BACKGROUND ONLY */
+.blur-bg{
+  position:absolute; inset:0;
+  backdrop-filter:blur(20px);
+  background:rgba(255,255,255,.18);
+}
+
+/* FRONT */
+.front-content{
+  position:relative;
+  z-index:2;
+  padding:18px;
+}
+
+.logo{font-weight:900;font-size:22px}
+
+.photo{
+  width:110px;height:140px;
+  border-radius:14px;
+  overflow:hidden;
+  background:rgba(255,255,255,.35);
+}
+.photo img{width:100%;height:100%;object-fit:cover}
+
+.top{
+  display:flex; gap:14px; margin-top:14px;
+}
+.right{
+  display:flex; flex-direction:column;
+  gap:6px; font-size:14px;
+}
+
+.update{
+  margin-top:16px;
+  padding:8px;
+  background:rgba(0,255,0,.35);
+  border-radius:10px;
+  text-align:center;
+  font-weight:700;
+}
+
+.name{
+  margin-top:14px;
+  font-size:16px;
+  font-weight:800;
+}
+
+/* BACK */
+.back{
+  transform:rotateY(180deg);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+.back h3{margin-bottom:10px}
+
+/* ===== TABBAR (CREATED LATE) ===== */
+.tabbar{
+  position:absolute;
+  left:0; right:0; bottom:0;
+  height:80px;
+  display:flex;
+  background:rgba(255,255,255,.18);
+  backdrop-filter:blur(20px);
+}
+.tabbar button{
+  flex:1;
+  border:none;
+  background:none;
+  color:#fff;
+  font-weight:700;
+}
 </style>
 </head>
+
 <body>
-<div class="app">
-<div class="screens">
 
-<!-- Экран кода -->
-<section class="screen active" id="lock">
-  <div class="center">
-    <div style="font-size:22px;font-weight:900;margin-bottom:12px;">Введіть код</div>
-    <div class="pin-display">
-      <div id="d1"></div>
-      <div id="d2"></div>
-      <div id="d3"></div>
-      <div id="d4"></div>
-    </div>
-    <div class="num-pad">
-      <button onclick="addDigit('1')">1</button>
-      <button onclick="addDigit('2')">2</button>
-      <button onclick="addDigit('3')">3</button>
-      <button onclick="addDigit('4')">4</button>
-      <button onclick="addDigit('5')">5</button>
-      <button onclick="addDigit('6')">6</button>
-      <button onclick="addDigit('7')">7</button>
-      <button onclick="addDigit('8')">8</button>
-      <button onclick="addDigit('9')">9</button>
-      <button class="erase" onclick="eraseDigit()">⌫</button>
-      <button onclick="addDigit('0')">0</button>
-      <div></div>
-    </div>
-    <div id="pinError" style="color:#ff6b6b;font-weight:700;margin-top:12px;"></div>
+<!-- PIN -->
+<div id="pinScreen" class="screen">
+  <div class="pin-dots">
+    <div></div><div></div><div></div><div></div>
   </div>
-</section>
 
-<!-- Главный экран -->
-<section class="screen" id="feed">
-  <div class="center">
-    <div style="font-size:24px;font-weight:900;margin-bottom:20px;">Дія</div>
-    <button class="btn" onclick="go('docs')">Створити документ</button>
+  <div class="pad">
+    <button onclick="add(1)">1</button><button onclick="add(2)">2</button><button onclick="add(3)">3</button>
+    <button onclick="add(4)">4</button><button onclick="add(5)">5</button><button onclick="add(6)">6</button>
+    <button onclick="add(7)">7</button><button onclick="add(8)">8</button><button onclick="add(9)">9</button>
+    <button onclick="del()">⌫</button><button onclick="add(0)">0</button><button></button>
   </div>
-</section>
+</div>
 
-<!-- Документы -->
-<section class="screen" id="docs">
-  <div class="center">
-    <div class="card-wrap">
-      <button class="btn" onclick="go('data')">Створити документ</button>
-    </div>
-  </div>
-</section>
+<!-- APP -->
+<div id="app" class="screen hidden">
 
-<!-- Форма данных -->
-<section class="screen" id="data">
-  <div class="center">
-    <div class="card-wrap">
-      <div class="input-group"><label>Імʼя</label><input id="name" placeholder="Імʼя"></div>
-      <div class="input-group"><label>Прізвище</label><input id="surname" placeholder="Прізвище"></div>
-      <div class="input-group"><label>По-батькові</label><input id="patronymic" placeholder="По-батькові"></div>
-      <div class="input-group"><label>Дата народження</label><input type="date" id="birth"></div>
-      <div class="input-group"><label>Фото</label><input type="file" id="photoInput"></div>
-      <canvas id="sign" class="signature"></canvas>
-      <button class="btn" onclick="generateDoc()">Створити документ</button>
-    </div>
-  </div>
-</section>
+  <div class="card-wrap">
+    <div id="card" class="card" onclick="flip()">
 
-<!-- Финальная карточка -->
-<section class="screen" id="final">
-  <div class="center">
-    <div class="card-wrap">
-      <div class="doc" id="docCard" onclick="flipCard()">
-        <div class="side front" id="cardFront">
-          <div style="font-size:22px;font-weight:900;z-index:10;">DA1</div>
-          <div class="photo"><img id="photo"></div>
-          <div class="info-left">
-            <div id="fullNameName">Імʼя</div>
-            <div id="fullNameSurname">Прізвище</div>
-            <div id="fullNamePatronymic">По-батькові</div>
+      <!-- FRONT -->
+      <div class="side">
+        <div class="blur-bg"></div>
+        <div class="front-content">
+          <div class="logo">Дія</div>
+
+          <div class="top">
+            <div class="photo">
+              <img src="https://picsum.photos/300/400">
+            </div>
+
+            <div class="right">
+              <div>01.01.2000</div>
+              <div>№ 07460112</div>
+            </div>
           </div>
-          <div class="info-right">
-            <div id="dBirth">Дата: 01.01.2000</div>
-            <div id="dNumber">№ 07460112</div>
-            <canvas id="dSign" class="signature"></canvas>
-          </div>
-          <div class="update-strip" id="updateStrip"></div>
-        </div>
-        <div class="side back">
-          <div class="qr-label">QR-код</div>
-          <canvas id="qrCanvas"></canvas>
+
+          <div class="update">Документ оновлено: сьогодні</div>
+          <div class="name">Імʼя Прізвище По-батькові</div>
         </div>
       </div>
+
+      <!-- BACK -->
+      <div class="side back">
+        <h3>QR-код</h3>
+        <canvas id="qr"></canvas>
+      </div>
+
     </div>
   </div>
-</section>
 
-</div>
-
-<div class="tabbar">
-  <button class="active" onclick="go('feed',this)">Стрічка</button>
-  <button onclick="go('docs',this)">Документи</button>
-  <button>Сервіси</button>
-  <button>Меню</button>
-</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script>
-const screens=document.querySelectorAll('.screen');
-function go(id,btn){
-  screens.forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  if(btn){
-    document.querySelectorAll('.tabbar button').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-  }
+/* ===== PIN ===== */
+let pin=[];
+const dots=document.querySelectorAll('.pin-dots div');
+
+function drawDots(){
+  dots.forEach((d,i)=>d.classList.toggle('on',i<pin.length));
 }
 
-// КОД-ПАРОЛЬ
-let pinValue='';
-function updatePinDisplay(){
-  for(let i=1;i<=4;i++){
-    document.getElementById('d'+i).textContent = pinValue[i-1]||'';
-  }
-}
-function addDigit(d){
-  if(pinValue.length>=4) return;
-  pinValue+=d;
-  updatePinDisplay();
-  if(pinValue.length===4){
-    if(pinValue==='1111'){
-      pinValue='';updatePinDisplay();
-      document.querySelector('.tabbar').style.display='flex';
-      go('docs');
-      document.getElementById('pinError').textContent='';
-    } else {
-      document.getElementById('pinError').textContent='Невірний код!';
-      pinValue='';updatePinDisplay();
+function add(n){
+  if(pin.length>=4)return;
+  pin.push(n); drawDots();
+  if(pin.length===4){
+    if(pin.join('')==='1111'){
+      unlock();
+    }else{
+      pin=[]; drawDots();
     }
   }
 }
-function eraseDigit(){pinValue=pinValue.slice(0,-1);updatePinDisplay();}
+function del(){pin.pop(); drawDots();}
 
-// Фото
-const photoInput = document.getElementById('photoInput');
-const photo = document.getElementById('photo');
-photoInput.onchange=e=>photo.src=URL.createObjectURL(e.target.files[0]);
-
-// Подпись
-const c=document.getElementById('sign'),ctx=c.getContext('2d');let d=false;
-c.onpointerdown=e=>{d=true;ctx.beginPath();ctx.moveTo(e.offsetX,e.offsetY);}
-c.onpointerup=()=>d=false;
-c.onpointermove=e=>{if(!d)return;ctx.lineWidth=2;ctx.lineCap='round';ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();}
-
-// Финальная карточка
-let qrGenerated=false;
-function flipCard(){
-  if(!qrGenerated){
-    QRCode.toCanvas(document.getElementById('qrCanvas'), 'https://example.com',{width:200},function(err){if(err)console.error(err);});
-    qrGenerated=true;
-  }
-  document.getElementById('docCard').classList.toggle('flip');
+function unlock(){
+  document.getElementById('pinScreen').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  createTabbar();
 }
 
-// Генерация документа
-function generateDoc(){
-  document.getElementById('fullNameName').textContent=document.getElementById('name').value;
-  document.getElementById('fullNameSurname').textContent=document.getElementById('surname').value;
-  document.getElementById('fullNamePatronymic').textContent=document.getElementById('patronymic').value;
+/* ===== CARD ===== */
+let flipped=false;
+let qrReady=false;
 
-  const birthVal = document.getElementById('birth').value.split('-').reverse().join('.');
-  document.getElementById('dBirth').textContent = `Дата: ${birthVal}`;
-  document.getElementById('dNumber').textContent = '№ 07460112';
+function flip(){
+  if(!qrReady){
+    QRCode.toCanvas(document.getElementById('qr'),
+      'https://example.com',
+      {width:200});
+    qrReady=true;
+  }
+  flipped=!flipped;
+  document.getElementById('card').classList.toggle('flip',flipped);
+}
 
-  // Подпись
-  const signData = c.toDataURL();
-  const dSign = document.getElementById('dSign');
-  const img = new Image();
-  img.src = signData;
-  img.style.width='150px'; img.style.height='60px'; img.style.objectFit='contain';
-  dSign.replaceWith(img);
-
-  // Зеленая полоска
-  const today = new Date().toLocaleDateString('uk-UA');
-  document.getElementById('updateStrip').textContent = `Документ оновлено: ${today}`;
-
-  go('final');
+/* ===== TABBAR ===== */
+function createTabbar(){
+  const t=document.createElement('div');
+  t.className='tabbar';
+  t.innerHTML=`
+    <button>Стрічка</button>
+    <button>Документи</button>
+    <button>Сервіси</button>
+    <button>Меню</button>`;
+  document.body.appendChild(t);
 }
 </script>
 </body>
