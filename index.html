@@ -3,11 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Дія</title>
-  <!-- FaceID -->
-  <section class="screen" id="face">
-    <div class="card faceid shimmer">🔒 Face ID…</div>
-  </section>
+<title>Привіт</title>
 <style>
 :root{
   --vio:#5b5cff;
@@ -19,8 +15,6 @@
   --r:22px;
   --ease:cubic-bezier(.2,.8,.2,1);
 }
-
-/* Общие */
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;margin:0;font-family:-apple-system,BlinkMacSystemFont,system-ui;color:#fff;}
 body{
@@ -31,12 +25,8 @@ body{
     linear-gradient(160deg,var(--vio),#1f235c);
   overflow:hidden;
 }
-
-/* APP */
 .app{height:100%;display:flex;flex-direction:column;}
 .header{padding:16px 18px 8px;font-weight:900;letter-spacing:.4px;}
-
-/* SCREENS */
 .screens{flex:1;position:relative;touch-action:pan-y;}
 .screen{
   position:absolute; inset:0;
@@ -47,8 +37,6 @@ body{
   pointer-events:none;
 }
 .screen.active{opacity:1;transform:translateX(0);pointer-events:auto;}
-
-/* GLASS CARD */
 .card{
   background:linear-gradient(180deg,var(--glass),var(--glass2));
   backdrop-filter: blur(22px) saturate(140%);
@@ -58,8 +46,6 @@ body{
     0 20px 40px rgba(0,0,0,.35),
     inset 0 1px 0 rgba(255,255,255,.35);
 }
-
-/* SHIMMER */
 .shimmer{position:relative;overflow:hidden;}
 .shimmer::after{
   content:"";position:absolute;inset:-100% -50%;
@@ -67,8 +53,6 @@ body{
   animation:sh 2.2s infinite;
 }
 @keyframes sh{to{transform:translateX(200%)}} 
-
-/* GRID */
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
 .tile{
   padding:18px;border-radius:18px;
@@ -76,41 +60,47 @@ body{
   backdrop-filter: blur(18px);
   font-weight:800;text-align:center;cursor:pointer;
 }
-
-/* INPUTS */
 label{font-size:12px;opacity:.8;}
 input{width:100%;margin-top:6px;margin-bottom:10px;padding:14px;border-radius:14px;border:none;outline:none;font-size:16px;}
-
-/* BUTTON */
 .btn{width:100%;padding:16px;border-radius:16px;border:none;font-weight:900;color:#2b2f7a;background:linear-gradient(180deg,#fff,#eef1ff);cursor:pointer;}
-
-/* DOCUMENT */
 .center{display:flex;justify-content:center;align-items:center;}
 .doc-wrap{perspective:1400px;}
 .doc{
-  width:350px;height:220px;
+  width:350px;
+  height:380px;
   position:relative;transform-style:preserve-3d;
-  transition:.9s var(--ease);
+  transition:transform 0.8s cubic-bezier(.2,.8,.2,1);
   cursor:pointer;
 }
 .doc.flip{transform:rotateY(180deg);}
-.side{
-  position:absolute;inset:0;border-radius:20px;
-  padding:16px;backface-visibility:hidden;
-  background:linear-gradient(135deg,#8b95ff,#3b44b5);
-  box-shadow:0 20px 40px rgba(0,0,0,.45);
+.doc .side{
+  position:absolute;inset:0;
+  border-radius:20px;
+  padding:16px;
+  backface-visibility:visible;
+  display:flex;
+  flex-direction:column;
 }
-.back{transform:rotateY(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.doc .back{
+  transform:rotateY(180deg);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
 .row{display:flex;gap:12px;margin-top:10px;}
-.photo{width:64px;height:84px;border-radius:10px;background:rgba(255,255,255,.35);overflow:hidden;}
+.photo{width:100px;height:120px;border-radius:10px;background:rgba(255,255,255,.35);overflow:hidden;}
 .photo img{width:100%;height:100%;object-fit:cover;}
 .watermark{position:absolute;right:12px;bottom:10px;font-size:10px;opacity:.6;}
-.qr{width:120px;height:120px;background:#fff;border-radius:12px;}
-
-/* SIGN */
+.qr{width:120px;height:120px;background:#fff;border-radius:12px;margin-bottom:10px;}
 canvas{width:100%;height:100px;background:#fff;border-radius:14px;}
-
-/* TABBAR */
+.update-strip{
+  position:absolute;bottom:0;left:0;right:0;
+  height:30px;
+  background:rgba(0,255,0,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;border-bottom-left-radius:20px;border-bottom-right-radius:20px;
+}
 .tabbar{
   position:absolute;left:0;right:0;bottom:0;
   height:78px;padding:10px 8px env(safe-area-inset-bottom);
@@ -124,22 +114,20 @@ canvas{width:100%;height:100px;background:#fff;border-radius:14px;}
   cursor:pointer;
 }
 .tabbar button.active{background:rgba(255,255,255,.22);}
-
-/* FACEID */
-.faceid{
-  display:flex;align-items:center;justify-content:center;
-  height:200px;font-size:18px;font-weight:900;
-}
+.faceid{display:flex;align-items:center;justify-content:center;height:100%;font-size:22px;font-weight:900;}
 </style>
 </head>
-
 <body>
 <div class="app">
-<div class="header">Дія</div>
-
 <div class="screens">
+  <!-- FaceID при запуске -->
+  <section class="screen active" id="face">
+    <div class="faceid shimmer">🔒 Аутентифікація FaceID…</div>
+  </section>
+
   <!-- Стрічка -->
-  <section class="screen active" id="feed">
+  <section class="screen" id="feed">
+    <div class="header">Дія</div>
     <div class="card shimmer">
       <div class="grid">
         <div class="tile" onclick="go('docs')">Документи</div>
@@ -165,7 +153,7 @@ canvas{width:100%;height:100px;background:#fff;border-radius:14px;}
       <label>Дата народження</label><input type="date" id="birth">
       <label>Фото</label><input type="file" id="photoInput">
       <label>Підпис</label><canvas id="sign"></canvas>
-      <button class="btn" onclick="startFaceID()">Створити документ</button>
+      <button class="btn" onclick="generateDoc()">Створити документ</button>
     </div>
   </section>
 
@@ -174,18 +162,23 @@ canvas{width:100%;height:100px;background:#fff;border-radius:14px;}
     <div class="center">
       <div class="doc-wrap">
         <div class="doc" id="docCard" onclick="flip()">
-          <div class="side">
-            <b>Паспорт Громадянина України</b>
+          <div class="side front">
+            <b>Паспорт громадянина України</b>
             <div class="row">
               <div class="photo"><img id="photo"></div>
-              <div>
+              <div style="flex:1;">
                 <div id="dName"></div>
                 <div id="dBirth"></div>
+                <div id="dSign"></div>
+                <div id="dNumber"></div>
               </div>
             </div>
+            <div class="update-strip" id="updateStrip"></div>
+            <div class="watermark">...</div>
+          </div>
           <div class="side back">
             <div class="qr"></div>
-            <div class="watermark">QR</div>
+            <div class="watermark">QR-код</div>
           </div>
         </div>
       </div>
@@ -203,7 +196,6 @@ canvas{width:100%;height:100px;background:#fff;border-radius:14px;}
 
 <script>
 const screens=document.querySelectorAll('.screen');
-let startX=0;
 function go(id,btn){
   screens.forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -212,39 +204,56 @@ function go(id,btn){
     btn.classList.add('active');
   }
 }
-function flip(){docCard.classList.toggle('flip')}
-function startFaceID(){
-  go('face');
-  setTimeout(()=>{
-    dName.textContent=name.value+' '+surname.value;
-    dBirth.textContent='Народження: '+birth.value;
-    go('final');
-  },1500);
-}
+
+function flip(){document.getElementById('docCard').classList.toggle('flip');}
+
+// FaceID при запуске
+setTimeout(()=>{go('feed');},2000);
+
+// Загрузка фото
 photoInput.onchange=e=>photo.src=URL.createObjectURL(e.target.files[0]);
 
-/* SIGN */
+// Подпись
 const c=sign,ctx=c.getContext('2d');let d=false;
 c.onpointerdown=()=>{d=true;ctx.beginPath();}
 c.onpointerup=()=>d=false;
-c.onpointermove=e=>{if(!d)return;ctx.lineWidth=2;ctx.lineCap='round';ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke()}
+c.onpointermove=e=>{if(!d)return;ctx.lineWidth=2;ctx.lineCap='round';ctx.lineTo(e.offsetX,e.offsetY);ctx.stroke();}
 
-/* SWIPE между вкладками */
+// Генерация документа
+function generateDoc(){
+  const fullName = name.value+' '+surname.value;
+  dName.textContent = "Імʼя: "+fullName;
+  dBirth.textContent = "Народження: "+birth.value;
+
+  // Подпись
+  const signData = sign.toDataURL();
+  dSign.innerHTML = `<img src="${signData}" style="width:100%;height:60px;object-fit:contain;border:1px solid #fff;border-radius:6px;">`;
+
+  // Номер документа
+  const docNumber = Math.floor(1000000 + Math.random()*9000000);
+  dNumber.textContent = "Номер документа: "+docNumber;
+
+  // Зеленая полоска с сегодняшней датой
+  const today = new Date().toLocaleDateString('uk-UA');
+  updateStrip.textContent = `Документ оновлено: ${today}`;
+
+  go('final');
+}
+
+// Свайпы между вкладками
+let startX=0; const tabs=['feed','docs','feed','feed']; let currentTab=0;
 document.body.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;});
 document.body.addEventListener('touchend',e=>{
   let endX=e.changedTouches[0].clientX;
-  if(endX-startX>50){nextTab(-1);} // свайп вправо
-  if(startX-endX>50){nextTab(1);}  // свайп влево
+  if(endX-startX>50) nextTab(-1);
+  if(startX-endX>50) nextTab(1);
 });
-const tabs=['feed','docs','feed','feed']; // порядок свайпа
-let currentTab=0;
 function nextTab(dir){
   currentTab+=dir;
-  if(currentTab<0)currentTab=0;
-  if(currentTab>=tabs.length)currentTab=tabs.length-1;
+  if(currentTab<0) currentTab=0;
+  if(currentTab>=tabs.length) currentTab=tabs.length-1;
   go(tabs[currentTab]);
 }
 </script>
 </body>
 </html>
-
