@@ -10,7 +10,7 @@
   --blue:#2b6cff;
   --pink:#ff63c3;
   --yellow:#ffd66e;
-  --glass:rgba(255,255,255,.22);
+  --glass:rgba(255,255,255,.15);
   --glass2:rgba(255,255,255,.12);
   --r:22px;
   --ease:cubic-bezier(.2,.8,.2,1);
@@ -25,9 +25,8 @@ body{
     linear-gradient(160deg,var(--vio),#1f235c);
   overflow:hidden;
 }
-.app{height:100%;display:flex;flex-direction:column;}
-.header{padding:16px 18px 8px;font-weight:900;letter-spacing:.4px;}
-.screens{flex:1;position:relative;touch-action:pan-y;}
+.app{height:100%;display:flex;flex-direction:column;align-items:center;}
+.screens{flex:1;position:relative;touch-action:pan-y;width:100%;}
 .screen{
   position:absolute; inset:0;
   padding:10px 14px 90px;
@@ -37,163 +36,127 @@ body{
   pointer-events:none;
 }
 .screen.active{opacity:1;transform:translateX(0);pointer-events:auto;}
-.card{
-  background:linear-gradient(180deg,var(--glass),var(--glass2));
-  backdrop-filter: blur(22px) saturate(140%);
-  border-radius:var(--r);
-  padding:16px;
-  box-shadow:
-    0 20px 40px rgba(0,0,0,.35),
-    inset 0 1px 0 rgba(255,255,255,.35);
-}
-.shimmer{position:relative;overflow:hidden;}
-.shimmer::after{
-  content:"";position:absolute;inset:-100% -50%;
-  background:linear-gradient(120deg,transparent 40%,rgba(255,255,255,.35) 50%,transparent 60%);
-  animation:sh 2.2s infinite;
-}
-@keyframes sh{to{transform:translateX(200%)}} 
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
-.tile{
-  padding:18px;border-radius:18px;
-  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.14));
-  backdrop-filter: blur(18px);
-  font-weight:800;text-align:center;cursor:pointer;
-}
-label{font-size:12px;opacity:.8;}
-input{width:100%;margin-top:6px;margin-bottom:10px;padding:14px;border-radius:14px;border:none;outline:none;font-size:16px;}
-.btn{width:100%;padding:16px;border-radius:16px;border:none;font-weight:900;color:#2b2f7a;background:linear-gradient(180deg,#fff,#eef1ff);cursor:pointer;}
-.center{display:flex;justify-content:center;align-items:center;}
-.doc-wrap{perspective:1400px;}
+.center{display:flex;justify-content:center;align-items:center;flex-direction:column;}
+.btn{padding:16px;border-radius:16px;border:none;font-weight:900;color:#2b2f7a;background:linear-gradient(180deg,#fff,#eef1ff);cursor:pointer;margin-top:10px;width:120px;}
+.num-pad{display:grid;grid-template-columns:repeat(3,80px);gap:12px;margin-top:20px;}
+.num-pad button{padding:18px;font-size:24px;border-radius:12px;border:none;background:rgba(255,255,255,.2);color:#fff;font-weight:900;cursor:pointer;}
+.tabbar{display:none;position:absolute;left:0;right:0;bottom:0;height:78px;padding:10px 8px env(safe-area-inset-bottom);display:flex;gap:6px;backdrop-filter: blur(24px);background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.08));}
+.tabbar button{flex:1;border:none;border-radius:16px;background:transparent;color:#fff;font-size:12px;font-weight:800;cursor:pointer;}
+.tabbar button.active{background:rgba(255,255,255,.22);}
+.card-wrap{perspective:1400px;margin-top:20px;}
 .doc{
-  width:350px;
-  height:400px;
+  width:350px;height:420px;
   position:relative;transform-style:preserve-3d;
   transition:transform 0.8s cubic-bezier(.2,.8,.2,1);
   cursor:pointer;
 }
 .doc.flip{transform:rotateY(180deg);}
-.doc .side{
-  position:absolute;inset:0;
-  border-radius:20px;
-  padding:16px;
-  backface-visibility:visible;
-  display:flex;
-  flex-direction:column;
-}
-.doc .back{
-  transform:rotateY(180deg);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-}
-.photo{width:100px;height:120px;border-radius:10px;background:rgba(255,255,255,.35);overflow:hidden;position:absolute;top:16px;left:16px;}
+.side{position:absolute;inset:0;border-radius:20px;padding:16px;backface-visibility:visible;background:var(--glass);backdrop-filter:blur(20px);}
+.back{transform:rotateY(180deg);display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);}
+.photo{width:100px;height:120px;border-radius:10px;background:rgba(255,255,255,.35);overflow:hidden;position:absolute;top:40px;left:16px;}
 .photo img{width:100%;height:100%;object-fit:cover;}
-.info{position:absolute;top:16px;left:130px;display:flex;flex-direction:column;gap:4px;}
+.info{position:absolute;top:40px;left:130px;display:flex;flex-direction:column;gap:6px;}
 .info div{font-size:14px;}
-.signature{position:absolute;bottom:60px;left:16px;width:150px;height:60px;}
-.update-strip{
-  position:absolute;bottom:0;left:0;right:0;
-  height:30px;
-  background:rgba(0,255,0,0.3);
-  display:flex;align-items:center;justify-content:center;
-  font-size:14px;font-weight:700;border-bottom-left-radius:20px;border-bottom-right-radius:20px;
-}
-.qr{width:120px;height:120px;background:#fff;border-radius:12px;margin-bottom:10px;}
-.tabbar{
-  display:none; /* Скрыт по умолчанию */
-  position:absolute;left:0;right:0;bottom:0;
-  height:78px;padding:10px 8px env(safe-area-inset-bottom);
-  display:flex;gap:6px;
-  backdrop-filter: blur(24px);
-  background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,.08));
-}
-.tabbar button{
-  flex:1;border:none;border-radius:16px;
-  background:transparent;color:#fff;font-size:12px;font-weight:800;
-  cursor:pointer;
-}
-.tabbar button.active{background:rgba(255,255,255,.22);}
+.signature{position:absolute;top:200px;left:16px;width:150px;height:60px;background:rgba(255,255,255,.08);}
+.update-strip{position:absolute;bottom:60px;left:0;right:0;height:30px;background:rgba(0,255,0,.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;border-bottom-left-radius:20px;border-bottom-right-radius:20px;}
+.bottom-line{display:flex;justify-content:space-between;align-items:center;position:absolute;bottom:20px;left:16px;right:16px;font-size:14px;font-weight:700;}
+.bottom-line .dots{font-size:20px;}
 </style>
 </head>
 <body>
 <div class="app">
 <div class="screens">
-  <!-- Экран блокировки паролем -->
-  <section class="screen active" id="lock">
-    <div class="center" style="flex-direction:column;gap:20px;">
-      <div style="font-size:22px;font-weight:900;">Введіть код доступу</div>
-      <input id="pin" type="password" maxlength="4" style="width:120px;text-align:center;font-size:24px;padding:10px;border-radius:12px;border:none;">
-      <button class="btn" onclick="checkPin()">Ввести</button>
-      <div id="pinError" style="color:#ff6b6b;font-weight:700;"></div>
-    </div>
-  </section>
 
-  <!-- Главный экран (Стрічка) -->
-  <section class="screen" id="feed">
-    <div class="header">Привіт</div>
-    <div class="card shimmer">
-      <div class="grid">
-        <div class="tile" onclick="go('docs')">Документи</div>
-        <div class="tile">Сервіси</div>
-        <div class="tile">Донати</div>
-        <div class="tile">Меню</div>
-      </div>
+<!-- Экран кода -->
+<section class="screen active" id="lock">
+  <div class="center">
+    <div style="font-size:22px;font-weight:900;">Введіть код</div>
+    <div class="num-pad">
+      <button onclick="addDigit('1')">1</button>
+      <button onclick="addDigit('2')">2</button>
+      <button onclick="addDigit('3')">3</button>
+      <button onclick="addDigit('4')">4</button>
+      <button onclick="addDigit('5')">5</button>
+      <button onclick="addDigit('6')">6</button>
+      <button onclick="addDigit('7')">7</button>
+      <button onclick="addDigit('8')">8</button>
+      <button onclick="addDigit('9')">9</button>
+      <div></div>
+      <button onclick="addDigit('0')">0</button>
+      <div></div>
     </div>
-  </section>
+    <div id="pinError" style="color:#ff6b6b;font-weight:700;margin-top:12px;"></div>
+  </div>
+</section>
 
-  <!-- Документы -->
-  <section class="screen" id="docs">
-    <div class="card">
-      <div class="tile" onclick="go('data')">➕ Створити документ</div>
+<!-- Главный экран -->
+<section class="screen" id="feed">
+  <div class="center">
+    <div style="font-size:24px;font-weight:900;">Дія</div>
+    <button class="btn" onclick="go('docs')">Документи</button>
+  </div>
+</section>
+
+<!-- Документы -->
+<section class="screen" id="docs">
+  <div class="center">
+    <div class="card-wrap">
+      <button class="btn" onclick="go('data')">Створити документ</button>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Форма данных -->
-  <section class="screen" id="data">
-    <div class="card">
+<!-- Форма данных -->
+<section class="screen" id="data">
+  <div class="center">
+    <div class="card-wrap">
       <label>Імʼя</label><input id="name">
       <label>Прізвище</label><input id="surname">
+      <label>По-батькові</label><input id="patronymic">
       <label>Дата народження</label><input type="date" id="birth">
       <label>Фото</label><input type="file" id="photoInput">
       <label>Підпис</label><canvas id="sign" class="signature"></canvas>
       <button class="btn" onclick="generateDoc()">Створити документ</button>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Финальная карточка -->
-  <section class="screen" id="final">
-    <div class="center">
-      <div class="doc-wrap">
-        <div class="doc" id="docCard" onclick="flip()">
-          <div class="side front">
-            <div class="photo"><img id="photo"></div>
-            <div class="info">
-              <div id="dName"></div>
-              <div id="dBirth"></div>
-              <div id="dNumber"></div>
-            </div>
-            <canvas id="dSign" class="signature"></canvas>
-            <div class="update-strip" id="updateStrip"></div>
+<!-- Финальная карточка -->
+<section class="screen" id="final">
+  <div class="center">
+    <div class="card-wrap">
+      <div class="doc" id="docCard" onclick="flip()">
+        <div class="side front">
+          <div style="font-size:22px;font-weight:900;">DA1</div>
+          <div class="photo"><img id="photo"></div>
+          <div class="info">
+            <div id="dBirth">Дата: 01.01.2000</div>
+            <div id="dNumber">№ 07460112</div>
           </div>
-          <div class="side back">
-            <div class="qr"></div>
+          <canvas id="dSign" class="signature"></canvas>
+          <div class="update-strip" id="updateStrip"></div>
+          <div class="bottom-line">
+            <div id="fullName">Імʼя Прізвище По-батькові</div>
+            <div class="dots">•••</div>
           </div>
+        </div>
+        <div class="side back">
+          <div id="qr" class="qr"></div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
 </div>
 
 <div class="tabbar">
   <button class="active" onclick="go('feed',this)">Стрічка</button>
   <button onclick="go('docs',this)">Документи</button>
-  <button onclick="go('feed',this)">Сервіси</button>
-  <button onclick="go('feed',this)">Меню</button>
 </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script>
 const screens=document.querySelectorAll('.screen');
 function go(id,btn){
@@ -207,15 +170,22 @@ function go(id,btn){
 
 function flip(){document.getElementById('docCard').classList.toggle('flip');}
 
-// Проверка пароля
-function checkPin(){
-  const pin = document.getElementById('pin').value;
-  const error = document.getElementById('pinError');
-  if(pin==='1111'){
-    error.textContent='';
-    go('feed');
-    document.querySelector('.tabbar').style.display='flex';
-  } else { error.textContent='Невірний код!'; }
+// Код-пароль
+let pinValue='';
+function addDigit(d){
+  if(pinValue.length>=4) return;
+  pinValue+=d;
+  if(pinValue.length===4){
+    if(pinValue==='1111'){
+      pinValue='';
+      go('feed');
+      document.querySelector('.tabbar').style.display='flex';
+      document.getElementById('pinError').textContent='';
+    }else{
+      document.getElementById('pinError').textContent='Невірний код!';
+      pinValue='';
+    }
+  }
 }
 
 // Загрузка фото
@@ -231,18 +201,19 @@ c.onpointermove=e=>{if(!d)return;ctx.lineWidth=2;ctx.lineCap='round';ctx.lineTo(
 
 // Генерация документа
 function generateDoc(){
-  const fullName = name.value+' '+surname.value;
-  document.getElementById('dName').textContent = fullName;
-  document.getElementById('dBirth').textContent = birth.value;
-  const docNumber = Math.floor(1000000 + Math.random()*9000000);
-  document.getElementById('dNumber').textContent = "№ " + docNumber;
+  const fullName = document.getElementById('name').value+' '+document.getElementById('surname').value+' '+document.getElementById('patronymic').value;
+  document.getElementById('fullName').textContent = fullName;
+
+  const birthVal = document.getElementById('birth').value.split('-').reverse().join('.');
+  document.getElementById('dBirth').textContent = `Дата: ${birthVal}`;
+  document.getElementById('dNumber').textContent = '№ 07460112';
 
   // Подпись
   const signData = c.toDataURL();
   const dSign = document.getElementById('dSign');
   const img = new Image();
   img.src = signData;
-  img.style.width='100%';
+  img.style.width='150px';
   img.style.height='60px';
   img.style.objectFit='contain';
   dSign.replaceWith(img);
@@ -251,22 +222,10 @@ function generateDoc(){
   const today = new Date().toLocaleDateString('uk-UA');
   document.getElementById('updateStrip').textContent = `Документ оновлено: ${today}`;
 
-  go('final');
-}
+  // QR-код
+  QRCode.toCanvas(document.getElementById('qr'), 'https://example.com', {width:120}, function (error) {if(error)console.error(error);});
 
-// Свайпы
-let startX=0; const tabs=['feed','docs','feed','feed']; let currentTab=0;
-document.body.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;});
-document.body.addEventListener('touchend',e=>{
-  let endX=e.changedTouches[0].clientX;
-  if(endX-startX>50) nextTab(-1);
-  if(startX-endX>50) nextTab(1);
-});
-function nextTab(dir){
-  currentTab+=dir;
-  if(currentTab<0) currentTab=0;
-  if(currentTab>=tabs.length) currentTab=tabs.length-1;
-  go(tabs[currentTab]);
+  go('final');
 }
 </script>
 </body>
