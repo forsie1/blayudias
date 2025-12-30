@@ -2,8 +2,8 @@
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Дія</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+<title>Дія DEMO</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
 body{
@@ -100,7 +100,7 @@ body{
   display:flex;
   align-items:flex-start;
   justify-content:center;
-  padding-top:40px;
+  padding-top:60px;
 }
 
 /* CARD FLIP (NO MIRROR) */
@@ -128,7 +128,7 @@ body{
   padding:14px;
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
+  justify-content:center;
 }
 .back{
   transform:rotateY(180deg);
@@ -139,13 +139,13 @@ body{
 }
 
 /* PASSPORT */
-.header{font-weight:800;text-align:center}
+.header{font-weight:800;text-align:center;margin-bottom:10px}
 .main{display:flex;gap:12px;align-items:flex-start}
 .photo{width:140px;height:210px;border-radius:16px;overflow:hidden}
 .photo img{width:100%;height:100%;object-fit:cover}
 .info{display:flex;flex-direction:column;justify-content:flex-start}
 .info div{margin-bottom:8px}
-.signature-img{width:120px;height:40px;object-fit:contain;display:block;margin-top:6px}
+.signature-img{width:100%;height:40px;object-fit:contain;display:block;margin-top:6px}
 
 .ticker{
   background:#1faa59;
@@ -163,7 +163,7 @@ body{
 @keyframes scroll{
   to{transform:translateX(-100%)}
 }
-.fio{font-size:26px;font-weight:900;text-align:left}
+.fio{font-size:26px;font-weight:900;text-align:left;margin-top:12px}
 
 /* QR */
 .qr-box{
@@ -188,7 +188,6 @@ canvas{
 }
 </style>
 </head>
-
 <body>
 
 <div id="splash">
@@ -235,11 +234,192 @@ canvas{
           <div class="main">
             <div class="photo"><img id="pPhoto"></div>
             <div class="info">
+              <div>Прізвище<b id="pLast"></b></div>
+              <div>Імʼя<b id="pFirst"></b></div>
+              <div>По батькові<b id="pFather"></b></div>
               <div>Дата народження<b id="pBirth"></b></div>
               <div>Номер<b>172073</b></div>
               <div>Підпис<canvas id="signCanvas"></canvas></div>
             </div>
           </div>
           <div class="ticker"><span id="tickerText"></span></div>
-          <div class="fio" id="pFio"></div>
         </div>
+
+        <div class="face back">
+          <div class="qr-box">
+            <div><b id="qrLabel">QR-код буде дійсний ще</b></div>
+            <div><b><span id="m">3</span>:<span id="s">00</span></b></div>
+            <img id="qrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=diia">
+            <div class="qr-buttons">
+              <button id="btnQR">QR-код</button>
+              <button id="btnBar">Штрих-код</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="screen" id="services">
+  <div class="services-grid">
+    <div class="service">💰 Військові облігації</div>
+    <div class="service">🚁 Лінія дронів</div>
+    <div class="service">💸 Національний кешбек</div>
+    <div class="service">🤖 Чатбот єВорог</div>
+    <div class="service">🔧 ЄВідновлення</div>
+    <div class="service">💵 Відшкодування збитків</div>
+    <div class="service">🏅 Ветеранський спорт</div>
+    <div class="service">📘 єкнига</div>
+    <div class="service">🅰 A</div>
+    <div class="service">🚗 Водієві</div>
+    <div class="service">🏠 Місце проживання</div>
+    <div class="service">📝 Опитування</div>
+    <div class="service">💍 Шлюб онлайн</div>
+    <div class="service">🏢 Послуги для ВПО</div>
+    <div class="service">💰 Податки</div>
+    <div class="service">🛠 Допомога по безробіттю</div>
+    <div class="service">⚖ Судові послуги</div>
+    <div class="service">🏘 єОселя</div>
+    <div class="service">📜 Виконавчі провадження</div>
+    <div class="service">Θ Довідки та витяги</div>
+    <div class="service">🎮 Розваги</div>
+    <div class="service">💳 Повернення вкладів</div>
+  </div>
+</div>
+
+<!-- MENU -->
+<div class="screen" id="menu">
+  <input placeholder="Прізвище" id="last">
+  <input placeholder="Імʼя" id="first">
+  <input placeholder="По батькові" id="father">
+  <input type="date" id="birth">
+  <input type="file" id="photo">
+  <canvas id="signCanvas"></canvas>
+  <button onclick="save()">Зберегти</button>
+</div>
+
+</div>
+
+<div id="tabbar">
+  <div class="tab active" onclick="openTab('feed',this)">📰 Стрічка</div>
+  <div class="tab" onclick="openTab('documents',this)">📄 Документи</div>
+  <div class="tab" onclick="openTab('services',this)">🧩 Сервіси</div>
+  <div class="tab" onclick="openTab('menu',this)">☰ Меню</div>
+</div>
+</div>
+
+<script>
+/* SPLASH */
+setTimeout(()=>{splash.style.display="none";pinScreen.classList.remove("hidden");},2000);
+
+/* PIN */
+const PIN="1111";let p="";
+for(let i=0;i<4;i++)dots.appendChild(document.createElement("div")).className="pin-dot";
+[1,2,3,4,5,6,7,8,9,"⌫",0].forEach(v=>{
+  const b=document.createElement("div");
+  b.className="pin-btn";b.textContent=v;
+  b.onclick=()=>{if(v==="⌫")p=p.slice(0,-1);else if(p.length<4)p+=v;
+    [...dots.children].forEach((d,i)=>d.classList.toggle("filled",i<p.length));
+    if(p===PIN){pinScreen.style.display="none";app.classList.remove("hidden");}
+  };
+  pad.appendChild(b);
+});
+
+/* TABS */
+function openTab(id,el){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+}
+
+/* FLIP */
+card.onclick=()=>card.classList.toggle("flipped");
+
+/* DATA */
+function save(){
+  const d={
+    last:last.value||"Іваненко",
+    first:first.value||"Іван",
+    father:father.value||"Іванович",
+    birth:birth.value||"2000-01-01",
+    photo:photo.files[0]?URL.createObjectURL(photo.files[0]):"",
+    sign:signCanvas.toDataURL()
+  };
+  localStorage.setItem("p",JSON.stringify(d));
+  load();
+}
+function load(){
+  const d=JSON.parse(localStorage.getItem("p"))||{};
+  pFio.innerHTML=`${d.father||""}<br>${d.first||""}<br>${d.last||""}`;
+  pBirth.innerText=(d.birth||"").split("-").reverse().join(".");
+  pLast.innerText=d.last||"";
+  pFirst.innerText=d.first||"";
+  pFather.innerText=d.father||"";
+  if(d.photo)pPhoto.src=d.photo;
+  if(d.sign){
+    const ctx=signCanvas.getContext("2d");
+    const img=new Image();
+    img.onload=()=>ctx.drawImage(img,0,0,signCanvas.width,signCanvas.height);
+    img.src=d.sign;
+  }
+  tickerText.innerText=`Дані оновлено · ${new Date().toLocaleString()}`;
+}
+load();
+
+/* QR / Barcode */
+let qrTimer=180;
+let currentCode="QR";
+const qrImg=document.getElementById("qrImg");
+const m=document.getElementById("m");
+const s=document.getElementById("s");
+const btnQR=document.getElementById("btnQR");
+const btnBar=document.getElementById("btnBar");
+
+btnQR.onclick=()=>{currentCode="QR";qrImg.src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=diia";qrTimer=180};
+btnBar.onclick=()=>{currentCode="BAR";qrImg.src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=1234567890&format=png";qrTimer=180};
+
+setInterval(()=>{
+  let min=Math.floor(qrTimer/60);
+  let sec=qrTimer%60;
+  m.textContent=min;
+  s.textContent=String(sec).padStart(2,"0");
+  qrTimer--; if(qrTimer<0) qrTimer=180;
+},1000);
+
+/* SIGNATURE CANVAS */
+const signCanvas = document.getElementById('signCanvas');
+const ctx = signCanvas.getContext('2d');
+let drawing=false;
+function resizeCanvas(){signCanvas.width=signCanvas.offsetWidth;signCanvas.height=signCanvas.offsetHeight;}
+window.addEventListener('resize',resizeCanvas);
+resizeCanvas();
+
+function startPos(e){drawing=true;draw(e);}
+function endPos(e){drawing=false;ctx.beginPath();}
+function draw(e){
+  if(!drawing) return;
+  e.preventDefault();
+  const rect = signCanvas.getBoundingClientRect();
+  const x = (e.touches?e.touches[0].clientX:e.clientX)-rect.left;
+  const y = (e.touches?e.touches[0].clientY:e.clientY)-rect.top;
+  ctx.lineWidth=2;
+  ctx.lineCap="round";
+  ctx.strokeStyle="#000";
+  ctx.lineTo(x,y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x,y);
+}
+signCanvas.addEventListener('mousedown',startPos);
+signCanvas.addEventListener('mouseup',endPos);
+signCanvas.addEventListener('mousemove',draw);
+signCanvas.addEventListener('touchstart',startPos);
+signCanvas.addEventListener('touchend',endPos);
+signCanvas.addEventListener('touchmove',draw);
+
+</script>
+</body>
+</html>
