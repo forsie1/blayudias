@@ -12,6 +12,9 @@ body{
   color:#fff;
   overflow:hidden;
   transition: background 1s ease;
+  -webkit-user-select:none;
+  user-select:none;
+  touch-action:none;
 }
 .hidden{display:none}
 
@@ -95,9 +98,9 @@ body{
 .card-wrap{
   height:100%;
   display:flex;
-  align-items:flex-start; /* опускаем ниже */
+  align-items:flex-start;
   justify-content:center;
-  padding-top:40px; /* поднимаем/опускаем рамку */
+  padding-top:40px;
 }
 
 /* CARD FLIP (NO MIRROR) */
@@ -141,7 +144,7 @@ body{
 .photo{width:140px;height:210px;border-radius:16px;overflow:hidden}
 .photo img{width:100%;height:100%;object-fit:cover}
 .info{display:flex;flex-direction:column;justify-content:flex-start}
-.info b{display:block;margin-bottom:8px}
+.info div{margin-bottom:8px}
 .signature-img{width:120px;height:40px;object-fit:contain;display:block;margin-top:6px}
 
 .ticker{
@@ -178,8 +181,10 @@ input,button{
   border-radius:12px;border:none
 }
 canvas{
-  width:100%;height:70px;
-  border:1px solid #555;border-radius:12px
+  width:100%;
+  height:70px;
+  border:1px solid #555;border-radius:12px;
+  touch-action:none;
 }
 </style>
 </head>
@@ -204,21 +209,20 @@ canvas{
 <!-- FEED -->
 <div class="screen active" id="feed">
   <div class="feed-card">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3a/Ukrainian_drone.jpg">
+    <img src="https://i.postimg.cc/mgLgLVvR/drone.jpg">
     <h3>Україна масштабувала виробництво дронів</h3>
     <p>Нові безпілотники вже працюють на фронті.</p>
   </div>
   <div class="feed-card">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Power_outage_Ukraine.jpg/320px-Power_outage_Ukraine.jpg">
+    <img src="https://i.postimg.cc/43qkKZ1M/power.jpg">
     <h3>Ситуація зі світлом</h3>
     <p>Графіки стабілізації оновлено.</p>
   </div>
   <div class="feed-card">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Ukrainian_soldiers.jpg/320px-Ukrainian_soldiers.jpg">
+    <img src="https://i.postimg.cc/63RQH0dD/soldiers.jpg">
     <h3>Підтримка ЗСУ</h3>
     <p>Відкрито нові збори для бригад.</p>
   </div>
-  <!-- можешь добавить ещё новостей -->
 </div>
 
 <!-- DOCUMENTS -->
@@ -233,214 +237,9 @@ canvas{
             <div class="info">
               <div>Дата народження<b id="pBirth"></b></div>
               <div>Номер<b>172073</b></div>
-              <div>Підпис<img id="pSign" class="signature-img"></div>
+              <div>Підпис<canvas id="signCanvas"></canvas></div>
             </div>
           </div>
           <div class="ticker"><span id="tickerText"></span></div>
           <div class="fio" id="pFio"></div>
         </div>
-
-        <div class="face back">
-          <div class="qr-box">
-            <div><b id="qrLabel">QR-код буде дійсний ще</b></div>
-            <div><b><span id="m">3</span>:<span id="s">00</span></b></div>
-            <img id="qrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=diia">
-            <div class="qr-buttons">
-              <button id="btnQR">QR-код</button>
-              <button id="btnBar">Штрих-код</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- SERVICES -->
-<div class="screen" id="services">
-  <div class="services-grid">
-    <div class="service">💰 Військові облігації</div>
-    <div class="service">🚁 Лінія дронів</div>
-    <div class="service">💸 Національний кешбек</div>
-    <div class="service">🤖 Чатбот єВорог</div>
-    <div class="service">🔧 ЄВідновлення</div>
-    <div class="service">💵 Відшкодування збитків</div>
-    <div class="service">🏅 Ветеранський спорт</div>
-    <div class="service">📘 єкнига</div>
-    <div class="service">🅰 A</div>
-    <div class="service">🚗 Водієві</div>
-    <div class="service">🏠 Місце проживання</div>
-    <div class="service">📝 Опитування</div>
-    <div class="service">💍 Шлюб онлайн</div>
-    <div class="service">🏢 Послуги для ВПО</div>
-    <div class="service">💰 Податки</div>
-    <div class="service">🛠 Допомога по безробіттю</div>
-    <div class="service">⚖ Судові послуги</div>
-    <div class="service">🏘 єОселя</div>
-    <div class="service">📜 Виконавчі провадження</div>
-    <div class="service">Θ Довідки та витяги</div>
-    <div class="service">🎮 Розваги</div>
-    <div class="service">💳 Повернення вкладів</div>
-  </div>
-</div>
-
-<!-- MENU -->
-<div class="screen" id="menu">
-  <input placeholder="Прізвище" id="last">
-  <input placeholder="Імʼя" id="first">
-  <input placeholder="По батькові" id="father">
-  <input type="date" id="birth">
-  <input type="file" id="photo">
-  <canvas id="sign"></canvas>
-  <button onclick="save()">Зберегти</button>
-</div>
-
-</div>
-
-<div id="tabbar">
-  <div class="tab active" onclick="openTab('feed',this)">📰 Стрічка</div>
-  <div class="tab" onclick="openTab('documents',this)">📄 Документи</div>
-  <div class="tab" onclick="openTab('services',this)">🧩 Сервіси</div>
-  <div class="tab" onclick="openTab('menu',this)">☰ Меню</div>
-</div>
-</div>
-
-<script>
-setTimeout(()=>{splash.style.display="none";pinScreen.classList.remove("hidden");},2000);
-
-/* PIN */
-const PIN="1111";let p="";
-for(let i=0;i<4;i++)dots.appendChild(document.createElement("div")).className="pin-dot";
-[1,2,3,4,5,6,7,8,9,"⌫",0].forEach(v=>{
-  const b=document.createElement("div");
-  b.className="pin-btn";b.textContent=v;
-  b.onclick=()=>{
-    if(v==="⌫")p=p.slice(0,-1);else if(p.length<4)p+=v;
-    [...dots.children].forEach((d,i)=>d.classList.toggle("filled",i<p.length));
-    if(p===PIN){pinScreen.style.display="none";app.classList.remove("hidden");}
-  };
-  pad.appendChild(b);
-});
-
-/* TABS */
-function openTab(id,el){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  el.classList.add("active");
-}
-
-/* FLIP */
-card.onclick=()=>card.classList.toggle("flipped");
-
-/* DATA */
-function save(){
-  const d={last:last.value||"Іваненко",first:first.value||"Іван",father:father.value||"Іванович",birth:birth.value||"2000-01-01",photo:photo.files[0]?URL.createObjectURL(photo.files[0]):"",sign:sign.toDataURL()};
-  localStorage.setItem("p",JSON.stringify(d));load();
-}
-function load(){
-  const d=JSON.parse(localStorage.getItem("p"))||{};
-  pFio.innerHTML=`${d.father||""}<br>${d.first||""}<br>${d.last||""}`;
-  pBirth.innerText=(d.birth||"").split("-").reverse().join(".");
-  if(d.photo)pPhoto.src=d.photo;
-  if(d.sign)pSign.src=d.sign;
-  tickerText.innerText=`Дані оновлено · ${new Date().toLocaleString()}`;
-}
-load();
-
-/* QR / Barcode */
-let qrTimer=180;
-let currentCode="QR";
-const qrImg=document.getElementById("qrImg");
-const m=document.getElementById("m");
-const s=document.getElementById("s");
-const btnQR=document.getElementById("btnQR");
-const btnBar=document.getElementById("btnBar");
-
-btnQR.onclick=()=>{
-  currentCode="QR";
-  qrImg.src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=diia";
-  qrTimer=180;
-};
-btnBar.onclick=()=>{
-  currentCode="BAR";
-  qrImg.src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=1234567890&format=png";
-  qrTimer=180;
-};
-
-setInterval(()=>{
-  let min=Math.floor(qrTimer/60);
-  let sec=qrTimer%60;
-  m.textContent=min;
-  s.textContent=String(sec).padStart(2,"0");
-  qrTimer--; if(qrTimer<0) qrTimer=180;
-},1000);
-
-/* ===== DEVICE ID ===== */
-function getDeviceId() {
-  let id = localStorage.getItem("DEVICE_ID");
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem("DEVICE_ID", id);
-  }
-  return id;
-}
-const DEVICE_ID = getDeviceId();
-
-/* ===== LICENSE ===== */
-const MASTER_SECRET = "DIA-2025"; 
-
-function generateKey(deviceId) {
-  return btoa(deviceId + "|" + MASTER_SECRET);
-}
-
-function checkLicense() {
-  const savedKey = localStorage.getItem("LICENSE_KEY");
-  if (!savedKey) return false;
-  return savedKey === generateKey(DEVICE_ID);
-}
-
-/* ===== LOCK SCREEN ===== */
-function showLock() {
-  document.body.innerHTML = `
-    <div style="
-      position:fixed;inset:0;
-      display:flex;flex-direction:column;
-      justify-content:center;align-items:center;
-      background:#000;color:#fff;
-      font-family:sans-serif;
-      text-align:center;
-      padding:20px
-    ">
-      <h2>🔒 Доступ обмежено</h2>
-      <p>Введіть персональний ключ</p>
-      <input id="key" placeholder="XXXX-XXXX"
-        style="padding:12px;border-radius:10px;border:none;width:100%;max-width:260px">
-      <button onclick="activate()"
-        style="margin-top:12px;padding:12px 18px;border:none;border-radius:12px">
-        Активувати
-      </button>
-      <small style="opacity:.6;margin-top:12px">
-        ID пристрою:<br>${DEVICE_ID}
-      </small>
-    </div>
-  `;
-}
-
-function activate() {
-  const input = document.getElementById("key").value.trim();
-  if (input === generateKey(DEVICE_ID)) {
-    localStorage.setItem("LICENSE_KEY", input);
-    location.reload();
-  } else {
-    alert("Невірний ключ");
-  }
-}
-
-/* ===== START ===== */
-if (!checkLicense()) {
-  showLock();
-}
-</script>
-</body>
-</html>
