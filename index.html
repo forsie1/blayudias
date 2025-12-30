@@ -95,8 +95,9 @@ body{
 .card-wrap{
   height:100%;
   display:flex;
-  align-items:center;
+  align-items:flex-start; /* опускаем ниже */
   justify-content:center;
+  padding-top:40px; /* поднимаем/опускаем рамку */
 }
 
 /* CARD FLIP (NO MIRROR) */
@@ -121,11 +122,10 @@ body{
   background:rgba(255,255,255,.18);
   backdrop-filter:blur(20px);
   border-radius:26px;
-  padding:22px;
+  padding:14px;
   display:flex;
   flex-direction:column;
-  justify-content:center; /* Контент по центру */
-  gap:14px;
+  justify-content:space-between;
 }
 .back{
   transform:rotateY(180deg);
@@ -136,23 +136,14 @@ body{
 }
 
 /* PASSPORT */
-.header{font-weight:800;margin-bottom:6px;margin-top:6px}
-.main{display:flex;gap:14px;align-items:flex-start}
+.header{font-weight:800;text-align:center}
+.main{display:flex;gap:12px;align-items:flex-start}
 .photo{width:140px;height:210px;border-radius:16px;overflow:hidden}
 .photo img{width:100%;height:100%;object-fit:cover}
+.info{display:flex;flex-direction:column;justify-content:flex-start}
 .info b{display:block;margin-bottom:8px}
-.signature-img{width:120px;height:36px;object-fit:contain}
+.signature-img{width:120px;height:40px;object-fit:contain;display:block;margin-top:6px}
 
-/* FIO */
-.fio{
-  font-size:24px;
-  font-weight:900;
-  line-height:1.15;
-  text-align:left;
-  margin-top:10px;
-}
-
-/* TICKER */
 .ticker{
   background:#1faa59;
   padding:6px 0;
@@ -169,6 +160,7 @@ body{
 @keyframes scroll{
   to{transform:translateX(-100%)}
 }
+.fio{font-size:26px;font-weight:900;text-align:left}
 
 /* QR */
 .qr-box{
@@ -198,7 +190,7 @@ canvas{
   <h1>Привіт 👋</h1>
   <p>Дія</p>
   <p>Міністерство цифрової трансформації України</p>
-  <small>DEMO</small>
+  <small></small>
 </div>
 
 <div id="pinScreen" class="hidden">
@@ -217,25 +209,16 @@ canvas{
     <p>Нові безпілотники вже працюють на фронті.</p>
   </div>
   <div class="feed-card">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/Power_outage_Ukraine.jpg">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Power_outage_Ukraine.jpg/320px-Power_outage_Ukraine.jpg">
     <h3>Ситуація зі світлом</h3>
     <p>Графіки стабілізації оновлено.</p>
   </div>
   <div class="feed-card">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Ukrainian_soldiers.jpg">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Ukrainian_soldiers.jpg/320px-Ukrainian_soldiers.jpg">
     <h3>Підтримка ЗСУ</h3>
     <p>Відкрито нові збори для бригад.</p>
   </div>
-  <div class="feed-card">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Ukraine_reconstruction.jpg">
-    <h3>Відновлення інфраструктури</h3>
-    <p>Проекти тривають у всій країні.</p>
-  </div>
-  <div class="feed-card">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Ukraine_education.jpg">
-    <h3>Освітні ініціативи</h3>
-    <p>Нові курси для школярів і студентів.</p>
-  </div>
+  <!-- можешь добавить ещё новостей -->
 </div>
 
 <!-- DOCUMENTS -->
@@ -248,9 +231,9 @@ canvas{
           <div class="main">
             <div class="photo"><img id="pPhoto"></div>
             <div class="info">
-              Дата народження<b id="pBirth"></b>
-              Номер<b>172073</b>
-              Підпис<img id="pSign" class="signature-img">
+              <div>Дата народження<b id="pBirth"></b></div>
+              <div>Номер<b>172073</b></div>
+              <div>Підпис<img id="pSign" class="signature-img"></div>
             </div>
           </div>
           <div class="ticker"><span id="tickerText"></span></div>
@@ -331,7 +314,8 @@ for(let i=0;i<4;i++)dots.appendChild(document.createElement("div")).className="p
 [1,2,3,4,5,6,7,8,9,"⌫",0].forEach(v=>{
   const b=document.createElement("div");
   b.className="pin-btn";b.textContent=v;
-  b.onclick=()=>{if(v==="⌫")p=p.slice(0,-1);else if(p.length<4)p+=v;
+  b.onclick=()=>{
+    if(v==="⌫")p=p.slice(0,-1);else if(p.length<4)p+=v;
     [...dots.children].forEach((d,i)=>d.classList.toggle("filled",i<p.length));
     if(p===PIN){pinScreen.style.display="none";app.classList.remove("hidden");}
   };
@@ -356,7 +340,7 @@ function save(){
 }
 function load(){
   const d=JSON.parse(localStorage.getItem("p"))||{};
-  pFio.innerHTML=`${d.last||""}<br>${d.first||""}<br>${d.father||""}`;
+  pFio.innerHTML=`${d.father||""}<br>${d.first||""}<br>${d.last||""}`;
   pBirth.innerText=(d.birth||"").split("-").reverse().join(".");
   if(d.photo)pPhoto.src=d.photo;
   if(d.sign)pSign.src=d.sign;
@@ -404,7 +388,7 @@ function getDeviceId() {
 const DEVICE_ID = getDeviceId();
 
 /* ===== LICENSE ===== */
-const MASTER_SECRET = "DIA-2025"; // поменяй сам
+const MASTER_SECRET = "DIA-2025"; 
 
 function generateKey(deviceId) {
   return btoa(deviceId + "|" + MASTER_SECRET);
